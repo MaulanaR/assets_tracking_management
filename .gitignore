@@ -1,0 +1,36 @@
+# dependencies
+/fe/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/fe/build
+/fe/dist
+/fe/src-tauri/target
+/fe/src-tauri/.cargo
+
+# misc
+.DS_Store
+.env
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# tauri build output
+/src-tauri/target
+/src-tauri/.cargo
+
+# editor directories and files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
