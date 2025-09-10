@@ -1,7 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
-import Api from '../axios/api';
-import { showErrorNotification } from '../globalNotification';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
+import Api from "../axios/api";
+import { showErrorNotification } from "../globalNotification";
 
 /**
  * Builds a URL with query parameters
@@ -10,41 +10,41 @@ import { showErrorNotification } from '../globalNotification';
  * @returns {string} URL with query parameters
  */
 function buildUrl(baseUrl, params) {
-  const queryParts = [];
+	const queryParts = [];
 
-  for (const [key, value] of Object.entries(params)) {
-    if (value === undefined || value === null) continue;
+	for (const [key, value] of Object.entries(params)) {
+		if (value === undefined || value === null) continue;
 
-    // Custom format: key with brackets and CSV (e.g. includes[emails,phones]=true)
-    const isBracketCsvKey =
-      key.includes('[') && key.includes(',') && key.includes(']');
+		// Custom format: key with brackets and CSV (e.g. includes[emails,phones]=true)
+		const isBracketCsvKey =
+			key.includes("[") && key.includes(",") && key.includes("]");
 
-    if (isBracketCsvKey) {
-      // Jangan encode key-nya
-      queryParts.push(`${key}=${encodeURIComponent(value)}`);
-    } else if (key === 'includes' && Array.isArray(value)) {
-      // Khusus: includes[emails,phones,...]=true
-      const joined = value.join(',');
-      queryParts.push(`includes[${joined}]=true`);
-    } else if (typeof value === 'object' && !Array.isArray(value)) {
-      // Nested object: search[name]=abc
-      for (const [nestedKey, nestedValue] of Object.entries(value)) {
-        if (nestedValue !== undefined && nestedValue !== null) {
-          queryParts.push(
-            `${encodeURIComponent(key)}[${encodeURIComponent(nestedKey)}]=${encodeURIComponent(nestedValue)}`,
-          );
-        }
-      }
-    } else {
-      // Normal key=value
-      queryParts.push(
-        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-      );
-    }
-  }
+		if (isBracketCsvKey) {
+			// Jangan encode key-nya
+			queryParts.push(`${key}=${encodeURIComponent(value)}`);
+		} else if (key === "includes" && Array.isArray(value)) {
+			// Khusus: includes[emails,phones,...]=true
+			const joined = value.join(",");
+			queryParts.push(`includes[${joined}]=true`);
+		} else if (typeof value === "object" && !Array.isArray(value)) {
+			// Nested object: search[name]=abc
+			for (const [nestedKey, nestedValue] of Object.entries(value)) {
+				if (nestedValue !== undefined && nestedValue !== null) {
+					queryParts.push(
+						`${encodeURIComponent(key)}[${encodeURIComponent(nestedKey)}]=${encodeURIComponent(nestedValue)}`,
+					);
+				}
+			}
+		} else {
+			// Normal key=value
+			queryParts.push(
+				`${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+			);
+		}
+	}
 
-  const queryString = queryParts.join('&');
-  return `${baseUrl}?${queryString}`;
+	const queryString = queryParts.join("&");
+	return `${baseUrl}?${queryString}`;
 }
 
 /**
@@ -65,151 +65,151 @@ function buildUrl(baseUrl, params) {
  * @returns {Object} Form query result object
  */
 export function useDataQuery({
-  queryKey,
-  getUrl,
-  filters = {},
-  submitUrl,
-  method = 'POST',
-  onSuccess,
-  onError,
-  transformResponse = (data) => data,
-  queryOptions = {},
-  mutationOptions = {},
-  axiosConfig = {},
+	queryKey,
+	getUrl,
+	filters = {},
+	submitUrl,
+	method = "POST",
+	onSuccess,
+	onError,
+	transformResponse = (data) => data,
+	queryOptions = {},
+	mutationOptions = {},
+	axiosConfig = {},
 }) {
-  const queryClient = useQueryClient();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+	const queryClient = useQueryClient();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState(null);
 
-  const fullGetUrl = getUrl ? buildUrl(getUrl, filters) : null;
+	const fullGetUrl = getUrl ? buildUrl(getUrl, filters) : null;
 
-  const effectiveQueryKey = [...queryKey];
-  if (Object.keys(filters).length > 0) {
-    effectiveQueryKey.push({ filters });
-  }
+	const effectiveQueryKey = [...queryKey];
+	if (Object.keys(filters).length > 0) {
+		effectiveQueryKey.push({ filters });
+	}
 
-  // Load data if getUrl is provided
-  const {
-    data: initialData,
-    isLoading,
-    error: fetchError,
-    refetch,
-    isError: isFetchError,
-  } = useQuery({
-    queryKey: effectiveQueryKey,
-    queryFn: async () => {
-      try {
-        const res = await Api().get(fullGetUrl, {
-          ...axiosConfig,
-          paramsSerializer: {
-            // Handle complex parameter serialization (like arrays and nested objects)
-            encode: (param) => {
-              // We already handled this in buildUrl
-              return param;
-            },
-          },
-        });
-        return transformResponse(res.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+	// Load data if getUrl is provided
+	const {
+		data: initialData,
+		isLoading,
+		error: fetchError,
+		refetch,
+		isError: isFetchError,
+	} = useQuery({
+		queryKey: effectiveQueryKey,
+		queryFn: async () => {
+			try {
+				const res = await Api().get(fullGetUrl, {
+					...axiosConfig,
+					paramsSerializer: {
+						// Handle complex parameter serialization (like arrays and nested objects)
+						encode: (param) => {
+							// We already handled this in buildUrl
+							return param;
+						},
+					},
+				});
+				return transformResponse(res.data);
+			} catch (error) {
+				console.error("Error fetching data:", error);
 
-        // Show error notification
-        showErrorNotification({
-          message: 'Failed to load data',
-          description: error?.response?.data?.message || error.message,
-        });
+				// Show error notification
+				showErrorNotification({
+					message: "Failed to load data",
+					description: error?.response?.data?.message || error.message,
+				});
 
-        throw error;
-      }
-    },
-    ...queryOptions,
-  });
+				throw error;
+			}
+		},
+		...queryOptions,
+	});
 
-  // Form submission mutation
-  const mutation = useMutation({
-    mutationFn: async (formData) => {
-      setIsSubmitting(true);
-      setSubmitError(null);
+	// Form submission mutation
+	const mutation = useMutation({
+		mutationFn: async (formData) => {
+			setIsSubmitting(true);
+			setSubmitError(null);
 
-      try {
-        const res = await Api().request({
-          url: submitUrl,
-          method,
-          data: formData,
-          ...axiosConfig,
-        });
-        return transformResponse(res.data);
-      } catch (error) {
-        setSubmitError(error);
+			try {
+				const res = await Api().request({
+					url: submitUrl,
+					method,
+					data: formData,
+					...axiosConfig,
+				});
+				return transformResponse(res.data);
+			} catch (error) {
+				setSubmitError(error);
 
-        // Show error notification
-        showErrorNotification({
-          message: 'Submission Failed',
-          description: error?.response?.data?.message || error.message,
-        });
+				// Show error notification
+				showErrorNotification({
+					message: "Submission Failed",
+					description: error?.response?.data?.message || error.message,
+				});
 
-        throw error;
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    onSuccess: (data) => {
-      // Refresh data if needed
-      queryClient.invalidateQueries({ queryKey: effectiveQueryKey });
+				throw error;
+			} finally {
+				setIsSubmitting(false);
+			}
+		},
+		onSuccess: (data) => {
+			// Refresh data if needed
+			queryClient.invalidateQueries({ queryKey: effectiveQueryKey });
 
-      if (onSuccess) {
-        onSuccess(data);
-      }
-    },
-    onError: (err) => {
-      if (onError) {
-        onError(err);
-      }
-    },
-    ...mutationOptions,
-  });
+			if (onSuccess) {
+				onSuccess(data);
+			}
+		},
+		onError: (err) => {
+			if (onError) {
+				onError(err);
+			}
+		},
+		...mutationOptions,
+	});
 
-  // Enhanced submit function with better error handling
-  const submit = useCallback(
-    (formData) => {
-      return mutation.mutate(formData);
-    },
-    [mutation],
-  );
+	// Enhanced submit function with better error handling
+	const submit = useCallback(
+		(formData) => {
+			return mutation.mutate(formData);
+		},
+		[mutation],
+	);
 
-  const clearErrors = useCallback(() => {
-    setSubmitError(null);
-  }, []);
+	const clearErrors = useCallback(() => {
+		setSubmitError(null);
+	}, []);
 
-  const reset = useCallback(() => {
-    clearErrors();
-    if (fullGetUrl) {
-      refetch();
-    }
-  }, [clearErrors, fullGetUrl, refetch]);
+	const reset = useCallback(() => {
+		clearErrors();
+		if (fullGetUrl) {
+			refetch();
+		}
+	}, [clearErrors, fullGetUrl, refetch]);
 
-  return {
-    initialData,
-    isLoading,
-    filters,
-    fetchError,
-    submitError,
-    error: submitError || fetchError,
-    isFetchError,
-    hasError: Boolean(submitError || fetchError),
-    clearErrors,
-    isSubmitting,
-    isSuccess: mutation.isSuccess,
-    submit,
-    refetch,
-    reset,
-    mutation,
-    fullUrl: fullGetUrl,
-    queryResult: {
-      data: initialData,
-      isLoading,
-      error: fetchError,
-      refetch,
-    },
-  };
+	return {
+		initialData,
+		isLoading,
+		filters,
+		fetchError,
+		submitError,
+		error: submitError || fetchError,
+		isFetchError,
+		hasError: Boolean(submitError || fetchError),
+		clearErrors,
+		isSubmitting,
+		isSuccess: mutation.isSuccess,
+		submit,
+		refetch,
+		reset,
+		mutation,
+		fullUrl: fullGetUrl,
+		queryResult: {
+			data: initialData,
+			isLoading,
+			error: fetchError,
+			refetch,
+		},
+	};
 }
