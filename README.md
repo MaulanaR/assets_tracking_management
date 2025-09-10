@@ -1,2 +1,2 @@
 # assets_tracking_management
-FE -> React
+./fe -> React + tauri
