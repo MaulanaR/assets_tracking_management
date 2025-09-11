@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from app.database import Base, engine
-from app.routes import routes_route
+from app.api.v1.router import api_router
 from app.utils import responses_utils
 
 import traceback
@@ -17,8 +17,8 @@ Base.metadata.create_all(bind=engine)
 def root():
     return {"message": "Rixco DB with users table ready 🚀"}
 
-# register routes
-app.include_router(routes_route.router)
+# register API v1 routes
+app.include_router(api_router, prefix="/api/v1")
 
 # ✅ Middleware Logging
 @app.middleware("http")

@@ -12,5 +12,5 @@ class UsersModel(Base):
     is_active = Column(Boolean, default=True)
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)  # nanti bisa buat tabel roles
     apu = Column(JSON, nullable=True)  # Array untuk Access Permissions Users
-    created_at = Column(DateTime, default=datetime.now())
-    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
