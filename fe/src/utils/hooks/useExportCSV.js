@@ -1,8 +1,8 @@
-import Api from "@/utils/axios/api";
-import { App } from "antd";
-import moment from "moment";
-import Papa from "papaparse";
-import { useState } from "react";
+import Api from '@/utils/axios/api';
+import { App } from 'antd';
+import moment from 'moment';
+import Papa from 'papaparse';
+import { useState } from 'react';
 
 /**
  * Custom hook for exporting data to CSV
@@ -16,175 +16,175 @@ import { useState } from "react";
  * @returns {Object} - { exportToCSV, isExporting }
  */
 const useExportCSV = ({
-	endpoint,
-	defaultParams = {},
-	selectedKeys = [],
-	filename = "export",
-	transformData = null,
-	csvOptions = {},
+  endpoint,
+  defaultParams = {},
+  selectedKeys = [],
+  filename = 'export',
+  transformData = null,
+  csvOptions = {},
 }) => {
-	const { message } = App.useApp();
-	const [isExporting, setIsExporting] = useState(false);
+  const { message } = App.useApp();
+  const [isExporting, setIsExporting] = useState(false);
 
-	/**
-	 * Extract selected keys from data item
-	 * @param {Object} item - Data item
-	 * @param {Array} keys - Array of keys to extract
-	 * @returns {Object} - Extracted data
-	 */
-	const extractSelectedKeys = (item, keys) => {
-		const result = {};
+  /**
+   * Extract selected keys from data item
+   * @param {Object} item - Data item
+   * @param {Array} keys - Array of keys to extract
+   * @returns {Object} - Extracted data
+   */
+  const extractSelectedKeys = (item, keys) => {
+    const result = {};
 
-		for (const key of keys) {
-			if (typeof key === "string") {
-				// Simple key extraction with dot notation support
-				result[key] = getNestedValue(item, key);
-			} else if (typeof key === "object") {
-				// Object format: { key: 'displayName', path: 'nested.path', default: 'defaultValue' }
-				const { key: displayKey, path, default: defaultValue = "-" } = key;
-				result[displayKey] = getNestedValue(item, path) || defaultValue;
-			}
-		}
+    for (const key of keys) {
+      if (typeof key === 'string') {
+        // Simple key extraction with dot notation support
+        result[key] = getNestedValue(item, key);
+      } else if (typeof key === 'object') {
+        // Object format: { key: 'displayName', path: 'nested.path', default: 'defaultValue' }
+        const { key: displayKey, path, default: defaultValue = '-' } = key;
+        result[displayKey] = getNestedValue(item, path) || defaultValue;
+      }
+    }
 
-		return result;
-	};
+    return result;
+  };
 
-	/**
-	 * Get nested value from object using dot notation
-	 * @param {Object} obj - Source object
-	 * @param {string} path - Dot notation path (e.g., 'emails.0.value')
-	 * @returns {any} - Value at path or undefined
-	 */
-	const getNestedValue = (obj, path) => {
-		return path.split(".").reduce((current, key) => {
-			if (current && typeof current === "object") {
-				// Handle array access (e.g., emails.0.value)
-				if (!Number.isNaN(Number(key)) && Array.isArray(current)) {
-					return current[Number.parseInt(key)];
-				}
-				return current[key];
-			}
-			return undefined;
-		}, obj);
-	};
+  /**
+   * Get nested value from object using dot notation
+   * @param {Object} obj - Source object
+   * @param {string} path - Dot notation path (e.g., 'emails.0.value')
+   * @returns {any} - Value at path or undefined
+   */
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((current, key) => {
+      if (current && typeof current === 'object') {
+        // Handle array access (e.g., emails.0.value)
+        if (!Number.isNaN(Number(key)) && Array.isArray(current)) {
+          return current[Number.parseInt(key)];
+        }
+        return current[key];
+      }
+      return undefined;
+    }, obj);
+  };
 
-	/**
-	 * Flatten object for CSV compatibility
-	 * @param {Object} obj - Object to flatten
-	 * @returns {Object} - Flattened object
-	 */
-	const flattenObject = (obj, prefix = "") => {
-		const flattened = {};
+  /**
+   * Flatten object for CSV compatibility
+   * @param {Object} obj - Object to flatten
+   * @returns {Object} - Flattened object
+   */
+  const flattenObject = (obj, prefix = '') => {
+    const flattened = {};
 
-		for (const key in obj) {
-			if (Object.prototype.hasOwnProperty.call(obj, key)) {
-				const newKey = prefix ? `${prefix}.${key}` : key;
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const newKey = prefix ? `${prefix}.${key}` : key;
 
-				if (
-					obj[key] !== null &&
-					typeof obj[key] === "object" &&
-					!Array.isArray(obj[key])
-				) {
-					Object.assign(flattened, flattenObject(obj[key], newKey));
-				} else {
-					flattened[newKey] = obj[key];
-				}
-			}
-		}
+        if (
+          obj[key] !== null &&
+          typeof obj[key] === 'object' &&
+          !Array.isArray(obj[key])
+        ) {
+          Object.assign(flattened, flattenObject(obj[key], newKey));
+        } else {
+          flattened[newKey] = obj[key];
+        }
+      }
+    }
 
-		return flattened;
-	};
+    return flattened;
+  };
 
-	/**
-	 * Export data to CSV
-	 * @param {Object} options - Export options
-	 * @param {Object} options.params - Additional parameters for API request
-	 * @param {Array} options.keys - Override selectedKeys for this export
-	 * @param {string} options.customFilename - Override filename for this export
-	 */
-	const exportToCSV = async (options = {}) => {
-		const {
-			params: additionalParams = {},
-			keys: customKeys = selectedKeys,
-			customFilename = filename,
-		} = options;
+  /**
+   * Export data to CSV
+   * @param {Object} options - Export options
+   * @param {Object} options.params - Additional parameters for API request
+   * @param {Array} options.keys - Override selectedKeys for this export
+   * @param {string} options.customFilename - Override filename for this export
+   */
+  const exportToCSV = async (options = {}) => {
+    const {
+      params: additionalParams = {},
+      keys: customKeys = selectedKeys,
+      customFilename = filename,
+    } = options;
 
-		try {
-			setIsExporting(true);
+    try {
+      setIsExporting(true);
 
-			// Merge default params with additional params
-			const requestParams = {
-				is_skip_pagination: true,
-				...defaultParams,
-				...additionalParams,
-			};
+      // Merge default params with additional params
+      const requestParams = {
+        is_skip_pagination: true,
+        ...defaultParams,
+        ...additionalParams,
+      };
 
-			// Make API request
-			const response = await Api().get(endpoint, {
-				params: requestParams,
-			});
+      // Make API request
+      const response = await Api().get(endpoint, {
+        params: requestParams,
+      });
 
-			// Check if data exists
-			if (!response.data?.results?.length) {
-				message.warning("No data to export");
-				return;
-			}
+      // Check if data exists
+      if (!response.data?.results?.length) {
+        message.warning('No data to export');
+        return;
+      }
 
-			// Extract selected keys from data
-			let csvData = response.data.results.map((item) =>
-				extractSelectedKeys(item, customKeys),
-			);
+      // Extract selected keys from data
+      let csvData = response.data.results.map((item) =>
+        extractSelectedKeys(item, customKeys),
+      );
 
-			// Apply custom transformation if provided
-			if (transformData && typeof transformData === "function") {
-				csvData = transformData(csvData);
-			}
+      // Apply custom transformation if provided
+      if (transformData && typeof transformData === 'function') {
+        csvData = transformData(csvData);
+      }
 
-			// Flatten objects for CSV compatibility
-			const flattenedData = csvData.map((item) => flattenObject(item));
+      // Flatten objects for CSV compatibility
+      const flattenedData = csvData.map((item) => flattenObject(item));
 
-			// Default CSV options
-			const defaultCSVOptions = {
-				header: true,
-				delimiter: ",",
-				encoding: "utf-8",
-			};
+      // Default CSV options
+      const defaultCSVOptions = {
+        header: true,
+        delimiter: ',',
+        encoding: 'utf-8',
+      };
 
-			// Convert to CSV
-			const csv = Papa.unparse(flattenedData, {
-				...defaultCSVOptions,
-				...csvOptions,
-			});
+      // Convert to CSV
+      const csv = Papa.unparse(flattenedData, {
+        ...defaultCSVOptions,
+        ...csvOptions,
+      });
 
-			// Create and download file
-			const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-			const link = document.createElement("a");
-			const url = URL.createObjectURL(blob);
-			const timestamp = moment().format("YYYY-MM-DD_HH-mm-ss");
+      // Create and download file
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      const timestamp = moment().format('YYYY-MM-DD_HH-mm-ss');
 
-			link.setAttribute("href", url);
-			link.setAttribute("download", `${customFilename}_${timestamp}.csv`);
-			link.style.visibility = "hidden";
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${customFilename}_${timestamp}.csv`);
+      link.style.visibility = 'hidden';
 
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-			URL.revokeObjectURL(url);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-			message.success("Export completed successfully");
-		} catch (error) {
-			console.error("Export failed:", error);
-			message.error("Failed to export data");
-			throw error; // Re-throw for component handling if needed
-		} finally {
-			setIsExporting(false);
-		}
-	};
+      message.success('Export completed successfully');
+    } catch (error) {
+      console.error('Export failed:', error);
+      message.error('Failed to export data');
+      throw error; // Re-throw for component handling if needed
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
-	return {
-		exportToCSV,
-		isExporting,
-	};
+  return {
+    exportToCSV,
+    isExporting,
+  };
 };
 
 export default useExportCSV;
