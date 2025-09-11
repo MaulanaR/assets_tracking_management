@@ -34,3 +34,7 @@ pnpm-debug.log*
 # OS generated files
 Thumbs.db
 ehthumbs.db
+
+# python dependencies
+/be/__pycache__
+/be/venv

@@ -1,0 +1,39 @@
+2025-09-11 09:14:22,269 - ERROR - ❌ Unhandled ERROR: name 'time' is not defined
+2025-09-11 09:15:50,733 - ERROR - ❌ Unhandled ERROR: name 'time' is not defined
+2025-09-11 09:28:26,200 - INFO - ✅ GET http://127.0.0.1:8000/roles → 307 | 0.78ms
+2025-09-11 09:28:26,209 - INFO - BEGIN (implicit)
+2025-09-11 09:28:26,215 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+2025-09-11 09:28:26,215 - INFO - [generated in 0.00044s] ()
+2025-09-11 09:28:26,219 - INFO - ROLLBACK
+2025-09-11 09:28:26,220 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/roles/ | Object of type RolesModel is not JSON serializable | 16.62ms
+2025-09-11 09:41:10,258 - INFO - ✅ GET http://127.0.0.1:8000/roles → 307 | 0.48ms
+2025-09-11 09:41:10,268 - INFO - BEGIN (implicit)
+2025-09-11 09:41:10,270 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+2025-09-11 09:41:10,270 - INFO - [generated in 0.00030s] ()
+2025-09-11 09:41:10,272 - INFO - ROLLBACK
+2025-09-11 09:41:10,275 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/roles/ | Object of type RolesModel is not JSON serializable | 11.48ms
+2025-09-11 09:48:24,578 - INFO - ✅ GET http://127.0.0.1:8000/roles → 307 | 4.81ms
+2025-09-11 09:48:24,612 - INFO - BEGIN (implicit)
+2025-09-11 09:48:24,617 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+2025-09-11 09:48:24,617 - INFO - [generated in 0.00043s] ()
+2025-09-11 09:48:24,620 - INFO - ROLLBACK
+2025-09-11 09:48:24,621 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/roles/ | You must set the config attribute `from_attributes=True` to use from_orm | 35.96ms
+2025-09-11 09:51:11,414 - INFO - ✅ GET http://127.0.0.1:8000/roles → 307 | 0.83ms
+2025-09-11 09:51:11,420 - INFO - BEGIN (implicit)
+2025-09-11 09:51:11,423 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+2025-09-11 09:51:11,423 - INFO - [generated in 0.00019s] ()
+2025-09-11 09:51:11,428 - INFO - ROLLBACK
+2025-09-11 09:51:11,428 - INFO - ✅ GET http://127.0.0.1:8000/roles/ → 200 | 12.13ms
+2025-09-11 09:52:31,460 - INFO - ✅ GET http://127.0.0.1:8000/roles → 307 | 0.42ms
+2025-09-11 09:52:31,469 - INFO - BEGIN (implicit)
+2025-09-11 09:52:31,471 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+2025-09-11 09:52:31,471 - INFO - [generated in 0.00020s] ()
+2025-09-11 09:52:31,473 - INFO - ROLLBACK
+2025-09-11 09:52:31,473 - INFO - ✅ GET http://127.0.0.1:8000/roles/ → 200 | 9.55ms
+2025-09-11 09:53:06,871 - INFO - ✅ POST http://127.0.0.1:8000/roles → 307 | 0.25ms
+2025-09-11 09:53:06,879 - INFO - ✅ POST http://127.0.0.1:8000/roles/ → 422 | 6.35ms
