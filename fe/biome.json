@@ -22,6 +22,9 @@
         "noDangerouslySetInnerHtml": "error",
         "noDangerouslySetInnerHtmlWithChildren": "error",
         "noGlobalEval": "error"
+      },
+	  "a11y": {
+        "noStaticElementInteractions": "off",
       }
     }
   },

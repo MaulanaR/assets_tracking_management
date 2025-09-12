@@ -1,20 +1,21 @@
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
-import Logo from "@/assets/cetho-logo.png";
-import { useAuthStore } from "@/stores";
 import {
-  LogoutOutlined,
-  PieChartOutlined,
-  UserOutlined,
+	LogoutOutlined,
+	PieChartOutlined,
+	UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Dropdown, Grid, Layout, Menu, Space, Typography } from "antd";
 import {
-  ChevronLeft, ChevronRight, Database,
-  LayoutDashboard,
-  Package,
-  Users
+	ChevronLeft,
+	ChevronRight,
+	Database,
+	LayoutDashboard,
+	Package,
+	Users,
 } from "lucide-react";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router";
+import Logo from "@/assets/cetho-logo.png";
+import { useAuthStore } from "@/stores";
 
 const { Content, Sider, Header } = Layout;
 const { Text } = Typography;
