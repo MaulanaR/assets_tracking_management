@@ -93,7 +93,9 @@ const AppLayout = () => {
 		<Layout hasSider style={{ minHeight: "100vh" }}>
 			{/* Mobile Overlay */}
 			{isMobile && mobileMenuOpen && (
-				<div
+				<button
+					type="button"
+					aria-label="Close mobile menu"
 					onClick={() => setMobileMenuOpen(false)}
 					onKeyDown={(e) => {
 						if (e.key === "Escape") {
@@ -108,6 +110,7 @@ const AppLayout = () => {
 						backgroundColor: "rgba(0, 0, 0, 0.5)",
 						zIndex: 999,
 					}}
+					tabIndex={0}
 				/>
 			)}
 
