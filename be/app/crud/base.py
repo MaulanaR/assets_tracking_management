@@ -29,6 +29,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         return db.query(self.model).filter(self.model.id == id).first()
 
+    def get_by_field(self, db: Session, field: str, value: Any) -> Optional[ModelType]:
+        """
+        Get record by specific field
+        """
+        field_filter = getattr(self.model, field) == value
+        return db.query(self.model).filter(field_filter).first()
+
     def get_multi(self, db: Session, *, skip: int = 0, limit: int = 100) -> List[ModelType]:
         """
         Get multiple records

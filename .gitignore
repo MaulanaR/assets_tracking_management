@@ -36,5 +36,6 @@ Thumbs.db
 ehthumbs.db
 
 # python dependencies
-/be/__pycache__
+**/__pycache__/
 /be/venv
+/be/logs
