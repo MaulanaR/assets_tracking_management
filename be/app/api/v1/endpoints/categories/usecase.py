@@ -13,8 +13,8 @@ from app.utils.responses_utils import (
 )
 
 # Ini var operasi ke DB, semua operasi DB panggil ini
-dbOps = base.CRUDBase(DepartmentModel)
-moduleName = "Department"
+dbOps = base.CRUDBase(CategoryModel)
+moduleName = "Category"
 
 def Create(param: ParamCreate, db: Session):
 	existing_data = dbOps.get_by_field(db, "name", param.name)
