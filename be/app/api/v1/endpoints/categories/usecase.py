@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.crud import base
 from .model import *
 from .struct import *
+from fastapi import Request
 from app.utils.responses_utils import (
 	success_response,
 	error_response,
@@ -44,12 +45,12 @@ def Create(param: ParamCreate, db: Session):
 		status_code=HTTP_201_CREATED
 	)
 
-def GetAll(db: Session, page: int = 1, limit: int = 10):
+def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None):
 	# Calculate skip from page number
 	skip = (page - 1) * limit
 	
 	# Get data with pagination
-	datas = dbOps.get_multi(db, skip=skip, limit=limit)
+	datas = dbOps.get_multi(db, skip=skip, limit=limit, request=request)
 	
 	# Get total count for pagination
 	total_count = dbOps.count(db)
