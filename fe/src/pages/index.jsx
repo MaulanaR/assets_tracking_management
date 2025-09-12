@@ -1,11 +1,7 @@
 import { useAuthStore } from '@/stores';
-import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import {
-  AccountBookOutlined,
-  CheckOutlined,
   LogoutOutlined,
   PieChartOutlined,
-  SwapOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import {
@@ -17,18 +13,18 @@ import {
   Menu,
   Space,
   Typography,
-  message,
 } from 'antd';
-import { BrainIcon } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import {
   ChevronLeft,
-  CreditCard,
   Database,
   LayoutDashboard,
+  Package,
+  Users,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
+import Logo from '@/assets/cetho-logo.png';
 
 const { Content, Sider, Header } = Layout;
 const { Text } = Typography;
@@ -36,22 +32,13 @@ const { useBreakpoint } = Grid;
 
 const AppLayout = () => {
   const navigate = useNavigate();
-  const { user, logout, getCurrentWorkspace, switchWorkspace } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Menggunakan Ant Design's useBreakpoint hook
   const screens = useBreakpoint();
   const isMobile = !screens.md; // md breakpoint = 768px
-
-  const currentWorkspace = getCurrentWorkspace();
-
-  // Fetch available workspaces
-  const { initialData: workspacesData, refetch: refetchWorkspaces } =
-    useDataQuery({
-      queryKey: ['workspaces'],
-      getUrl: '/api/v1/workspaces',
-    });
 
   const menuItems = [
     {
@@ -60,34 +47,24 @@ const AppLayout = () => {
       label: isMobile && !mobileMenuOpen ? '' : 'Dashboard',
     },
     {
-      key: '/datastores',
+      key: '/masterdata',
       icon: <Database size={16} />,
-      label: isMobile && !mobileMenuOpen ? '' : 'Datastores',
+      label: isMobile && !mobileMenuOpen ? '' : 'Master Data',
     },
     {
-      key: '/workspaces',
-      icon: <SwapOutlined />,
-      label: isMobile && !mobileMenuOpen ? '' : 'Workspaces',
+      key: '/assets-management',
+      icon: <Package size={16} />,
+      label: isMobile && !mobileMenuOpen ? '' : 'Asset Management',
     },
-    {
-      key: '/trasactions',
-      icon: <CreditCard size={16} />,
-      label: isMobile && !mobileMenuOpen ? '' : 'Transactions',
+        {
+      key: '/users-role-management',
+      icon: <Users size={16} />,
+      label: isMobile && !mobileMenuOpen ? '' : 'Users & Role Management',
     },
     {
       key: '/reports',
       icon: <PieChartOutlined />,
       label: isMobile && !mobileMenuOpen ? '' : 'Reports',
-    },
-    {
-      key: '/accounts',
-      icon: <AccountBookOutlined />,
-      label: isMobile && !mobileMenuOpen ? '' : 'Accounts',
-    },
-    {
-      key: '/ai',
-      icon: <BrainIcon size={16} />,
-      label: isMobile && !mobileMenuOpen ? '' : 'Grooming Ai',
     },
   ];
 
@@ -103,65 +80,6 @@ const AppLayout = () => {
     await logout();
     navigate('/auth/login');
   };
-
-  const handleSwitchWorkspace = (workspace) => {
-    switchWorkspace(workspace);
-    message.success(`Switched to workspace: ${workspace.name}`);
-    refetchWorkspaces(); // Refresh workspace data
-  };
-
-  // Get available workspaces and sort them
-  const availableWorkspaces = (() => {
-    const allWorkspaces = [];
-
-    if (workspacesData?.results && Array.isArray(workspacesData.results)) {
-      allWorkspaces.push(...workspacesData.results);
-    }
-
-    // Sort workspaces: current workspace first, then others
-    return allWorkspaces.sort((a, b) => {
-      const aIsCurrent = currentWorkspace?.id === a.id;
-      const bIsCurrent = currentWorkspace?.id === b.id;
-
-      if (aIsCurrent && !bIsCurrent) return -1;
-      if (!aIsCurrent && bIsCurrent) return 1;
-
-      return (a.name || '').localeCompare(b.name || '');
-    });
-  })();
-
-  // Create workspace dropdown menu items
-  const workspaceMenuItems = [
-    ...availableWorkspaces.map((workspace) => {
-      const isCurrentWorkspace = currentWorkspace?.id === workspace.id;
-      return {
-        key: `workspace-${workspace.id}`,
-        label: (
-          <Space>
-            {workspace.name || `Workspace ${workspace.id}`}
-            {isCurrentWorkspace && (
-              <CheckOutlined style={{ color: '#52c41a' }} />
-            )}
-          </Space>
-        ),
-        onClick: () => {
-          if (!isCurrentWorkspace) {
-            handleSwitchWorkspace(workspace);
-          }
-        },
-        disabled: isCurrentWorkspace,
-      };
-    }),
-    {
-      type: 'divider',
-    },
-    {
-      key: 'manage-workspaces',
-      label: 'Manage Workspaces',
-      icon: <SwapOutlined />,
-      onClick: () => navigate('/workspaces'),
-    },
-  ];
 
   const userMenuItems = [
     {
@@ -179,8 +97,6 @@ const AppLayout = () => {
       onClick: handleLogout,
     },
   ];
-
-  console.log('aaaaaa =>', currentWorkspace);
 
   return (
     <Layout hasSider style={{ minHeight: '100vh' }}>
@@ -244,7 +160,11 @@ const AppLayout = () => {
             paddingLeft: isMobile ? 0 : 24,
           }}
         >
-          {isMobile ? 'Accounting App' : !collapsed && 'Accounting App'}
+          <img
+            src={Logo}
+            alt="Logo"
+            style={{ height: 32, marginRight: collapsed ? 0 : 8 }}
+          />
         </div>
         <Menu
           onClick={handleClick}
@@ -266,35 +186,6 @@ const AppLayout = () => {
           }}
         >
           <Space size={isMobile ? 'small' : 'large'}>
-            {/* Workspace Selector */}
-            {isMobile ? (
-              <Dropdown
-                menu={{ items: workspaceMenuItems }}
-                placement="bottomLeft"
-                trigger={['click']}
-              >
-                <Button type="text" size="small">
-                  <SwapOutlined />
-                </Button>
-              </Dropdown>
-            ) : (
-              <Space>
-                <Typography.Text type="secondary">Workspace:</Typography.Text>
-                <Dropdown
-                  menu={{ items: workspaceMenuItems }}
-                  placement="bottomLeft"
-                  trigger={['click']}
-                >
-                  <Button type="text" style={{ fontWeight: 500 }}>
-                    <Space>
-                      {currentWorkspace?.name || 'Select Workspace'}
-                      <SwapOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown>
-              </Space>
-            )}
-
             {/* User Menu */}
             <Dropdown
               menu={{ items: userMenuItems }}

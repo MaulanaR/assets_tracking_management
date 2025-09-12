@@ -37,9 +37,10 @@ export default defineConfig(async () => {
 				ignored: ["**/src-tauri/**"],
 			},
 			proxy: {
-				"/api": {
+				"/api/v1": {
 					target: env.VITE_API_BASE_URL,
 					changeOrigin: true,
+					secure: false,
 				},
 			},
 		},
