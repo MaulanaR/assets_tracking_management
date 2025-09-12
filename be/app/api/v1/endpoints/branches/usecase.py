@@ -13,18 +13,10 @@ from app.utils.responses_utils import (
 )
 
 # Ini var operasi ke DB, semua operasi DB panggil ini
-dbOps = base.CRUDBase(DepartmentModel)
-moduleName = "Department"
+dbOps = base.CRUDBase(BranchModel)
+moduleName = "Branch"
 
 def Create(param: ParamCreate, db: Session):
-	existing_data = dbOps.get_by_field(db, "name", param.name)
-	if existing_data:
-		return error_response(
-			message=f"{moduleName} already exists",
-			errors={"name": f"Duplicate {moduleName} name"},
-			status_code=HTTP_400_BAD_REQUEST
-		)
-	
 	# validate code
 	existing_data = dbOps.get_by_field(db, "code", param.code)
 	if existing_data:
@@ -112,6 +104,17 @@ def PatchById(id: int, param: ParamPatch, db: Session):
 			errors={"id": f"{moduleName} not found"},
 			status_code=HTTP_404_NOT_FOUND
 		)
+	
+	# validate code
+	if param.code != oldData.code:
+		notUnique = dbOps.get_by_field(db, "code", param.code)
+		if notUnique:
+			return error_response(
+				message=f"{moduleName} already exists",
+				errors={"name": f"Duplicate {moduleName} code"},
+				status_code=HTTP_400_BAD_REQUEST
+			)
+		
 	update_data = param.model_dump(exclude_unset=True)
 	newData = dbOps.update(db, db_obj=oldData, obj_in=update_data)
 	return success_response(

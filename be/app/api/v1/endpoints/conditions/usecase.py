@@ -24,6 +24,16 @@ def Create(param: ParamCreate, db: Session):
 			errors={"name": f"Duplicate {moduleName} name"},
 			status_code=HTTP_400_BAD_REQUEST
 		)
+	
+	# validate code
+	existing_data = dbOps.get_by_field(db, "code", param.code)
+	if existing_data:
+		return error_response(
+			message=f"{moduleName} already exists",
+			errors={"name": f"Duplicate {moduleName} code"},
+			status_code=HTTP_400_BAD_REQUEST
+		)
+	
 	newData = dbOps.create(db, obj_in=param)
 	return success_response(
 		data=ResponseSchema.model_validate(newData).model_dump(
@@ -75,6 +85,16 @@ def UpdateById(id: int, param: ParamPUT, db: Session):
 			status_code=HTTP_404_NOT_FOUND
 		)
 	newData = dbOps.update(db, db_obj=oldData, obj_in=param)
+
+	# validate code
+	notUnique = dbOps.get_by_field(db, "code", param.code)
+	if notUnique:
+		return error_response(
+			message=f"{moduleName} already exists",
+			errors={"name": f"Duplicate {moduleName} code"},
+			status_code=HTTP_400_BAD_REQUEST
+		)
+	
 	return success_response(
 		data=ResponseSchema.model_validate(newData).model_dump(
 			exclude_none=True,
