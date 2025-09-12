@@ -3,6 +3,7 @@ import AppLayout from '@/pages';
 import ReactLazyWithSuspense from '@/utils/reactLazyWithSuspense';
 import { createBrowserRouter } from 'react-router';
 import datastores from './datastores/_datastores';
+import masterdata from './masterdata/_masterdata';
 import reports from './reports/_reports';
 import workspaces from './workspaces';
 
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
         path: 'ai',
         element: ReactLazyWithSuspense(() => import('@/pages/ai/groomingAi')),
       },
+      ...masterdata,
       ...datastores,
       ...reports,
       ...workspaces,

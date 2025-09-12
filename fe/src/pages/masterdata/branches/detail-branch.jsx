@@ -1,0 +1,120 @@
+import ProSkeleton from '@ant-design/pro-skeleton';
+import { Breadcrumb, Flex } from 'antd';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+
+import { useDataQuery } from '@/utils/hooks/useDataQuery';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { App } from 'antd';
+import { useEffect } from 'react';
+import { useParams } from 'react-router';
+import Forms from './forms';
+import { BranchFormSchema } from './constant';
+
+const DetailBranch = () => {
+  const { notification } = App.useApp();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const endpoints =
+    id && typeof id === 'string' && id.trim() !== ''
+      ? `/api/v1/branches/${id}`
+      : '/api/v1/branches';
+
+  const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
+    queryKey: ['branches'],
+    getUrl: endpoints,
+    method: 'PUT', // Use PUT for updating existing branch
+    submitUrl: endpoints,
+    onSuccess: () => {
+      notification.success({
+        message: 'Branch Updated',
+        description: 'Branch has been successfully updated.',
+        duration: 3,
+      });
+      navigate('/datastores/branches');
+    },
+    onError: (err) => {
+      notification.success({
+        message: 'Contact Update Failed',
+        description: err.message || 'Failed to update contact.',
+        duration: 3,
+      });
+    },
+  });
+
+  const {
+    // register,
+    handleSubmit,
+    // getValues,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(BranchFormSchema),
+    defaultValues: {
+      code: '',
+      name: '',
+      address: '',
+    },
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        code: initialData?.results?.code || '',
+        name: initialData?.results?.name || '',
+        email: initialData?.results?.email || '',
+        position: initialData?.results?.position || '',
+        contact_type: initialData?.results?.type || '',
+        address: initialData?.results?.address || '',
+      });
+    }
+  }, [initialData, reset]);
+
+  const onSubmit = (data) => {
+    submit(data);
+  };
+
+  if (isLoading) {
+    return <ProSkeleton type="descriptions" />;
+  }
+
+  return (
+    <Flex gap={'large'} vertical>
+      <Flex justify="space-between" align="center">
+        <Breadcrumb
+          separator=">"
+          style={{
+            cursor: 'pointer',
+          }}
+          items={[
+            {
+              title: 'Datastore',
+              onClick: () => navigate('/datastores'),
+            },
+            {
+              title: 'Contacts',
+              onClick: () => navigate('/datastores/branches'),
+            },
+            {
+              title: 'Detail Branch',
+            },
+          ]}
+        />
+      </Flex>
+
+      <Forms
+        title={'Detail Branch'}
+        control={control}
+        isLoading={isLoading}
+        handleSubmit={handleSubmit(onSubmit)}
+        isSubmitting={isSubmitting}
+        errors={errors}
+        isDetail={true}
+      />
+    </Flex>
+  );
+};
+
+export default DetailBranch;
