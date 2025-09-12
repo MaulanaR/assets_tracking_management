@@ -3,12 +3,21 @@ from fastapi.responses import JSONResponse
 from app.database import Base, engine
 from app.api.v1.router import api_router
 from app.utils import responses_utils
+from fastapi.middleware.cors import CORSMiddleware
 
 import traceback
 import logging
 import time
 
 app = FastAPI(title="Rixco API", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # bisa pakai ["*"] untuk izinkan semua
+    allow_credentials=True,
+    allow_methods=["*"],            # GET, POST, PUT, DELETE dll
+    allow_headers=["*"],            # Authorization, Content-Type dll
+)
 
 # Create tables
 Base.metadata.create_all(bind=engine)
