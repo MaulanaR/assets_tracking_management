@@ -2,8 +2,8 @@ import sys
 import os
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+from sqlalchemy import create_engine 
 
 from alembic import context
 
@@ -12,6 +12,7 @@ from alembic import context
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 from app.database import Base
+from app.database import DB_URL
 import app.models # import semua model biar terdeteksi
 
 # this is the Alembic Config object, which provides
@@ -46,7 +47,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = DB_URL
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -65,11 +66,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    connectable = create_engine(DB_URL, poolclass=pool.NullPool, echo=True)
 
     with connectable.connect() as connection:
         context.configure(

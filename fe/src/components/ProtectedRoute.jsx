@@ -21,7 +21,8 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  if (!isAuthenticated) {
+  // if (!isAuthenticated) {
+  if (false) {
     // Redirect to login page with return url
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }

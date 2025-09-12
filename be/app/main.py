@@ -92,7 +92,7 @@ async def not_found_handler(request: Request, exc):
         status_code=responses_utils.HTTP_404_NOT_FOUND,
         content={
             "message": "Route not found",
-            "data": None,
-            "errors": None
+            "data": {},
+            "errors": {}
         }
     )

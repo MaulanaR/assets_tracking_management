@@ -1,11 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import os
+from dotenv import load_dotenv
 
-# File SQLite akan bernama rixco_db.db
-SQLALCHEMY_DATABASE_URL = "sqlite:///rixco_db.db"
+load_dotenv()
 
+# Set DB Connection from ENV
+DB_URL = os.getenv("DB_URL")
 engine = create_engine(
-  SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}, echo=True
+  DB_URL, echo=True
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

@@ -1,5 +1,6 @@
 from typing import Any, Optional, Dict
 from fastapi.responses import JSONResponse
+from datetime import datetime
 
 # HTTP Status Codes Reference
 HTTP_200_OK = 200
@@ -18,9 +19,10 @@ def success_response(
     return JSONResponse(
         status_code=status_code,
         content={
+            "status": "success",
             "message": message,
-            "data": data,
-            "errors": None
+            "results": data,
+            "timestamp": datetime.now().isoformat()
         }
     )
 
@@ -32,8 +34,9 @@ def error_response(
     return JSONResponse(
         status_code=status_code,
         content={
+            "status": "error",
             "message": message,
-            "data": None,
-            "errors": errors
+            "results": errors,
+            "timestamp": datetime.now().isoformat()
         }
     )

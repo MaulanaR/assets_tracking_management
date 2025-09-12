@@ -136,3 +136,184 @@ FROM roles
 2025-09-11 15:18:57,024 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 8.64ms
 2025-09-11 16:00:35,064 - INFO - ✅ GET http://127.0.0.1:8000/docs → 200 | 0.58ms
 2025-09-11 16:00:37,742 - INFO - ✅ GET http://127.0.0.1:8000/openapi.json → 200 | 16.09ms
+2025-09-12 22:44:48,684 - INFO - ✅ GET http://127.0.0.1:8000/ → 200 | 3.81ms
+2025-09-12 22:44:49,045 - ERROR - ❌ Unhandled ERROR: 404: Not Found
+2025-09-12 22:44:49,045 - INFO - ✅ GET http://127.0.0.1:8000/favicon.ico → 404 | 1.14ms
+2025-09-12 22:50:43,878 - INFO - ✅ GET http://127.0.0.1:8000/docs → 200 | 0.94ms
+2025-09-12 22:50:44,817 - INFO - ✅ GET http://127.0.0.1:8000/openapi.json → 200 | 41.57ms
+2025-09-12 23:07:55,416 - INFO - ✅ GET http://127.0.0.1:8000/docs → 200 | 0.55ms
+2025-09-12 23:07:55,882 - INFO - ✅ GET http://127.0.0.1:8000/openapi.json → 200 | 77.80ms
+2025-09-12 23:22:34,831 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.64ms
+2025-09-12 23:22:34,856 - INFO - BEGIN (implicit)
+2025-09-12 23:22:34,859 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-12 23:22:34,859 - INFO - [generated in 0.00030s] (100, 0)
+2025-09-12 23:22:34,871 - INFO - ROLLBACK
+2025-09-12 23:22:34,872 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/api/v1/roles/ | Object of type datetime is not JSON serializable | 37.38ms
+2025-09-12 23:23:10,165 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.29ms
+2025-09-12 23:23:10,170 - INFO - BEGIN (implicit)
+2025-09-12 23:23:10,171 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-12 23:23:10,175 - INFO - [cached since 35.32s ago] (100, 0)
+2025-09-12 23:23:10,176 - INFO - ROLLBACK
+2025-09-12 23:23:10,176 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/api/v1/roles/ | Object of type datetime is not JSON serializable | 7.70ms
+2025-09-12 23:23:52,542 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.36ms
+2025-09-12 23:23:52,567 - INFO - BEGIN (implicit)
+2025-09-12 23:23:52,569 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-12 23:23:52,570 - INFO - [generated in 0.00048s] (100, 0)
+2025-09-12 23:23:52,572 - INFO - ROLLBACK
+2025-09-12 23:23:52,572 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/api/v1/roles/ | Object of type datetime is not JSON serializable | 27.90ms
+2025-09-12 23:25:12,061 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.41ms
+2025-09-12 23:25:12,081 - INFO - BEGIN (implicit)
+2025-09-12 23:25:12,089 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-12 23:25:12,089 - INFO - [generated in 0.00035s] (100, 0)
+2025-09-12 23:25:12,091 - INFO - ROLLBACK
+2025-09-12 23:25:12,091 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 25.96ms
+2025-09-12 23:56:19,906 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.45ms
+2025-09-12 23:56:19,927 - INFO - BEGIN (implicit)
+2025-09-12 23:56:19,933 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-12 23:56:19,933 - INFO - [generated in 0.00027s] (100, 0)
+2025-09-12 23:56:19,937 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles) AS anon_1
+2025-09-12 23:56:19,937 - INFO - [generated in 0.00021s] ()
+2025-09-12 23:56:19,939 - INFO - ROLLBACK
+2025-09-12 23:56:19,940 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 31.33ms
+2025-09-12 23:56:29,876 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.60ms
+2025-09-12 23:56:29,879 - INFO - BEGIN (implicit)
+2025-09-12 23:56:29,880 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-12 23:56:29,880 - INFO - [cached since 9.947s ago] (100, 0)
+2025-09-12 23:56:29,880 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles) AS anon_1
+2025-09-12 23:56:29,881 - INFO - [cached since 9.944s ago] ()
+2025-09-12 23:56:29,881 - INFO - ROLLBACK
+2025-09-12 23:56:29,882 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 3.29ms
+2025-09-13 00:00:59,219 - INFO - ✅ GET http://127.0.0.1:8000/docs → 200 | 0.46ms
+2025-09-13 00:00:59,545 - INFO - ✅ GET http://127.0.0.1:8000/openapi.json → 200 | 54.28ms
+2025-09-13 00:01:30,155 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles?limit=1 → 307 | 0.27ms
+2025-09-13 00:01:30,159 - INFO - BEGIN (implicit)
+2025-09-13 00:01:30,160 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-13 00:01:30,160 - INFO - [cached since 310.2s ago] (1, 0)
+2025-09-13 00:01:30,164 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles) AS anon_1
+2025-09-13 00:01:30,165 - INFO - [cached since 310.2s ago] ()
+2025-09-13 00:01:30,166 - INFO - ROLLBACK
+2025-09-13 00:01:30,166 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/?limit=1 → 200 | 8.86ms
+2025-09-13 00:01:39,830 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.37ms
+2025-09-13 00:01:39,833 - INFO - BEGIN (implicit)
+2025-09-13 00:01:39,834 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-13 00:01:39,834 - INFO - [cached since 319.9s ago] (100, 0)
+2025-09-13 00:01:39,835 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles) AS anon_1
+2025-09-13 00:01:39,835 - INFO - [cached since 319.9s ago] ()
+2025-09-13 00:01:39,838 - INFO - ROLLBACK
+2025-09-13 00:01:39,839 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 7.02ms
+2025-09-13 00:02:56,495 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.41ms
+2025-09-13 00:02:56,514 - INFO - BEGIN (implicit)
+2025-09-13 00:02:56,518 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-13 00:02:56,518 - INFO - [generated in 0.00053s] (10, 0)
+2025-09-13 00:02:56,524 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles) AS anon_1
+2025-09-13 00:02:56,525 - INFO - [generated in 0.00045s] ()
+2025-09-13 00:02:56,526 - INFO - ROLLBACK
+2025-09-13 00:02:56,527 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 30.10ms
+2025-09-13 00:05:10,044 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles → 307 | 0.44ms
+2025-09-13 00:05:10,047 - INFO - BEGIN (implicit)
+2025-09-13 00:05:10,048 - INFO - SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles
+ LIMIT ? OFFSET ?
+2025-09-13 00:05:10,048 - INFO - [cached since 133.5s ago] (10, 0)
+2025-09-13 00:05:10,050 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT roles.id AS roles_id, roles.name AS roles_name, roles.description AS roles_description, roles.created_at AS roles_created_at, roles.updated_at AS roles_updated_at 
+FROM roles) AS anon_1
+2025-09-13 00:05:10,050 - INFO - [cached since 133.5s ago] ()
+2025-09-13 00:05:10,052 - INFO - ROLLBACK
+2025-09-13 00:05:10,053 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/roles/ → 200 | 6.94ms
+2025-09-13 00:07:25,592 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branches → 307 | 0.44ms
+2025-09-13 00:07:25,597 - ERROR - ❌ ERROR: GET http://127.0.0.1:8000/api/v1/branches/ | name 'page' is not defined | 1.62ms
+2025-09-13 00:08:30,662 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branches → 307 | 0.68ms
+2025-09-13 00:08:30,681 - INFO - BEGIN (implicit)
+2025-09-13 00:08:30,684 - INFO - SELECT branches.id AS branches_id, branches.code AS branches_code, branches.name AS branches_name, branches.created_at AS branches_created_at, branches.created_by AS branches_created_by, branches.updated_at AS branches_updated_at, branches.updated_by AS branches_updated_by, branches.deleted_at AS branches_deleted_at, branches.address AS branches_address 
+FROM branches
+ LIMIT ? OFFSET ?
+2025-09-13 00:08:30,684 - INFO - [generated in 0.00024s] (10, -10)
+2025-09-13 00:08:30,690 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT branches.id AS branches_id, branches.code AS branches_code, branches.name AS branches_name, branches.created_at AS branches_created_at, branches.created_by AS branches_created_by, branches.updated_at AS branches_updated_at, branches.updated_by AS branches_updated_by, branches.deleted_at AS branches_deleted_at, branches.address AS branches_address 
+FROM branches) AS anon_1
+2025-09-13 00:08:30,690 - INFO - [generated in 0.00022s] ()
+2025-09-13 00:08:30,691 - INFO - ROLLBACK
+2025-09-13 00:08:30,692 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branches/ → 200 | 28.13ms
+2025-09-13 00:08:50,550 - ERROR - ❌ Unhandled ERROR: 404: Not Found
+2025-09-13 00:08:50,550 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branche → 404 | 0.46ms
+2025-09-13 00:09:10,238 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branches → 307 | 0.68ms
+2025-09-13 00:09:10,242 - INFO - BEGIN (implicit)
+2025-09-13 00:09:10,242 - INFO - SELECT branches.id AS branches_id, branches.code AS branches_code, branches.name AS branches_name, branches.created_at AS branches_created_at, branches.created_by AS branches_created_by, branches.updated_at AS branches_updated_at, branches.updated_by AS branches_updated_by, branches.deleted_at AS branches_deleted_at, branches.address AS branches_address 
+FROM branches
+ LIMIT ? OFFSET ?
+2025-09-13 00:09:10,242 - INFO - [cached since 39.56s ago] (10, -10)
+2025-09-13 00:09:10,243 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT branches.id AS branches_id, branches.code AS branches_code, branches.name AS branches_name, branches.created_at AS branches_created_at, branches.created_by AS branches_created_by, branches.updated_at AS branches_updated_at, branches.updated_by AS branches_updated_by, branches.deleted_at AS branches_deleted_at, branches.address AS branches_address 
+FROM branches) AS anon_1
+2025-09-13 00:09:10,243 - INFO - [cached since 39.55s ago] ()
+2025-09-13 00:09:10,244 - INFO - ROLLBACK
+2025-09-13 00:09:10,244 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branches/ → 200 | 3.32ms
+2025-09-13 00:09:37,207 - ERROR - ❌ Unhandled ERROR: 404: Not Found
+2025-09-13 00:09:37,207 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/branchese → 404 | 2.69ms
+2025-09-13 00:10:50,173 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/categories → 307 | 0.38ms
+2025-09-13 00:10:50,210 - INFO - BEGIN (implicit)
+2025-09-13 00:10:50,214 - INFO - SELECT categories.id AS categories_id, categories.code AS categories_code, categories.name AS categories_name, categories.description AS categories_description, categories.created_at AS categories_created_at, categories.created_by AS categories_created_by, categories.updated_at AS categories_updated_at, categories.updated_by AS categories_updated_by, categories.deleted_at AS categories_deleted_at 
+FROM categories
+ LIMIT ? OFFSET ?
+2025-09-13 00:10:50,216 - INFO - [generated in 0.00180s] (10, -10)
+2025-09-13 00:10:50,228 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT categories.id AS categories_id, categories.code AS categories_code, categories.name AS categories_name, categories.description AS categories_description, categories.created_at AS categories_created_at, categories.created_by AS categories_created_by, categories.updated_at AS categories_updated_at, categories.updated_by AS categories_updated_by, categories.deleted_at AS categories_deleted_at 
+FROM categories) AS anon_1
+2025-09-13 00:10:50,228 - INFO - [generated in 0.00032s] ()
+2025-09-13 00:10:50,232 - INFO - ROLLBACK
+2025-09-13 00:10:50,233 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/categories/ → 200 | 53.29ms
+2025-09-13 00:11:35,367 - ERROR - ❌ Unhandled ERROR: 404: Not Found
+2025-09-13 00:11:35,367 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/departmens → 404 | 0.73ms
+2025-09-13 00:11:48,532 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/departments → 307 | 0.30ms
+2025-09-13 00:11:48,551 - INFO - BEGIN (implicit)
+2025-09-13 00:11:48,554 - INFO - SELECT departments.id AS departments_id, departments.code AS departments_code, departments.name AS departments_name, departments.description AS departments_description, departments.created_at AS departments_created_at, departments.created_by AS departments_created_by, departments.updated_at AS departments_updated_at, departments.updated_by AS departments_updated_by, departments.deleted_at AS departments_deleted_at 
+FROM departments
+ LIMIT ? OFFSET ?
+2025-09-13 00:11:48,554 - INFO - [generated in 0.00054s] (10, -10)
+2025-09-13 00:11:48,560 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT departments.id AS departments_id, departments.code AS departments_code, departments.name AS departments_name, departments.description AS departments_description, departments.created_at AS departments_created_at, departments.created_by AS departments_created_by, departments.updated_at AS departments_updated_at, departments.updated_by AS departments_updated_by, departments.deleted_at AS departments_deleted_at 
+FROM departments) AS anon_1
+2025-09-13 00:11:48,560 - INFO - [generated in 0.00025s] ()
+2025-09-13 00:11:48,561 - INFO - ROLLBACK
+2025-09-13 00:11:48,562 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/departments/ → 200 | 23.65ms
+2025-09-13 00:13:04,240 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/conditions → 307 | 0.40ms
+2025-09-13 00:13:04,260 - INFO - BEGIN (implicit)
+2025-09-13 00:13:04,264 - INFO - SELECT conditions.id AS conditions_id, conditions.code AS conditions_code, conditions.name AS conditions_name, conditions.description AS conditions_description, conditions.created_at AS conditions_created_at, conditions.created_by AS conditions_created_by, conditions.updated_at AS conditions_updated_at, conditions.updated_by AS conditions_updated_by, conditions.deleted_at AS conditions_deleted_at 
+FROM conditions
+ LIMIT ? OFFSET ?
+2025-09-13 00:13:04,264 - INFO - [generated in 0.00031s] (10, -10)
+2025-09-13 00:13:04,269 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT conditions.id AS conditions_id, conditions.code AS conditions_code, conditions.name AS conditions_name, conditions.description AS conditions_description, conditions.created_at AS conditions_created_at, conditions.created_by AS conditions_created_by, conditions.updated_at AS conditions_updated_at, conditions.updated_by AS conditions_updated_by, conditions.deleted_at AS conditions_deleted_at 
+FROM conditions) AS anon_1
+2025-09-13 00:13:04,269 - INFO - [generated in 0.00023s] ()
+2025-09-13 00:13:04,270 - INFO - ROLLBACK
+2025-09-13 00:13:04,271 - INFO - ✅ GET http://127.0.0.1:8000/api/v1/conditions/ → 200 | 26.02ms
