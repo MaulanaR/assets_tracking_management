@@ -8,7 +8,7 @@ import { Card, Grid } from 'antd';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import LoginFormComponent from './form';
-import illustrationMobilDerek from '@/assets/undraw_towing_e407.svg';
+import illustrationMobilDerek from '@/assets/bg.png';
 const { useBreakpoint } = Grid;
 
 // Constants
@@ -19,7 +19,7 @@ const CONTAINER_STYLES = {
   alignItems: 'center',
   backgroundImage: `url(${illustrationMobilDerek})`,
   backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover',
+  backgroundPosition: 'right bottom',
 };
 
 export default () => {
@@ -72,7 +72,7 @@ export default () => {
 
   return (
     <div style={CONTAINER_STYLES}>
-      <Card styles={{ body: { height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' } }}>
+      <Card styles={{ body: { height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '500px' } }}>
         <LoginFormComponent onSubmit={onSubmit} isLoading={isLoading} />
       </Card>
     </div>
