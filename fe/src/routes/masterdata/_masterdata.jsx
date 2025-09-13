@@ -1,5 +1,6 @@
 import ReactLazyWithSuspense from '@/utils/reactLazyWithSuspense';
 import branches from './_branches';
+import categories from './_categories';
 
 /** @type {import('react-router').RouteObject[]} */
 const routes = [
@@ -13,6 +14,7 @@ const routes = [
         ),
       },
       ...branches,
+      ...categories,
       {
         path: '*',
         element: ReactLazyWithSuspense(() => import('@/pages/notfound')),

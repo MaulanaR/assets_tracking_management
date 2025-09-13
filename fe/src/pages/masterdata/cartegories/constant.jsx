@@ -4,7 +4,7 @@ import * as z from "zod";
 import ContextMenuOption from "@/blocs/ContextMenuOption";
 import renderTags from "@/utils/renderTags";
 
-export const BranchFormSchema = z
+export const CategoryFormSchema = z
 	.object({
 		code: z.string().min(1, "Code is required"),
 		name: z.string().min(1, "Name is required"),
@@ -13,7 +13,7 @@ export const BranchFormSchema = z
 	.passthrough();
 
 // API Endpoints
-export const ENDPOINTS = "/api/v1/branches";
+export const ENDPOINTS = "/api/v1/categories";
 
 // Pagination defaults
 export const DEFAULT_PER_PAGE = 10;
@@ -23,7 +23,7 @@ export const DEFAULT_FILTERS = {
 	page: DEFAULT_PAGE,
 };
 
-// Branch type colors mapping
+// Category type colors mapping
 export const TYPE_COLORS = {
 	customer: "blue",
 	supplier: "green",
@@ -105,9 +105,9 @@ export const getColumns = () => [
 		width: 50,
 		render: (_, record) => (
 			<ContextMenuOption
-				editPath={`/masterdata/branches/edit/${record.id}`}
-				detailPath={`/masterdata/branches/detail/${record.id}`}
-				deletePath={`/masterdata/branches/delete/${record.id}`}
+				editPath={`/masterdata/categories/edit/${record.id}`}
+				detailPath={`/masterdata/categories/detail/${record.id}`}
+				deletePath={`/masterdata/categories/delete/${record.id}`}
 			>
 				<Button
 					variant="text"
@@ -128,6 +128,6 @@ export const getBreadcrumbItems = (navigate) => [
 		onClick: () => navigate("/masterdata"),
 	},
 	{
-		title: "branches",
+		title: "categories",
 	},
 ];
