@@ -36,7 +36,7 @@ const { Title, Text } = Typography;
 const { Search } = Input;
 
 // Main Component
-const ContentBranches = () => {
+const ContentCategories = () => {
   const {
     selectedRow,
     screens,
@@ -117,7 +117,7 @@ const ContentBranches = () => {
           >
             <Flex justify="space-between" wrap="wrap">
               <Space size={'small'}>
-                <Title level={2}>Branches</Title>
+                <Title level={2}>Categories</Title>
                 <Title level={3} type="secondary" strong>
                   {initialData?.results?.pagination?.total}
                 </Title>
@@ -177,4 +177,4 @@ const ContentBranches = () => {
   );
 };
 
-export default ContentBranches;
+export default ContentCategories;

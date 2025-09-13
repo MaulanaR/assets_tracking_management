@@ -22,7 +22,7 @@ const routes = [
 						path: "filter",
 						element: ReactLazyWithSuspense(
 							async () =>
-								await import("@/pages/masterdata/categories/filter-branch"),
+								await import("@/pages/masterdata/categories/filter-category"),
 						),
 					},
 				],
@@ -31,20 +31,20 @@ const routes = [
 				path: "create",
 				element: ReactLazyWithSuspense(
 					async () =>
-						await import("@/pages/masterdata/categories/create-branch"),
+						await import("@/pages/masterdata/categories/create-category"),
 				),
 			},
 			{
 				path: "edit/:id",
 				element: ReactLazyWithSuspense(
-					async () => await import("@/pages/masterdata/categories/edit-branch"),
+					async () => await import("@/pages/masterdata/categories/edit-category"),
 				),
 			},
 			{
 				path: "detail/:id",
 				element: ReactLazyWithSuspense(
 					async () =>
-						await import("@/pages/masterdata/categories/detail-branch"),
+						await import("@/pages/masterdata/categories/detail-category"),
 				),
 			},
 			{
@@ -55,7 +55,7 @@ const routes = [
 						const res = await Api().delete(`/api/v1/categories/${id}`);
 						return res;
 					} catch (error) {
-						console.error("Error deleting branch:", error);
+						console.error("Error deleting category:", error);
 					}
 				},
 			},
