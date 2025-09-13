@@ -10,7 +10,8 @@ import {
   getBreadcrumbItems,
   getColumns,
 } from './constant';
-import { useBranchesController } from './controller-categories';
+
+import { useCategoriesController } from './controller-categories';
 
 // Styles
 const useStyle = createStyles(({ css, token }) => {
@@ -57,7 +58,7 @@ const ContentBranches = () => {
     handleCreate,
     handleExportCSV,
     navigate,
-  } = useBranchesController();
+  } = useCategoriesController();
 
   const { styles } = useStyle();
   const columns = getColumns();

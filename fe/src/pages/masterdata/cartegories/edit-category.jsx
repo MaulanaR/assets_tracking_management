@@ -5,36 +5,34 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { useDataQuery } from "@/utils/hooks/useDataQuery";
-import { BranchFormSchema } from "./constant";
+
+import { CategoryFormSchema } from "./constant";
 import Forms from "./forms";
 
-const DetailBranch = () => {
+const EditCategory = () => {
 	const { notification } = App.useApp();
 	const navigate = useNavigate();
 	const { id } = useParams();
 
-	const endpoints =
-		id && typeof id === "string" && id.trim() !== ""
-			? `/api/v1/branches/${id}`
-			: "/api/v1/branches";
+	const endpoints = `/api/v1/categories/${id}`;
 
 	const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
-		queryKey: ["branches"],
+		queryKey: ["categories", endpoints],
 		getUrl: endpoints,
-		method: "PUT", // Use PUT for updating existing branch
+		method: "PUT", // Use PUT for updating existing categori
 		submitUrl: endpoints,
 		onSuccess: () => {
 			notification.success({
-				message: "Branch Updated",
-				description: "Branch has been successfully updated.",
+				message: "Category Updated",
+				description: "Category has been successfully updated.",
 				duration: 3,
 			});
-			navigate("/masterdata/branches");
+			navigate("/masterdata/categories");
 		},
 		onError: (err) => {
 			notification.success({
-				message: "Contact Update Failed",
-				description: err.message || "Failed to update contact.",
+				message: "Category Update Failed",
+				description: err.message || "Failed to update categori.",
 				duration: 3,
 			});
 		},
@@ -48,7 +46,7 @@ const DetailBranch = () => {
 		control,
 		formState: { errors },
 	} = useForm({
-		resolver: zodResolver(BranchFormSchema),
+		resolver: zodResolver(CategoryFormSchema),
 		defaultValues: {
 			code: "",
 			name: "",
@@ -58,13 +56,15 @@ const DetailBranch = () => {
 
 	useEffect(() => {
 		if (initialData) {
+			const { code, name, email, position, contact_type, address } =
+				initialData?.results || {};
 			reset({
-				code: initialData?.results?.code || "",
-				name: initialData?.results?.name || "",
-				email: initialData?.results?.email || "",
-				position: initialData?.results?.position || "",
-				contact_type: initialData?.results?.type || "",
-				address: initialData?.results?.address || "",
+				code: code || "",
+				name: name || "",
+				email: email || "",
+				position: position || "",
+				contact_type: contact_type || "",
+				address: address || "",
 			});
 		}
 	}, [initialData, reset]);
@@ -92,26 +92,25 @@ const DetailBranch = () => {
 						},
 						{
 							title: "Contacts",
-							onClick: () => navigate("/masterdata/branches"),
+							onClick: () => navigate("/masterdata/categories"),
 						},
 						{
-							title: "Detail Branch",
+							title: "Edit Category",
 						},
 					]}
 				/>
 			</Flex>
 
 			<Forms
-				title={"Detail Branch"}
+				title="Edit Category"
 				control={control}
 				isLoading={isLoading}
 				handleSubmit={handleSubmit(onSubmit)}
 				isSubmitting={isSubmitting}
 				errors={errors}
-				isDetail={true}
 			/>
 		</Flex>
 	);
 };
 
-export default DetailBranch;
+export default EditCategory;

@@ -52,7 +52,7 @@ export default function FilterContact() {
     }
 
     const queryParams = new URLSearchParams(filterParams).toString();
-    navigate(`/masterdata/branches/list?${queryParams}`, { replace: true });
+    navigate(`/masterdata/categories/list?${queryParams}`, { replace: true });
   };
 
   return (
