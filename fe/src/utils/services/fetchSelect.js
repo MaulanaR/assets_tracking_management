@@ -20,15 +20,15 @@ export const fetchSelect = async ({ pageParam = 1, queryKey, url }) => {
   if (
     !response.data ||
     !response.data.results ||
-    !Array.isArray(response.data.results)
+    !Array.isArray(response.data.results.list)
   ) {
     console.error('Invalid response format:', response.data);
     throw new Error('Invalid response format');
   }
 
   return {
-    data: response.data.results,
-    nextPage: response?.data?.results?.links?.next
+    data: response.data.results?.list || [],
+    nextPage: response?.data?.results?.pagination?.next
       ? Number(pageParam) + 1
       : undefined,
   };
