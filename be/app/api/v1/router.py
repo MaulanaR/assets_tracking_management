@@ -5,6 +5,7 @@ from app.api.v1.endpoints.departments import handler as department_handler
 from app.api.v1.endpoints.conditions import handler as condition_handler
 from app.api.v1.endpoints.categories import handler as category_handler
 from app.api.v1.endpoints.branches import handler as branch_handler
+from app.api.v1.endpoints.employees import handler as employee_handler
 
 api_router = APIRouter()
 
@@ -25,5 +26,8 @@ api_router.include_router(category_handler.router, prefix="/categories", tags=["
 
 # Branch
 api_router.include_router(branch_handler.router, prefix="/branches", tags=["Branches"])
+
+# Employee
+api_router.include_router(employee_handler.router, prefix="/employees", tags=["Employees"])
 
 # Tambahkan router lainnya di sini ketika menambah fitur baru
