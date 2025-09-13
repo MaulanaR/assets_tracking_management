@@ -137,6 +137,17 @@ def PatchById(id: int, param: ParamPatch, db: Session):
 			errors={"id": f"{moduleName} not found"},
 			status_code=HTTP_404_NOT_FOUND
 		)
+
+	# validate code
+	if param.code != oldData.code:
+		notUnique = dbOps.get_by_field(db, "code", param.code)
+		if notUnique:
+			return error_response(
+				message=f"{moduleName} already exists",
+				errors={"name": f"Duplicate {moduleName} code"},
+				status_code=HTTP_400_BAD_REQUEST
+			)
+	
 	update_data = param.model_dump(exclude_unset=True)
 	newData = dbOps.update(db, db_obj=oldData, obj_in=update_data)
 	return success_response(
