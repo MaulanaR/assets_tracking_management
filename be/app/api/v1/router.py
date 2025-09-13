@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import roles, users, migration
+from app.api.v1.endpoints import migration
+from app.api.v1.endpoints.roles import handler as roles_handler
 from app.api.v1.endpoints.departments import handler as department_handler
 from app.api.v1.endpoints.conditions import handler as condition_handler
 from app.api.v1.endpoints.categories import handler as category_handler
@@ -7,12 +8,11 @@ from app.api.v1.endpoints.branches import handler as branch_handler
 
 api_router = APIRouter()
 
-# Include router dari semua endpoint
-api_router.include_router(roles.router, prefix="/roles", tags=["Roles"])
-api_router.include_router(users.router, prefix="/users", tags=["Users"])
-
 # Router migration
 api_router.include_router(migration.router, prefix="", tags=["Migration"])
+
+# Role
+api_router.include_router(roles_handler.router, prefix="/roles", tags=["Roles"])
 
 # Department
 api_router.include_router(department_handler.router, prefix="/departments", tags=["Departments"])

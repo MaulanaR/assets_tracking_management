@@ -12,10 +12,9 @@ def CreateHandler(param: ParamCreate, db: Session = Depends(get_db)):
     return Create(param, db)
 
 # READ ALL
-@router.get("/", response_model=list[ResponseSchema])
-# Jika mau filter otomatis, maka kirimkan parameter request ke fungsi.
-def GetHandler(request: Request,db: Session = Depends(get_db),page: int = 1,limit: int = 10):
-    return GetAll(db, page, limit, request)
+@router.get("/")
+def GetHandler(db: Session = Depends(get_db), page: int = 1, limit: int = 10):
+    return GetAll(db, page=page, limit=limit)
 
 # READ ONE
 @router.get("/{id}", response_model=ResponseSchema)

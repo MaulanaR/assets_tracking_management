@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from app.crud import base
 from .model import *
 from .struct import *
-from fastapi import Request
 from app.utils.responses_utils import (
 	success_response,
 	error_response,
@@ -14,16 +13,15 @@ from app.utils.responses_utils import (
 )
 
 # Ini var operasi ke DB, semua operasi DB panggil ini
-dbOps = base.CRUDBase(BranchModel)
-moduleName = "Branch"
+dbOps = base.CRUDBase(RoleModel)
+moduleName = "Role"
 
 def Create(param: ParamCreate, db: Session):
-	# validate code
-	existing_data = dbOps.get_by_field(db, "code", param.code)
+	existing_data = dbOps.get_by_field(db, "name", param.name)
 	if existing_data:
 		return error_response(
 			message=f"{moduleName} already exists",
-			errors={"name": f"Duplicate {moduleName} code"},
+			errors={"name": f"Duplicate {moduleName} name"},
 			status_code=HTTP_400_BAD_REQUEST
 		)
 
@@ -37,12 +35,12 @@ def Create(param: ParamCreate, db: Session):
 		status_code=HTTP_201_CREATED
 	)
 
-def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None):
+def GetAll(db: Session, page: int = 1, limit: int = 10):
 	# Calculate skip from page number
 	skip = (page - 1) * limit
 	
 	# Get data with pagination
-	datas = dbOps.get_multi(db, skip=skip, limit=limit, request=request)
+	datas = dbOps.get_multi(db, skip=skip, limit=limit)
 	
 	# Get total count for pagination
 	total_count = dbOps.count(db)
@@ -101,16 +99,7 @@ def UpdateById(id: int, param: ParamPUT, db: Session):
 			errors={"id": f"{moduleName} not found"},
 			status_code=HTTP_404_NOT_FOUND
 		)
-	
-	# validate code
-	notUnique = dbOps.get_by_field(db, "code", param.code)
-	if notUnique:
-		return error_response(
-			message=f"{moduleName} already exists",
-			errors={"name": f"Duplicate {moduleName} code"},
-			status_code=HTTP_400_BAD_REQUEST
-		)
-	
+
 	newData = dbOps.update(db, db_obj=oldData, obj_in=param)
 	return success_response(
 		data=ResponseSchema.model_validate(newData).model_dump(
@@ -129,17 +118,6 @@ def PatchById(id: int, param: ParamPatch, db: Session):
 			errors={"id": f"{moduleName} not found"},
 			status_code=HTTP_404_NOT_FOUND
 		)
-	
-	# validate code
-	if param.code != oldData.code:
-		notUnique = dbOps.get_by_field(db, "code", param.code)
-		if notUnique:
-			return error_response(
-				message=f"{moduleName} already exists",
-				errors={"name": f"Duplicate {moduleName} code"},
-				status_code=HTTP_400_BAD_REQUEST
-			)
-		
 	update_data = param.model_dump(exclude_unset=True)
 	newData = dbOps.update(db, db_obj=oldData, obj_in=update_data)
 	return success_response(

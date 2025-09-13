@@ -3,7 +3,7 @@ from sqlalchemy.types import JSON
 from datetime import datetime
 from app.database import Base
 
-class UsersModel(Base):
+class UserModel(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)

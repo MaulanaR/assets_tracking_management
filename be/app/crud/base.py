@@ -2,7 +2,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-
+from fastapi import Request
 from app.database import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -36,11 +36,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         field_filter = getattr(self.model, field) == value
         return db.query(self.model).filter(field_filter).first()
 
-    def get_multi(self, db: Session, *, skip: int = 0, limit: int = 100) -> List[ModelType]:
+    def get_multi(self, db: Session, *, skip: int = 0, limit: int = 100, request: Request = None) -> List[ModelType]:
         """
         Get multiple records
         """
-        return db.query(self.model).offset(skip).limit(limit).all()
+        filter_query = {}
+        if request is not None and hasattr(request, "query_params"):
+            for k, v in request.query_params.items():
+                if k in self.model.__table__.columns and v not in [None, ""]:
+                    filter_query[k] = v
+        return db.query(self.model).filter_by(**filter_query).offset(skip).limit(limit).all()
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         """
@@ -84,3 +89,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.delete(obj)
         db.commit()
         return obj
+        
+    def count(self, db: Session) -> int:
+        """
+        Get total count of records
+        """
+        return db.query(self.model).count()

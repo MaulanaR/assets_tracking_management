@@ -1,8 +1,8 @@
-
 from sqlalchemy.orm import Session
 from app.crud import base
 from .model import *
 from .struct import *
+from fastapi import Request
 from app.utils.responses_utils import (
 	success_response,
 	error_response,
@@ -44,20 +44,37 @@ def Create(param: ParamCreate, db: Session):
 		status_code=HTTP_201_CREATED
 	)
 
-def GetAll(db: Session, skip: int = 0, limit: int = 100):
-	datas = dbOps.get_multi(db, skip=skip, limit=limit)
-	respData = [
-		ResponseSchema.model_validate(r).model_dump(
-			exclude_none=True,
-			mode="json"
-		)
-		for r in datas
-	]
-	return success_response(
-		data=respData,
-		message=f"{moduleName}s retrieved successfully",
-		status_code=HTTP_200_OK
-	)
+def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None):
+    skip = (page - 1) * limit
+    datas = dbOps.get_multi(db, skip=skip, limit=limit, request=request)
+    total_count = dbOps.count(db)
+    total_pages = (total_count + limit - 1) // limit if total_count > 0 else 0
+
+    respData = [
+        ResponseSchema.model_validate(r).model_dump(
+            exclude_none=True,
+            mode="json"
+        )
+        for r in datas
+    ]
+
+    formatted_data = {
+        "list": respData,
+        "pagination": {
+            "page": page,
+            "limit": limit,
+            "total": total_count,
+            "total_pages": total_pages,
+            "has_next": page < total_pages,
+            "has_prev": page > 1
+        }
+    }
+
+    return success_response(
+        data=formatted_data,
+        message=f"{moduleName}s retrieved successfully",
+        status_code=HTTP_200_OK
+    )
 
 def GetById(id: int, db: Session):
 	oldData = dbOps.get(db, id=id)

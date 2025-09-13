@@ -39,3 +39,6 @@ ehthumbs.db
 **/__pycache__/
 /be/venv
 /be/logs
+/be/dist
+/be/build
+/be/logs
