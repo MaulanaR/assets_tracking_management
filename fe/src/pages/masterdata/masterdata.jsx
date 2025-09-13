@@ -1,9 +1,7 @@
 import { Card, Col, Row, Typography } from 'antd';
 import {
   Building2,
-  FileText,
   Package,
-  Settings,
   ShoppingCart,
   Tags,
   User,

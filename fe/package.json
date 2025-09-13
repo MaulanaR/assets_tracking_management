@@ -9,13 +9,8 @@
 		"preview": "vite preview",
 		"tauri": "tauri",
 		"prepare": "cd .. && husky fe/.husky",
-		"lint": "biome check .",
-		"lint:fix": "biome check --apply ."
-	},
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx,json,css,md}": [
-			"pnpm run lint:fix"
-		]
+		"lint": "biome check --write",
+		"format": "biome format --write"
 	},
 	"dependencies": {
 		"@ant-design/charts": "^2.2.7",
