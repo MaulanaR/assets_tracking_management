@@ -13,13 +13,15 @@ from app.utils.responses_utils import (
 )
 from app.api.v1.endpoints.departments.model import DepartmentModel
 from app.api.v1.endpoints.branches.model import BranchModel
+from app.api.v1.endpoints.categories.model import CategoryModel
+import app.api.v1.endpoints.categories.usecase as categories
 import os
 
 # Ini var operasi ke DB, semua operasi DB panggil ini
-dbOps = base.CRUDBase(EmployeeModel)
-moduleName = "Employee"
+dbOps = base.CRUDBase(AssetModel)
+moduleName = "Asset"
 
-ASSETS_DIR = "assets/employees"
+ASSETS_DIR = "assets/item_assets"
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
 async def save_attachment(attachment: UploadFile):
@@ -40,7 +42,13 @@ async def Create(param: ParamCreate, db: Session, attachment: UploadFile = None)
 			errors={"name": f"Duplicate {moduleName} code"},
 			status_code=HTTP_400_BAD_REQUEST
 		)
-
+    
+	# validate category
+	if param.category_id:
+		category = categories.GetById(param.category_id, db)
+		if category.status_code != HTTP_200_OK:
+			return category
+		
 	# handle attachment
 	if attachment:
 		file_path = await save_attachment(attachment)
@@ -48,7 +56,7 @@ async def Create(param: ParamCreate, db: Session, attachment: UploadFile = None)
 
 	newData = dbOps.create(db, obj_in=param)
 	return success_response(
-		data=enrich_employee_response(db, newData),
+		data=endrict_response(db, newData),
 		message=f"{moduleName} created successfully",
 		status_code=HTTP_201_CREATED
 	)
@@ -60,7 +68,7 @@ def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None)
     total_pages = (total_count + limit - 1) // limit if total_count > 0 else 0
 
     respData = [
-        enrich_employee_response(db, r)
+        endrict_response(db, r)
         for r in datas
     ]
 
@@ -91,7 +99,7 @@ def GetById(id: int, db: Session):
 			status_code=HTTP_404_NOT_FOUND
 		)
 	return success_response(
-		data=enrich_employee_response(db, oldData),
+		data=endrict_response(db, oldData),
 		message=f"{moduleName} retrieved successfully",
 		status_code=HTTP_200_OK
 	)
@@ -114,6 +122,12 @@ async def UpdateById(id: int, param: ParamPUT, db: Session, attachment: UploadFi
 			status_code=HTTP_400_BAD_REQUEST
 		)
 	
+	# validate category
+	if param.category_id:
+		category = categories.GetById(param.category_id, db)
+		if category.status_code != HTTP_200_OK:
+			return category
+		
 	# handle attachment
 	if attachment:
 		file_path = await save_attachment(attachment)
@@ -121,7 +135,7 @@ async def UpdateById(id: int, param: ParamPUT, db: Session, attachment: UploadFi
 
 	newData = dbOps.update(db, db_obj=oldData, obj_in=param)
 	return success_response(
-		data=enrich_employee_response(db, newData),
+		data=endrict_response(db, newData),
 		message=f"{moduleName} updated successfully",
 		status_code=HTTP_200_OK
 	)
@@ -145,10 +159,16 @@ def PatchById(id: int, param: ParamPatch, db: Session):
 				status_code=HTTP_400_BAD_REQUEST
 			)
 		
+	# validate category
+	if param.category_id != oldData.category_id:
+		category = categories.GetById(param.category_id, db)
+		if category.status_code != HTTP_200_OK:
+			return category
+		
 	update_data = param.model_dump(exclude_unset=True)
 	newData = dbOps.update(db, db_obj=oldData, obj_in=update_data)
 	return success_response(
-		data=enrich_employee_response(db, newData),
+		data=endrict_response(db, newData),
 		message=f"{moduleName} partially updated successfully",
 		status_code=HTTP_200_OK
 	)
@@ -161,7 +181,7 @@ def DeleteById(id: int, db: Session):
 			errors={"id": f"{moduleName} not found"},
 			status_code=HTTP_404_NOT_FOUND
 		)
-	data = enrich_employee_response(db, oldData)
+	data = endrict_response(db, oldData)
 	dbOps.remove(db, id=id)
 	return success_response(
 		data=data,
@@ -169,17 +189,21 @@ def DeleteById(id: int, db: Session):
 		status_code=HTTP_200_OK
 	)
 
-def enrich_employee_response(db: Session, employee_obj):
-	data = ResponseSchema.model_validate(employee_obj).model_dump(
+def endrict_response(db: Session, obj):
+	data = ResponseSchema.model_validate(obj).model_dump(
 		exclude_none=True,
 		mode="json"
 	)
 
 	# Pastikan department dan branch adalah dict
-	department_dict = get_department_detail(db, getattr(employee_obj, "department_id", None))
-	branch_dict = get_branch_detail(db, getattr(employee_obj, "branch_id", None))
+	department_dict = get_department_detail(db, getattr(obj, "department_id", None))
+	branch_dict = get_branch_detail(db, getattr(obj, "branch_id", None))
+	condition_dict = get_branch_detail(db, getattr(obj, "condition_id", None))
+	category_dict = get_branch_detail(db, getattr(obj, "category_id", None))
 	data["department"] = department_dict
 	data["branch"] = branch_dict
+	data["category"] = category_dict
+	data["condition"] = condition_dict
 
 	return data
 
@@ -204,6 +228,31 @@ def get_branch_detail(db: Session, branch_id: int):
     return {
         "id": branch.id,
         "code": getattr(branch, "code", None),
-        "name": getattr(branch, "name", None)
+        "name": getattr(branch, "name", None),
+        "address": getattr(branch, "address", None),
+    }
+
+def get_category_detail(db: Session, category_id: int):
+    if not category_id:
+        return None
+    category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+    if not category:
+        return None
+    return {
+        "id": category.id,
+        "code": getattr(category, "code", None),
+        "name": getattr(category, "name", None)
+    }
+
+def get_condition_detail(db: Session, condition_id: int):
+    if not condition_id:
+        return None
+    condition = db.query(ConditionModel).filter(ConditionModel.id == condition_id).first()
+    if not condition:
+        return None
+    return {
+        "id": condition.id,
+        "code": getattr(condition, "code", None),
+        "name": getattr(condition, "name", None)
     }
 

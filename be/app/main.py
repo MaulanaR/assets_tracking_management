@@ -4,6 +4,7 @@ from app.database import Base, engine
 from app.api.v1.router import api_router
 from app.utils import responses_utils
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 import traceback
 import logging
@@ -18,6 +19,9 @@ app.add_middleware(
     allow_methods=["*"],            # GET, POST, PUT, DELETE dll
     allow_headers=["*"],            # Authorization, Content-Type dll
 )
+
+# Mount assets folder
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 # Create tables
 Base.metadata.create_all(bind=engine)
