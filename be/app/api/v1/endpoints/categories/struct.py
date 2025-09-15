@@ -31,8 +31,8 @@ class ParamPatch(Category):
 # Skema untuk response dengan id
 class ResponseSchema(Category):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Union[datetime, None] = None
+    updated_at: Union[datetime, None] = None
 
     class Config:
         from_attributes = True
