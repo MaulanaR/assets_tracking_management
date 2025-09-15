@@ -4,54 +4,77 @@ from .model import *
 from .struct import *
 from fastapi import Request, UploadFile
 from app.utils.responses_utils import (
-	success_response,
-	error_response,
-	HTTP_200_OK,
-	HTTP_201_CREATED,
-	HTTP_400_BAD_REQUEST,
-	HTTP_404_NOT_FOUND,
+    success_response,
+    error_response,
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
 )
 from app.api.v1.endpoints.departments.model import DepartmentModel
 from app.api.v1.endpoints.branches.model import BranchModel
+
 import os
+import uuid
+import tempfile
+import pathlib
+from typing import Optional
 
 # Ini var operasi ke DB, semua operasi DB panggil ini
 dbOps = base.CRUDBase(EmployeeModel)
 moduleName = "Employee"
 
-ASSETS_DIR = "assets/employees"
-os.makedirs(ASSETS_DIR, exist_ok=True)
+# ---------- WRITE DIR (Serverless-safe) ----------
+# Pakai ENV WRITE_DIR jika tersedia (contoh: /data pada Docker/K8s),
+# default ke /tmp (writeable di AWS Lambda/Vercel; TIDAK persisten).
+WRITE_BASE_DIR = os.environ.get("WRITE_DIR") or tempfile.gettempdir()
+ASSETS_DIR = os.path.join(WRITE_BASE_DIR, "employees")
 
-async def save_attachment(attachment: UploadFile):
+def ensure_dirs() -> None:
+    pathlib.Path(ASSETS_DIR).mkdir(parents=True, exist_ok=True)
+
+def _safe_ext(name: str) -> str:
+    _, ext = os.path.splitext(name or "")
+    return ext[:10] if ext else ""
+
+async def save_attachment(attachment: Optional[UploadFile]) -> Optional[str]:
     if not attachment:
         return None
-    filename = f"{ASSETS_DIR}/{attachment.filename}"
-    with open(filename, "wb") as f:
-        content = await attachment.read()
-        f.write(content)
-    return filename
+
+    ensure_dirs()
+
+    original = os.path.basename(attachment.filename or "upload.bin")
+    ext = _safe_ext(original)
+    filename = f"{uuid.uuid4().hex}{ext}"
+    dest = os.path.join(ASSETS_DIR, filename)
+
+    data = await attachment.read()
+    with open(dest, "wb") as f:
+        f.write(data)
+
+    return dest
 
 async def Create(param: ParamCreate, db: Session, attachment: UploadFile = None):
-	# validate code
-	existing_data = dbOps.get_by_field(db, "code", param.code)
-	if existing_data:
-		return error_response(
-			message=f"{moduleName} already exists",
-			errors={"name": f"Duplicate {moduleName} code"},
-			status_code=HTTP_400_BAD_REQUEST
-		)
+    # validate code
+    existing_data = dbOps.get_by_field(db, "code", param.code)
+    if existing_data:
+        return error_response(
+            message=f"{moduleName} already exists",
+            errors={"code": f"Duplicate {moduleName} code"},
+            status_code=HTTP_400_BAD_REQUEST
+        )
 
-	# handle attachment
-	if attachment:
-		file_path = await save_attachment(attachment)
-		param.attachment = file_path
+    # handle attachment
+    if attachment:
+        file_path = await save_attachment(attachment)
+        param.attachment = file_path
 
-	newData = dbOps.create(db, obj_in=param)
-	return success_response(
-		data=enrich_employee_response(db, newData),
-		message=f"{moduleName} created successfully",
-		status_code=HTTP_201_CREATED
-	)
+    newData = dbOps.create(db, obj_in=param)
+    return success_response(
+        data=enrich_employee_response(db, newData),
+        message=f"{moduleName} created successfully",
+        status_code=HTTP_201_CREATED
+    )
 
 def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None):
     skip = (page - 1) * limit
@@ -59,10 +82,7 @@ def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None)
     total_count = dbOps.count(db)
     total_pages = (total_count + limit - 1) // limit if total_count > 0 else 0
 
-    respData = [
-        enrich_employee_response(db, r)
-        for r in datas
-    ]
+    respData = [enrich_employee_response(db, r) for r in datas]
 
     formatted_data = {
         "list": respData,
@@ -83,105 +103,106 @@ def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None)
     )
 
 def GetById(id: int, db: Session):
-	oldData = dbOps.get(db, id=id)
-	if not oldData:
-		return error_response(
-			message=f"{moduleName} not found",
-			errors={"id": f"{moduleName} not found"},
-			status_code=HTTP_404_NOT_FOUND
-		)
-	return success_response(
-		data=enrich_employee_response(db, oldData),
-		message=f"{moduleName} retrieved successfully",
-		status_code=HTTP_200_OK
-	)
+    oldData = dbOps.get(db, id=id)
+    if not oldData:
+        return error_response(
+            message=f"{moduleName} not found",
+            errors={"id": f"{moduleName} not found"},
+            status_code=HTTP_404_NOT_FOUND
+        )
+    return success_response(
+        data=enrich_employee_response(db, oldData),
+        message=f"{moduleName} retrieved successfully",
+        status_code=HTTP_200_OK
+    )
 
 async def UpdateById(id: int, param: ParamPUT, db: Session, attachment: UploadFile = None):
-	oldData = dbOps.get(db, id=id)
-	if not oldData:
-		return error_response(
-			message=f"{moduleName} not found",
-			errors={"id": f"{moduleName} not found"},
-			status_code=HTTP_404_NOT_FOUND
-		)
-	
-	# validate code
-	notUnique = dbOps.get_by_field(db, "code", param.code)
-	if notUnique:
-		return error_response(
-			message=f"{moduleName} already exists",
-			errors={"name": f"Duplicate {moduleName} code"},
-			status_code=HTTP_400_BAD_REQUEST
-		)
-	
-	# handle attachment
-	if attachment:
-		file_path = await save_attachment(attachment)
-		param.attachment = file_path
+    oldData = dbOps.get(db, id=id)
+    if not oldData:
+        return error_response(
+            message=f"{moduleName} not found",
+            errors={"id": f"{moduleName} not found"},
+            status_code=HTTP_404_NOT_FOUND
+        )
 
-	newData = dbOps.update(db, db_obj=oldData, obj_in=param)
-	return success_response(
-		data=enrich_employee_response(db, newData),
-		message=f"{moduleName} updated successfully",
-		status_code=HTTP_200_OK
-	)
+    # validate code (abaikan record yang sama)
+    if param.code and param.code != getattr(oldData, "code", None):
+        notUnique = dbOps.get_by_field(db, "code", param.code)
+        if notUnique and getattr(notUnique, "id", None) != id:
+            return error_response(
+                message=f"{moduleName} already exists",
+                errors={"code": f"Duplicate {moduleName} code"},
+                status_code=HTTP_400_BAD_REQUEST
+            )
+
+    # handle attachment
+    if attachment:
+        file_path = await save_attachment(attachment)
+        param.attachment = file_path
+
+    newData = dbOps.update(db, db_obj=oldData, obj_in=param)
+    return success_response(
+        data=enrich_employee_response(db, newData),
+        message=f"{moduleName} updated successfully",
+        status_code=HTTP_200_OK
+    )
 
 def PatchById(id: int, param: ParamPatch, db: Session):
-	oldData = dbOps.get(db, id=id)
-	if not oldData:
-		return error_response(
-			message=f"{moduleName} not found",
-			errors={"id": f"{moduleName} not found"},
-			status_code=HTTP_404_NOT_FOUND
-		)
-	
-	# validate code
-	if param.code != oldData.code:
-		notUnique = dbOps.get_by_field(db, "code", param.code)
-		if notUnique:
-			return error_response(
-				message=f"{moduleName} already exists",
-				errors={"name": f"Duplicate {moduleName} code"},
-				status_code=HTTP_400_BAD_REQUEST
-			)
-		
-	update_data = param.model_dump(exclude_unset=True)
-	newData = dbOps.update(db, db_obj=oldData, obj_in=update_data)
-	return success_response(
-		data=enrich_employee_response(db, newData),
-		message=f"{moduleName} partially updated successfully",
-		status_code=HTTP_200_OK
-	)
+    oldData = dbOps.get(db, id=id)
+    if not oldData:
+        return error_response(
+            message=f"{moduleName} not found",
+            errors={"id": f"{moduleName} not found"},
+            status_code=HTTP_404_NOT_FOUND
+        )
+
+    # validate code (abaikan record yang sama)
+    if param.code and param.code != getattr(oldData, "code", None):
+        notUnique = dbOps.get_by_field(db, "code", param.code)
+        if notUnique and getattr(notUnique, "id", None) != id:
+            return error_response(
+                message=f"{moduleName} already exists",
+                errors={"code": f"Duplicate {moduleName} code"},
+                status_code=HTTP_400_BAD_REQUEST
+            )
+
+    update_data = param.model_dump(exclude_unset=True)
+    newData = dbOps.update(db, db_obj=oldData, obj_in=update_data)
+    return success_response(
+        data=enrich_employee_response(db, newData),
+        message=f"{moduleName} partially updated successfully",
+        status_code=HTTP_200_OK
+    )
 
 def DeleteById(id: int, db: Session):
-	oldData = dbOps.get(db, id=id)
-	if not oldData:
-		return error_response(
-			message=f"{moduleName} not found",
-			errors={"id": f"{moduleName} not found"},
-			status_code=HTTP_404_NOT_FOUND
-		)
-	data = enrich_employee_response(db, oldData)
-	dbOps.remove(db, id=id)
-	return success_response(
-		data=data,
-		message=f"{moduleName} deleted successfully",
-		status_code=HTTP_200_OK
-	)
+    oldData = dbOps.get(db, id=id)
+    if not oldData:
+        return error_response(
+            message=f"{moduleName} not found",
+            errors={"id": f"{moduleName} not found"},
+            status_code=HTTP_404_NOT_FOUND
+        )
+    data = enrich_employee_response(db, oldData)
+    dbOps.remove(db, id=id)
+    return success_response(
+        data=data,
+        message=f"{moduleName} deleted successfully",
+        status_code=HTTP_200_OK
+    )
 
 def enrich_employee_response(db: Session, employee_obj):
-	data = ResponseSchema.model_validate(employee_obj).model_dump(
-		exclude_none=True,
-		mode="json"
-	)
+    data = ResponseSchema.model_validate(employee_obj).model_dump(
+        exclude_none=True,
+        mode="json"
+    )
 
-	# Pastikan department dan branch adalah dict
-	department_dict = get_department_detail(db, getattr(employee_obj, "department_id", None))
-	branch_dict = get_branch_detail(db, getattr(employee_obj, "branch_id", None))
-	data["department"] = department_dict
-	data["branch"] = branch_dict
+    department_dict = get_department_detail(db, getattr(employee_obj, "department_id", None))
+    branch_dict = get_branch_detail(db, getattr(employee_obj, "branch_id", None))
 
-	return data
+    data["department"] = department_dict
+    data["branch"] = branch_dict
+
+    return data
 
 def get_department_detail(db: Session, department_id: int):
     if not department_id:
@@ -206,4 +227,3 @@ def get_branch_detail(db: Session, branch_id: int):
         "code": getattr(branch, "code", None),
         "name": getattr(branch, "name", None)
     }
-
