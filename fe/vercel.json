@@ -5,6 +5,10 @@
     {
       "source": "/api/v1/:path*",
       "destination": "https://assets-tracking-management.vercel.app/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
