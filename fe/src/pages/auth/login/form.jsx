@@ -60,7 +60,7 @@ export default function LoginFormComponent({ onSubmit, isLoading }) {
     <div>
     <Title level={4} style={{marginBottom: 2}}>Sign in to your account</Title>
     <Text type="secondary" className="text-xs">
-      Use your email and password to log in.
+      Use your email and password to log in. ({ENV.VITE_APP_ENV})
     </Text>
     <LoginForm
       // title={ENV.VITE_APP_NAME}
