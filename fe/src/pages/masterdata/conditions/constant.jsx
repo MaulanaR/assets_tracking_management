@@ -1,56 +1,19 @@
+import ContextMenuOption from '@/blocs/ContextMenuOption';
+import renderTags from '@/utils/renderTags';
 import { Button } from 'antd';
 import { MoreVertical } from 'lucide-react';
 import * as z from 'zod';
 
-import ContextMenuOption from '@/blocs/ContextMenuOption';
-import renderTags from '@/utils/renderTags';
-
-export const EmployeeFormSchema = z
+export const ConditionFormSchema = z
   .object({
     code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
-    department: z
-      .object({
-        label: z.string(),
-        value: z.string().or(z.number()),
-        key: z.string(),
-        title: z.string(),
-      })
-      .optional(),
-    branch: z
-      .object({
-        label: z.string(),
-        value: z.string().or(z.number()),
-        key: z.string(),
-        title: z.string(),
-      })
-      .optional(),
     address: z.string().optional(),
-    phone: z.string().optional(),
-    attachment: z
-      .array(
-        z.object({
-          uid: z.string(),
-          name: z.string(),
-          size: z.number().positive('File size must be positive'),
-          type: z.string(),
-          lastModified: z.number().optional(),
-          lastModifiedDate: z.string().optional(),
-          percent: z.number().min(0).max(100).optional(),
-          originFileObj: z.object({
-            uid: z.string(),
-          }).optional(),
-          url: z.string().url('Invalid URL format').optional(),
-          status: z.enum(['uploading', 'done', 'error', 'removed']).optional(),
-        })
-      )
-      .optional(),
-    email: z.string().email('Invalid email format').optional(),
   })
   .passthrough();
 
 // API Endpoints
-export const ENDPOINTS = '/api/v1/employees';
+export const ENDPOINTS = '/api/v1/conditions';
 
 // Pagination defaults
 export const DEFAULT_PER_PAGE = 10;
@@ -60,7 +23,7 @@ export const DEFAULT_FILTERS = {
   page: DEFAULT_PAGE,
 };
 
-// Employee type colors mapping
+// Condition type colors mapping
 export const TYPE_COLORS = {
   customer: 'blue',
   supplier: 'green',
@@ -142,9 +105,9 @@ export const getColumns = () => [
     width: 50,
     render: (_, record) => (
       <ContextMenuOption
-        editPath={`/masterdata/employees/edit/${record.id}`}
-        detailPath={`/masterdata/employees/detail/${record.id}`}
-        deletePath={`/masterdata/employees/delete/${record.id}`}
+        editPath={`/masterdata/conditions/edit/${record.id}`}
+        detailPath={`/masterdata/conditions/detail/${record.id}`}
+        deletePath={`/masterdata/conditions/delete/${record.id}`}
       >
         <Button
           variant="text"
@@ -165,6 +128,6 @@ export const getBreadcrumbItems = (navigate) => [
     onClick: () => navigate('/masterdata'),
   },
   {
-    title: 'employees',
+    title: 'conditions',
   },
 ];
