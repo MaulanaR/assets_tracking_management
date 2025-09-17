@@ -67,7 +67,16 @@ export default () => {
 
   return (
     <div style={CONTAINER_STYLES}>
-       <Card styles={{ body: { height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' } }}>
+      <Card
+        styles={{
+          body: {
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        }}
+      >
         <RegisterFormComponent onSubmit={onSubmit} isLoading={isLoading} />
       </Card>
     </div>

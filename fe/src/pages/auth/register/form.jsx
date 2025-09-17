@@ -63,7 +63,7 @@ export default function RegisterFormComponent({ onSubmit, isLoading }) {
       onFinish={handleSubmit(onSubmit)}
       containerStyle={{
         height: 'auto',
-        paddingInline: 0
+        paddingInline: 0,
       }}
       submitter={{
         submitButtonProps: {

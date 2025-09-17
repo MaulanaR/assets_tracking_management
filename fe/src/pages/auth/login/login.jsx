@@ -1,3 +1,4 @@
+import illustrationMobilDerek from '@/assets/bg.png';
 import { ENV, logger } from '@/config/env';
 import { useAuthStore } from '@/stores';
 import {
@@ -8,7 +9,6 @@ import { Card, Grid } from 'antd';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import LoginFormComponent from './form';
-import illustrationMobilDerek from '@/assets/bg.png';
 const { useBreakpoint } = Grid;
 
 // Constants
@@ -72,7 +72,17 @@ export default () => {
 
   return (
     <div style={CONTAINER_STYLES}>
-      <Card styles={{ body: { height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '500px' } }}>
+      <Card
+        styles={{
+          body: {
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '500px',
+          },
+        }}
+      >
         <LoginFormComponent onSubmit={onSubmit} isLoading={isLoading} />
       </Card>
     </div>

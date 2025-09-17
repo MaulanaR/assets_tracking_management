@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router';
 
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Forms from './forms';
 import { BranchFormSchema } from './constant';
+import Forms from './forms';
 
 const CreateBranch = () => {
   const { notification } = App.useApp();

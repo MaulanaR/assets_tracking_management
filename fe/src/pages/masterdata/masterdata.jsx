@@ -44,7 +44,7 @@ const Datastore = () => {
       title: 'Employees',
       icon: <Package size={24} />,
       path: '/masterdata/employees/list',
-    }
+    },
   ];
 
   return (

@@ -58,75 +58,77 @@ export default function LoginFormComponent({ onSubmit, isLoading }) {
 
   return (
     <div>
-    <Title level={4} style={{marginBottom: 2}}>Sign in to your account</Title>
-    <Text type="secondary" className="text-xs">
-      Use your email and password to log in. ({ENV.VITE_APP_ENV})
-    </Text>
-    <LoginForm
-      // title={ENV.VITE_APP_NAME}
-      // subTitle="Sign in to your account"
-      onFinish={handleSubmit(onSubmit)}
-      containerStyle={{
-        height: 'auto',
-        paddingInline: 0
-      }}
-      submitter={{
-        submitButtonProps: {
-          disabled: isSubmitting || isLoading,
-          loading: isSubmitting || isLoading,
-        },
-        searchConfig: {
-          submitText: 'Sign In',
-        },
-      }}
-      actions={<SocialLoginActions />}
-    >
-      <Controller
-        name="email"
-        control={control}
-        render={({ field }) => (
-          <ProFormText
-            {...field}
-            fieldProps={{
-              size: 'large',
-              prefix: <UserOutlined className="prefixIcon" />,
-            }}
-            placeholder="Email"
-            validateStatus={errors.email && 'error'}
-            extra={
-              errors?.email?.message && (
-                <Text className="text-xs" type="danger">
-                  {errors.email.message}
-                </Text>
-              )
-            }
-          />
-        )}
-      />
-      <Controller
-        name="password"
-        control={control}
-        render={({ field }) => (
-          <ProFormText.Password
-            {...field}
-            fieldProps={{
-              size: 'large',
-              prefix: <LockOutlined className="prefixIcon" />,
-            }}
-            placeholder="Password"
-            validateStatus={errors.password && 'error'}
-            extra={
-              errors?.password?.message && (
-                <Text className="text-xs" type="danger">
-                  {errors.password.message}
-                </Text>
-              )
-            }
-          />
-        )}
-      />
-      <SignUpPrompt />
-    </LoginForm>
+      <Title level={4} style={{ marginBottom: 2 }}>
+        Sign in to your account
+      </Title>
+      <Text type="secondary" className="text-xs">
+        Use your email and password to log in. ({ENV.VITE_APP_ENV})
+      </Text>
+      <LoginForm
+        // title={ENV.VITE_APP_NAME}
+        // subTitle="Sign in to your account"
+        onFinish={handleSubmit(onSubmit)}
+        containerStyle={{
+          height: 'auto',
+          paddingInline: 0,
+        }}
+        submitter={{
+          submitButtonProps: {
+            disabled: isSubmitting || isLoading,
+            loading: isSubmitting || isLoading,
+          },
+          searchConfig: {
+            submitText: 'Sign In',
+          },
+        }}
+        actions={<SocialLoginActions />}
+      >
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <ProFormText
+              {...field}
+              fieldProps={{
+                size: 'large',
+                prefix: <UserOutlined className="prefixIcon" />,
+              }}
+              placeholder="Email"
+              validateStatus={errors.email && 'error'}
+              extra={
+                errors?.email?.message && (
+                  <Text className="text-xs" type="danger">
+                    {errors.email.message}
+                  </Text>
+                )
+              }
+            />
+          )}
+        />
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <ProFormText.Password
+              {...field}
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined className="prefixIcon" />,
+              }}
+              placeholder="Password"
+              validateStatus={errors.password && 'error'}
+              extra={
+                errors?.password?.message && (
+                  <Text className="text-xs" type="danger">
+                    {errors.password.message}
+                  </Text>
+                )
+              }
+            />
+          )}
+        />
+        <SignUpPrompt />
+      </LoginForm>
     </div>
   );
 }

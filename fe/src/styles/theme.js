@@ -16,9 +16,9 @@ export const theme = {
     boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)', // Tailwind's shadow-md
     wireframe: false,
   },
-  components:{
+  components: {
     Button: {
       borderRadius: 4, // 8px
-    }
-  }
+    },
+  },
 };

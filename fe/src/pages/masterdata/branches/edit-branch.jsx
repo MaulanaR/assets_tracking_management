@@ -8,8 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { App } from 'antd';
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
-import Forms from './forms';
 import { BranchFormSchema } from './constant';
+import Forms from './forms';
 
 const EditBranch = () => {
   const { notification } = App.useApp();

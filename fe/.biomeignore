@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Build outputs
+*.min.js
+*.min.css
+
+# Generated files
+.tauri/
+src-tauri/target/
+src-tauri/gen/
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache directories
+.cache/
+.vite/
+.next/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Assets that don't need linting
+public/
+src/assets/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.webp
+
+# Config files that are auto-generated or don't need strict linting
+vite.config.js
+postcss.config.mjs
+jsconfig.json
+vercel.json
