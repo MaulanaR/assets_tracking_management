@@ -30,19 +30,22 @@ const routes = [
       {
         path: 'create',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/masterdata/conditions/create-condition'),
+          async () =>
+            await import('@/pages/masterdata/conditions/create-condition'),
         ),
       },
       {
         path: 'edit/:id',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/masterdata/conditions/edit-condition'),
+          async () =>
+            await import('@/pages/masterdata/conditions/edit-condition'),
         ),
       },
       {
         path: 'detail/:id',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/masterdata/conditions/detail-condition'),
+          async () =>
+            await import('@/pages/masterdata/conditions/detail-condition'),
         ),
       },
       {

@@ -37,12 +37,14 @@ export const EmployeeFormSchema = z
           lastModified: z.number().optional(),
           lastModifiedDate: z.string().optional(),
           percent: z.number().min(0).max(100).optional(),
-          originFileObj: z.object({
-            uid: z.string(),
-          }).optional(),
+          originFileObj: z
+            .object({
+              uid: z.string(),
+            })
+            .optional(),
           url: z.string().url('Invalid URL format').optional(),
           status: z.enum(['uploading', 'done', 'error', 'removed']).optional(),
-        })
+        }),
       )
       .optional(),
     email: z.string().email('Invalid email format').optional(),

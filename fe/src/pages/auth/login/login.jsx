@@ -29,7 +29,6 @@ export default () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const screens = useBreakpoint();
 
   // Zustand store
   const { login, isAuthenticated, isLoading } = useAuthStore();

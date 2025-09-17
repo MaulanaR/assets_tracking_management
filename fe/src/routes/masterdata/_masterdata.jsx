@@ -1,9 +1,9 @@
 import ReactLazyWithSuspense from '@/utils/reactLazyWithSuspense';
 import branches from './_branches';
 import categories from './_categories';
-import employees from './_employees';
-import departments from './_departments';
 import conditions from './_conditions';
+import departments from './_departments';
+import employees from './_employees';
 
 /** @type {import('react-router').RouteObject[]} */
 const routes = [

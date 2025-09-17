@@ -22,7 +22,9 @@ const routes = [
             path: 'filter',
             element: ReactLazyWithSuspense(
               async () =>
-                await import('@/pages/masterdata/departments/filter-department'),
+                await import(
+                  '@/pages/masterdata/departments/filter-department'
+                ),
             ),
           },
         ],
@@ -30,19 +32,22 @@ const routes = [
       {
         path: 'create',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/masterdata/departments/create-department'),
+          async () =>
+            await import('@/pages/masterdata/departments/create-department'),
         ),
       },
       {
         path: 'edit/:id',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/masterdata/departments/edit-department'),
+          async () =>
+            await import('@/pages/masterdata/departments/edit-department'),
         ),
       },
       {
         path: 'detail/:id',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/masterdata/departments/detail-department'),
+          async () =>
+            await import('@/pages/masterdata/departments/detail-department'),
         ),
       },
       {
