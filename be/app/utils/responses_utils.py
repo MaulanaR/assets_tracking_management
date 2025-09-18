@@ -1,6 +1,7 @@
 from typing import Any, Optional, Dict
 from fastapi.responses import JSONResponse
 from datetime import datetime
+import json
 
 # HTTP Status Codes Reference
 HTTP_200_OK = 200
@@ -40,3 +41,6 @@ def error_response(
             "timestamp": datetime.now().isoformat()
         }
     )
+
+def extract_results(response: JSONResponse):
+    return response.body and json.loads(response.body).get("results")

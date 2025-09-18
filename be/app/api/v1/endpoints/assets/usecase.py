@@ -1,4 +1,6 @@
 from sqlalchemy.orm import Session
+from app.api.v1.endpoints.employee_assets.model import EmployeeAssetModel
+from app.api.v1.endpoints.employees.model import EmployeeModel
 from app.crud import base
 from .model import *
 from .struct import *
@@ -40,7 +42,7 @@ def _safe_ext(name: str) -> str:                                       # <<<
     _, ext = os.path.splitext(name or "")
     return ext[:10] if ext else ""
 
-async def save_attachment(attachment: Optional[UploadFile]) -> Optional[str]:
+async def SaveAttachment(attachment: Optional[UploadFile]) -> Optional[str]:
     if not attachment:
         return None
 
@@ -78,7 +80,7 @@ async def Create(param: ParamCreate, db: Session, attachment: UploadFile = None)
 
     # handle attachment
     if attachment:
-        file_path = await save_attachment(attachment)
+        file_path = await SaveAttachment(attachment)
         param.attachment = file_path
 
     newData = dbOps.create(db, obj_in=param)
@@ -92,7 +94,7 @@ def GetAll(db: Session, page: int = 1, limit: int = 10, request: Request = None)
     skip = (page - 1) * limit
     datas = dbOps.get_multi(db, skip=skip, limit=limit, request=request)
     total_count = dbOps.count(db)
-    total_pages = (total_count + limit - 1) // limit if total_count > 0 else 0
+    total_pages = (total_count + limit - 1) // limit if total_count > 0 else 0      
 
     respData = [endrict_response(db, r) for r in datas]
 
@@ -155,7 +157,7 @@ async def UpdateById(id: int, param: ParamPUT, db: Session, attachment: UploadFi
 
     # handle attachment
     if attachment:
-        file_path = await save_attachment(attachment)
+        file_path = await SaveAttachment(attachment)
         param.attachment = file_path
 
     newData = dbOps.update(db, db_obj=oldData, obj_in=param)
@@ -219,6 +221,17 @@ def endrict_response(db: Session, obj):
         exclude_none=True,
         mode="json"
     )
+
+    latestData = db.query(EmployeeAssetModel).filter(EmployeeAssetModel.asset_id == obj.id).order_by(EmployeeAssetModel.assign_date.desc(), EmployeeAssetModel.date.desc()).first()
+    if latestData:
+        cond = db.query(ConditionModel).filter(ConditionModel.id == latestData.condition_id).first()
+        obj.condition_id = cond.id
+
+        # get employee info
+        emp = db.query(EmployeeModel).filter(EmployeeModel.id == latestData.employee_id).first()
+
+        obj.branch_id = emp.branch_id
+        obj.department_id = emp.department_id
 
     # Perbaiki: panggil helper yang benar untuk masing-masing field     # <<<
     department_dict = get_department_detail(db, getattr(obj, "department_id", None))

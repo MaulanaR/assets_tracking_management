@@ -10,7 +10,7 @@ import traceback
 import logging
 import time
 
-app = FastAPI(title="Rixco API", version="1.0.0")
+app = FastAPI(title="Asset Tracking Management", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,13 +22,14 @@ app.add_middleware(
 
 # Mount assets folder
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+app.mount("/tmp", StaticFiles(directory="tmp"), name="tmp")
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def root():
-    return {"message": "Rixco DB with users table ready 🚀"}
+    return {"message": "Asset Tracking Management API ready 🚀"}
 
 # register API v1 routes
 app.include_router(api_router, prefix="/api/v1")
