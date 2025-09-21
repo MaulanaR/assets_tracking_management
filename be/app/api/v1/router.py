@@ -7,6 +7,7 @@ from app.api.v1.endpoints.categories import handler as category_handler
 from app.api.v1.endpoints.branches import handler as branch_handler
 from app.api.v1.endpoints.employees import handler as employee_handler
 from app.api.v1.endpoints.assets import handler as asset_handler
+from app.api.v1.endpoints.employee_assets import handler as employee_asset_handler
 
 api_router = APIRouter()
 
@@ -33,5 +34,8 @@ api_router.include_router(employee_handler.router, prefix="/employees", tags=["E
 
 # Assets
 api_router.include_router(asset_handler.router, prefix="/assets", tags=["Assets"])
+
+# Employees Assets
+api_router.include_router(employee_asset_handler.router, prefix="/employee_assets", tags=["Employee Assets"])
 
 # Tambahkan router lainnya di sini ketika menambah fitur baru
