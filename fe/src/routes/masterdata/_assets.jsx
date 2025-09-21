@@ -14,8 +14,7 @@ const routes = [
       {
         path: 'list',
         element: ReactLazyWithSuspense(
-          async () =>
-            await import('@/pages/masterdata/assets/content-assets'),
+          async () => await import('@/pages/masterdata/assets/content-assets'),
         ),
         children: [
           {

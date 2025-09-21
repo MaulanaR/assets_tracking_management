@@ -21,6 +21,10 @@ const CreateEmployee = () => {
       code: '',
       name: '',
       address: '',
+      department_id: '',
+      branch_id: '',
+      phone: '',
+      attachment: null,
     },
   });
 
@@ -66,8 +70,20 @@ const CreateEmployee = () => {
   });
 
   const onSubmit = (data) => {
-    console.log('INII DATAAA =>', data);
-    submit(data);
+    const formData = new FormData();
+
+    // Append each field to the FormData object manual
+    formData.append('code', data.code);
+    formData.append('name', data.name);
+    formData.append('department_id', data.department?.id || '');
+    formData.append('branch_id', data.branch?.id || '');
+    formData.append('address', data.address || '');
+    formData.append('phone', data.phone || '');
+
+    if (data?.attachment && data.attachment instanceof File) {
+      formData.append('attachment', data.attachment);
+    }
+    submit(formData);
   };
 
   console.log('ERRORS =>', errors, getValues());
