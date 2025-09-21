@@ -16,27 +16,6 @@ export const AssetFormSchema = z
       })
       .positive('Price must be greater than 0'),
 
-    attachment: z
-      .array(
-        z.object({
-          uid: z.string(),
-          name: z.string(),
-          size: z.number().positive('File size must be positive'),
-          type: z.string(),
-          lastModified: z.number().optional(),
-          lastModifiedDate: z.string().optional(),
-          percent: z.number().min(0).max(100).optional(),
-          originFileObj: z
-            .object({
-              uid: z.string(),
-            })
-            .optional(),
-          url: z.string().url('Invalid URL format').optional(),
-          status: z.enum(['uploading', 'done', 'error', 'removed']).optional(),
-        }),
-      )
-      .optional(),
-
     category: z
       .object({
         label: z.string(),
@@ -80,7 +59,7 @@ export const AssetFormSchema = z
   .passthrough();
 
 // API Endpoints
-export const ENDPOINTS = '/api/v1/employees';
+export const ENDPOINTS = '/api/v1/assets';
 
 // Pagination defaults
 export const DEFAULT_PER_PAGE = 10;
@@ -90,17 +69,15 @@ export const DEFAULT_FILTERS = {
   page: DEFAULT_PAGE,
 };
 
-// Employee type colors mapping
-export const TYPE_COLORS = {
-  customer: 'blue',
-  supplier: 'green',
-  employee: 'orange',
-  salesman: 'purple',
+// Asset status colors mapping
+export const STATUS_COLORS = {
+  available: 'green',
+  unavailable: 'red',
 };
 
 // Export CSV configuration
 export const EXPORT_CSV_CONFIG = {
-  selectedKeys: ['id', 'name', 'code', 'emails.0.value', 'phones.0.value'],
+  selectedKeys: ['id', 'name', 'code', 'price', 'status'],
   defaultParams: {
     is_skip_pagination: true,
   },
@@ -109,9 +86,10 @@ export const EXPORT_CSV_CONFIG = {
 // Mobile view expanded row render
 export const expandedRowRender = (record) => (
   <div style={{ padding: '8px', borderTop: '1px solid #f0f0f0' }}>
-    <p>code: {record.code}</p>
-    <p>name: {record.name}</p>
-    <p>email: {record.email}</p>
+    <p>Code: {record.code}</p>
+    <p>Name: {record.name}</p>
+    <p>Price: {record.price}</p>
+    <p>Status: {record.status}</p>
   </div>
 );
 
@@ -121,7 +99,7 @@ export const getColumns = () => [
     title: 'Code',
     dataIndex: 'code',
     key: 'code',
-    width: 100,
+    width: 120,
   },
   {
     title: 'Name',
@@ -130,38 +108,47 @@ export const getColumns = () => [
     width: 200,
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-    responsive: ['md'],
-    render: (email) => email ?? '-',
-  },
-  {
-    title: 'Position',
-    dataIndex: 'position',
-    key: 'position',
-    responsive: ['md'],
-    render: (position) => position ?? '-',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'contact_type',
-    key: 'contact_type',
+    title: 'Price',
+    dataIndex: 'price',
+    key: 'price',
     width: 120,
     responsive: ['md'],
-    render: (type) => {
-      return renderTags(type, { tags: [type], color: TYPE_COLORS[type] });
-    },
+    render: (price) => price ? `Rp ${Number(price).toLocaleString('en-US')}` : '-',
+  },
+  {
+    title: 'Category',
+    dataIndex: ['category', 'name'],
+    key: 'category',
+    width: 120,
+    responsive: ['md'],
+    render: (category) => category ?? '-',
+  },
+  {
+    title: 'Condition',
+    dataIndex: ['condition', 'name'],
+    key: 'condition',
+    width: 120,
+    responsive: ['lg'],
+    render: (condition) => condition ?? '-',
+  },
+  {
+    title: 'Department',
+    dataIndex: ['department', 'name'],
+    key: 'department',
+    width: 120,
+    responsive: ['lg'],
+    render: (department) => department ?? '-',
   },
   {
     title: 'Status',
-    dataIndex: 'is_active',
-    key: 'is_active',
+    dataIndex: 'status',
+    key: 'status',
     width: 100,
-    justify: 'center',
-    render: (_, record) => {
-      const status = record.is_active ? 'active' : 'inactive';
-      return renderTags(_, { tags: [status] });
+    render: (status) => {
+      return renderTags(status, { 
+        tags: [status], 
+        color: STATUS_COLORS[status] || 'default'
+      });
     },
   },
   {
@@ -172,9 +159,9 @@ export const getColumns = () => [
     width: 50,
     render: (_, record) => (
       <ContextMenuOption
-        editPath={`/masterdata/employees/edit/${record.id}`}
-        detailPath={`/masterdata/employees/detail/${record.id}`}
-        deletePath={`/masterdata/employees/delete/${record.id}`}
+        editPath={`/masterdata/assets/edit/${record.id}`}
+        detailPath={`/masterdata/assets/detail/${record.id}`}
+        deletePath={`/masterdata/assets/delete/${record.id}`}
       >
         <Button
           variant="text"
@@ -191,10 +178,10 @@ export const getColumns = () => [
 // Breadcrumb items
 export const getBreadcrumbItems = (navigate) => [
   {
-    title: 'Datastore',
+    title: 'Master Data',
     onClick: () => navigate('/masterdata'),
   },
   {
-    title: 'employees',
+    title: 'Assets',
   },
 ];

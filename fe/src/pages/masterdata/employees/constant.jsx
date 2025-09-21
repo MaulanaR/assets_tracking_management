@@ -27,26 +27,6 @@ export const EmployeeFormSchema = z
       .optional(),
     address: z.string().optional(),
     phone: z.string().optional(),
-    attachment: z
-      .array(
-        z.object({
-          uid: z.string(),
-          name: z.string(),
-          size: z.number().positive('File size must be positive'),
-          type: z.string(),
-          lastModified: z.number().optional(),
-          lastModifiedDate: z.string().optional(),
-          percent: z.number().min(0).max(100).optional(),
-          originFileObj: z
-            .object({
-              uid: z.string(),
-            })
-            .optional(),
-          url: z.string().url('Invalid URL format').optional(),
-          status: z.enum(['uploading', 'done', 'error', 'removed']).optional(),
-        }),
-      )
-      .optional(),
     email: z.string().email('Invalid email format').optional(),
   })
   .passthrough();

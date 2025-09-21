@@ -1,4 +1,5 @@
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
+import Api from '@/utils/axios/api';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
@@ -18,7 +19,8 @@ const EditEmployee = () => {
   const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
     queryKey: ['employees', endpoints],
     getUrl: endpoints,
-    method: 'PUT', // Use PUT for updating existing employe
+    method: 'PUT', // Use PUT for updating existing employee
+    submitType: 'json', // Changed to json
     submitUrl: endpoints,
     onSuccess: () => {
       notification.success({
@@ -29,9 +31,9 @@ const EditEmployee = () => {
       navigate('/masterdata/employees');
     },
     onError: (err) => {
-      notification.success({
+      notification.error({
         message: 'Employee Update Failed',
-        description: err.message || 'Failed to update employe.',
+        description: err.message || 'Failed to update employee.',
         duration: 3,
       });
     },
@@ -50,9 +52,10 @@ const EditEmployee = () => {
       code: '',
       name: '',
       address: '',
-      department_id: '',
-      branch_id: '',
+      department: null,
+      branch: null,
       phone: '',
+      email: '',
       attachment: null,
     },
   });
@@ -63,38 +66,120 @@ const EditEmployee = () => {
         code,
         name,
         address,
-        department_id,
-        branch_id,
+        department,
+        branch,
         phone,
+        email,
         attachment,
       } = initialData?.results || {};
       reset({
         code: code || '',
         name: name || '',
         address: address || '',
-        department_id: department_id || '',
-        branch_id: branch_id || '',
+        department: department || null,
+        branch: branch || null,
         phone: phone || '',
+        email: email || '',
         attachment: attachment || null,
       });
     }
   }, [initialData, reset]);
 
-  const onSubmit = (data) => {
-    const formData = new FormData();
-
-    // Append each field to the FormData object manual
-    formData.append('code', data.code);
-    formData.append('name', data.name);
-    formData.append('department_id', data.department?.id || '');
-    formData.append('branch_id', data.branch?.id || '');
-    formData.append('address', data.address || '');
-    formData.append('phone', data.phone || '');
-
-    if (data?.attachment && data.attachment instanceof File) {
-      formData.append('attachment', data.attachment);
+  const onSubmit = async (data) => {
+    // Handle file upload if present
+    if (data?.attachment && Array.isArray(data.attachment) && data.attachment.length > 0) {
+      const file = data.attachment[0];
+      
+      // Find the actual File object
+      let actualFile = null;
+      if (file.originFileObj && file.originFileObj instanceof File) {
+        actualFile = file.originFileObj;
+      } else if (file instanceof File) {
+        actualFile = file;
+      } else if (file.file && file.file instanceof File) {
+        actualFile = file.file;
+      }
+      
+      if (actualFile && actualFile instanceof File) {
+        // Build query parameters for file upload
+        const queryParams = new URLSearchParams();
+        queryParams.append('code', data.code);
+        queryParams.append('name', data.name);
+        
+        if (data.address) queryParams.append('address', data.address);
+        if (data.phone) queryParams.append('phone', data.phone);
+        if (data.email) queryParams.append('email', data.email);
+        if (data.department?.value) queryParams.append('department_id', data.department.value);
+        if (data.branch?.value) queryParams.append('branch_id', data.branch.value);
+        
+        const urlWithParams = `${endpoints}?${queryParams.toString()}`;
+        const formData = new FormData();
+        formData.append('attachment', actualFile);
+        
+        try {
+          await Api().request({
+            url: urlWithParams,
+            method: 'POST',
+            data: formData,
+          });
+          
+          notification.success({
+            message: 'Employee Created',
+            description: 'Employee has been successfully created.',
+            duration: 3,
+          });
+          navigate('/masterdata/employees');
+        } catch (error) {
+          notification.error({
+            message: 'Employee Creation Failed',
+            description: error?.response?.data?.message || error.message,
+            duration: 3,
+          });
+        }
+        return;
+      } else {
+        notification.error({
+          message: 'File Upload Error',
+          description: 'Invalid file object. Please try uploading the file again.',
+          duration: 3,
+        });
+        return;
+      }
     }
-    submit(formData);
+    
+    // Handle form submission without file
+    const queryParams = new URLSearchParams();
+    queryParams.append('code', data.code);
+    queryParams.append('name', data.name);
+    
+    if (data.address) queryParams.append('address', data.address);
+    if (data.phone) queryParams.append('phone', data.phone);
+    if (data.email) queryParams.append('email', data.email);
+    if (data.department?.value) queryParams.append('department_id', data.department.value);
+    if (data.branch?.value) queryParams.append('branch_id', data.branch.value);
+
+    const urlWithParams = `${endpoints}?${queryParams.toString()}`;
+    
+    try {
+      await Api().request({
+        url: urlWithParams,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+      notification.success({
+        message: 'Employee Created',
+        description: 'Employee has been successfully created.',
+        duration: 3,
+      });
+      navigate('/masterdata/employees');
+    } catch (error) {
+      notification.error({
+        message: 'Employee Creation Failed',
+        description: error?.response?.data?.message || error.message,
+        duration: 3,
+      });
+    }
   };
 
   if (isLoading) {

@@ -3,6 +3,8 @@ import proStyle from '@/styles/proComponentStyle';
 import { fetchSelect } from '@/utils/services/fetchSelect';
 import {
   ProForm,
+  ProFormMoney,
+  ProFormSelect,
   ProFormText,
   ProFormTextArea,
   ProFormUploadButton,
@@ -106,6 +108,125 @@ const Forms = ({
           />
 
           <Controller
+            name="price"
+            control={control}
+            render={(form) => (
+              <ProFormMoney
+                {...form.field}
+                label="Price"
+                placeholder="Enter price"
+                min={0}
+                locale="id-ID"
+                precision={2}
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.price && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.price?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="category"
+            control={control}
+            render={(form) => (
+              <SelectWithReactQuery
+                {...form.field}
+                url="/api/v1/categories"
+                label="Category"
+                placeholder="Select Category"
+                queryKey={['categories']}
+                customFetcher={fetchSelect}
+                labelKey="name"
+                valueKey="id"
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.category && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.category?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="condition"
+            control={control}
+            render={(form) => (
+              <SelectWithReactQuery
+                {...form.field}
+                url="/api/v1/conditions"
+                label="Condition"
+                placeholder="Select Condition"
+                queryKey={['conditions']}
+                customFetcher={fetchSelect}
+                labelKey="name"
+                valueKey="id"
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.condition && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.condition?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+        </ProForm.Group>
+
+        <ProForm.Group>
+          <Controller
+            name="status"
+            control={control}
+            render={(form) => (
+              <ProFormSelect
+                {...form.field}
+                label="Status"
+                placeholder="Select Status"
+                options={[
+                  { label: 'Available', value: 'available' },
+                  { label: 'Unavailable', value: 'unavailable' },
+                ]}
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.status && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.status?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+
+          <Controller
             name="department"
             control={control}
             render={(form) => (
@@ -168,56 +289,6 @@ const Forms = ({
 
         <ProForm.Group>
           <Controller
-            name="phone"
-            control={control}
-            render={(form) => (
-              <ProFormText
-                {...form.field}
-                label="Phone"
-                placeholder={''}
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.phone && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.phone?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            name="email"
-            control={control}
-            render={(form) => (
-              <ProFormText
-                {...form.field}
-                label="Email"
-                placeholder={''}
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.email && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.email?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-              />
-            )}
-          />
-
-          <Controller
             name="attachment"
             control={control}
             render={({ field: { onChange, value, ...field } }) => (
@@ -248,32 +319,6 @@ const Forms = ({
                     onChange(fileList);
                   },
                   beforeUpload: () => false, // Prevent auto upload
-                }}
-              />
-            )}
-          />
-        </ProForm.Group>
-
-        <ProForm.Group>
-          <Controller
-            name="address"
-            control={control}
-            render={(form) => (
-              <ProFormTextArea
-                {...form.field}
-                label="Address"
-                placeholder={''}
-                validateStatus={errors.address && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.address?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
                 }}
               />
             )}

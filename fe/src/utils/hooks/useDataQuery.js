@@ -76,6 +76,7 @@ export function useDataQuery({
   queryOptions = {},
   mutationOptions = {},
   axiosConfig = {},
+  submitType = 'json', // 'json' or 'form-data'
 }) {
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -135,6 +136,7 @@ export function useDataQuery({
         const res = await Api().request({
           url: submitUrl,
           method,
+          headers: submitType === 'form-data' ? {'Content-Type': 'multipart/form-data'} : { 'Content-Type': 'application/json' },
           data: formData,
           ...axiosConfig,
         });
