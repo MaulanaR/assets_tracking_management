@@ -113,7 +113,8 @@ export const getColumns = () => [
     key: 'price',
     width: 120,
     responsive: ['md'],
-    render: (price) => price ? `Rp ${Number(price).toLocaleString('en-US')}` : '-',
+    render: (price) =>
+      price ? `Rp ${Number(price).toLocaleString('en-US')}` : '-',
   },
   {
     title: 'Category',
@@ -145,9 +146,9 @@ export const getColumns = () => [
     key: 'status',
     width: 100,
     render: (status) => {
-      return renderTags(status, { 
-        tags: [status], 
-        color: STATUS_COLORS[status] || 'default'
+      return renderTags(status, {
+        tags: [status],
+        color: STATUS_COLORS[status] || 'default',
       });
     },
   },
