@@ -21,7 +21,6 @@ const CreateCondition = () => {
     defaultValues: {
       code: '',
       name: '',
-      address: '',
     },
   });
 

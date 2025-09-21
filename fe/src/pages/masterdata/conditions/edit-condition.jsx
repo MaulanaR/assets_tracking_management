@@ -50,21 +50,15 @@ const EditCondition = () => {
     defaultValues: {
       code: '',
       name: '',
-      address: '',
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      const { code, name, email, position, contact_type, address } =
-        initialData?.results || {};
+      const { code, name } = initialData?.results || {};
       reset({
         code: code || '',
         name: name || '',
-        email: email || '',
-        position: position || '',
-        contact_type: contact_type || '',
-        address: address || '',
       });
     }
   }, [initialData, reset]);

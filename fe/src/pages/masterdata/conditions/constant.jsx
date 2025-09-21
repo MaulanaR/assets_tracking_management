@@ -8,7 +8,6 @@ export const ConditionFormSchema = z
   .object({
     code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
-    address: z.string().optional(),
   })
   .passthrough();
 
@@ -61,30 +60,6 @@ export const getColumns = () => [
     dataIndex: 'name',
     key: 'name',
     width: 200,
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-    responsive: ['md'],
-    render: (email) => email ?? '-',
-  },
-  {
-    title: 'Position',
-    dataIndex: 'position',
-    key: 'position',
-    responsive: ['md'],
-    render: (position) => position ?? '-',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'contact_type',
-    key: 'contact_type',
-    width: 120,
-    responsive: ['md'],
-    render: (type) => {
-      return renderTags(type, { tags: [type], color: TYPE_COLORS[type] });
-    },
   },
   {
     title: 'Status',

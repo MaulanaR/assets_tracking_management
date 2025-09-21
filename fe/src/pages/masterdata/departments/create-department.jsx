@@ -21,7 +21,6 @@ const CreateDepartment = () => {
     defaultValues: {
       code: '',
       name: '',
-      address: '',
     },
   });
 

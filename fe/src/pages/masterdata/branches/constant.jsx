@@ -63,28 +63,10 @@ export const getColumns = () => [
     width: 200,
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-    responsive: ['md'],
-    render: (email) => email ?? '-',
-  },
-  {
-    title: 'Position',
-    dataIndex: 'position',
-    key: 'position',
-    responsive: ['md'],
-    render: (position) => position ?? '-',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'contact_type',
-    key: 'contact_type',
-    width: 120,
-    responsive: ['md'],
-    render: (type) => {
-      return renderTags(type, { tags: [type], color: TYPE_COLORS[type] });
-    },
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+    width: 200,
   },
   {
     title: 'Status',

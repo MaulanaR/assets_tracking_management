@@ -53,7 +53,6 @@ const DetailDepartment = () => {
     defaultValues: {
       code: '',
       name: '',
-      address: '',
     },
   });
 
@@ -62,10 +61,6 @@ const DetailDepartment = () => {
       reset({
         code: initialData?.results?.code || '',
         name: initialData?.results?.name || '',
-        email: initialData?.results?.email || '',
-        position: initialData?.results?.position || '',
-        contact_type: initialData?.results?.type || '',
-        address: initialData?.results?.address || '',
       });
     }
   }, [initialData, reset]);
