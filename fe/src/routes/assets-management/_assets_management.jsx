@@ -1,18 +1,17 @@
 import ReactLazyWithSuspense from '@/utils/reactLazyWithSuspense';
-import financialStatement from './_financial_statement';
 
 /** @type {import('react-router').RouteObject[]} */
 const routes = [
   {
-    path: 'reports',
+    path: 'assets-management',
     children: [
       {
         index: true,
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/reports/reports'),
+          async () =>
+            await import('@/pages/assets-management/assets-management'),
         ),
       },
-      ...financialStatement,
       {
         path: '*',
         element: ReactLazyWithSuspense(() => import('@/pages/notfound')),

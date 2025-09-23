@@ -38,7 +38,7 @@ const AppLayout = () => {
       label: isMobile && !mobileMenuOpen ? '' : 'Dashboard',
     },
     {
-      key: '/masterdata',
+      key: '/master-data',
       icon: <Database size={16} />,
       label: isMobile && !mobileMenuOpen ? '' : 'Master Data',
     },
