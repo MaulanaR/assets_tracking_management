@@ -129,12 +129,12 @@ const CreateAssignment = () => {
       const queryParams = new URLSearchParams();
       queryParams.append('code', data.code);
 
-      if (data.category?.value)
-        queryParams.append('category_id', data.category.value);
-      if (data.employee?.value)
-        queryParams.append('employee_id', data.employee.value);
-      if (data.condition?.value)
-        queryParams.append('condition_id', data.condition.value);
+      if (data.category)
+        queryParams.append('category_id', data.category);
+      if (data.employee)
+        queryParams.append('employee_id', data.employee);
+      if (data.condition)
+        queryParams.append('condition_id', data.condition);
 
       const urlWithParams = `${endpoints}?${queryParams.toString()}`;
 
