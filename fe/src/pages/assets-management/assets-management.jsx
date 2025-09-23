@@ -1,12 +1,6 @@
 import { Card, Col, Row, Typography } from 'antd';
-import {
-  Building2,
-  Package,
-  ShoppingCart,
-  Tags,
-  User,
-  Users,
-} from 'lucide-react';
+import { Notebook } from 'lucide-react';
+import { User } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 const { Title } = Typography;
@@ -22,7 +16,7 @@ const AssetsManagement = () => {
     },
     {
       title: 'Requisitions',
-      icon: <ShoppingCart size={24} />,
+      icon: <Notebook size={24} />,
       path: '/assets-management/requisitions/list',
     },
   ];

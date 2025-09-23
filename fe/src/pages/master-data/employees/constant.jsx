@@ -9,22 +9,8 @@ export const EmployeeFormSchema = z
   .object({
     code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
-    department: z
-      .object({
-        label: z.string(),
-        value: z.string().or(z.number()),
-        key: z.string(),
-        title: z.string(),
-      })
-      .optional(),
-    branch: z
-      .object({
-        label: z.string(),
-        value: z.string().or(z.number()),
-        key: z.string(),
-        title: z.string(),
-      })
-      .optional(),
+    department: z.union([z.string(), z.number()]),
+    branch: z.union([z.string(), z.number()]),
     address: z.string().optional(),
     phone: z.string().optional(),
     email: z.string().email('Invalid email format').optional(),

@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { AssetFormSchema } from './constant';
+import { AssignmentFormSchema } from './constant';
 import Forms from './forms';
 
-const CreateAsset = () => {
+const CreateAssignment = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const {
@@ -17,24 +17,21 @@ const CreateAsset = () => {
     control,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(AssetFormSchema),
+    resolver: zodResolver(AssignmentFormSchema),
     defaultValues: {
       code: '',
-      name: '',
-      price: 0,
-      attachment: null,
-      category: null,
+      asset: null,
+      employee: null,
       condition: null,
-      department: null,
-      branch: null,
-      status: null,
+      assign_date: null,
+      attachment: null,
     },
   });
 
-  const endpoints = '/api/v1/assets';
+  const endpoints = '/api/v1/employee_assets';
 
   const { isSubmitting, submit } = useDataQuery({
-    queryKey: ['assets'],
+    queryKey: ['assignments', endpoints],
     getUrl: endpoints,
     method: 'POST',
     submitType: 'json', // Changed to json since we'll handle the file separately
@@ -44,16 +41,16 @@ const CreateAsset = () => {
     submitUrl: endpoints,
     onSuccess: () => {
       notification.success({
-        message: 'Asset Created',
-        description: 'Asset has been successfully Created.',
+        message: 'Assignment Created',
+        description: 'Assignment has been successfully Created.',
         duration: 3,
       });
-      navigate('/master-data/assets');
+      navigate('/assets-management/assignments');
     },
     onError: (err) => {
       notification.error({
-        message: 'Asset Creation Failed',
-        description: err.message || 'Failed to create asset.',
+        message: 'Assignment Creation Failed',
+        description: err.message || 'Failed to create assignment.',
         duration: 3,
       });
     },
@@ -61,7 +58,6 @@ const CreateAsset = () => {
 
   console.log('Default Values:', getValues(), errors);
   const onSubmit = async (data) => {
-    console.log('Form Data:', data);
     // Handle file upload if present
     if (
       data?.attachment &&
@@ -82,20 +78,17 @@ const CreateAsset = () => {
 
       if (actualFile && actualFile instanceof File) {
         // Build query parameters for file upload
+
         const queryParams = new URLSearchParams();
         queryParams.append('code', data.code);
-        queryParams.append('name', data.name);
-        queryParams.append('price', data.price);
+        queryParams.append(
+          'assign_date',
+          data.assign_date?.toISOString() || '',
+        );
 
-        if (data.category?.value)
-          queryParams.append('category_id', data.category.value);
-        if (data.condition?.value)
-          queryParams.append('condition_id', data.condition.value);
-        if (data.department?.value)
-          queryParams.append('department_id', data.department.value);
-        if (data.branch?.value)
-          queryParams.append('branch_id', data.branch.value);
-        if (data.status) queryParams.append('status', data.status);
+        if (data.asset) queryParams.append('asset_id', data.asset);
+        if (data.employee) queryParams.append('employee_id', data.employee);
+        if (data.condition) queryParams.append('condition_id', data.condition);
 
         const urlWithParams = `${endpoints}?${queryParams.toString()}`;
         const formData = new FormData();
@@ -109,14 +102,14 @@ const CreateAsset = () => {
           });
 
           notification.success({
-            message: 'Asset Created',
-            description: 'Asset has been successfully created.',
+            message: 'Assignment Created',
+            description: 'Assignment has been successfully created.',
             duration: 3,
           });
-          navigate('/master-data/assets');
+          navigate('/assets-management/assignments');
         } catch (error) {
           notification.error({
-            message: 'Asset Creation Failed',
+            message: 'Assignment Creation Failed',
             description: error?.response?.data?.message || error.message,
             duration: 3,
           });
@@ -131,44 +124,40 @@ const CreateAsset = () => {
         });
         return;
       }
-    }
+    } else {
+      // Handle form submission without file
+      const queryParams = new URLSearchParams();
+      queryParams.append('code', data.code);
 
-    // Handle form submission without file
-    const queryParams = new URLSearchParams();
-    queryParams.append('code', data.code);
-    queryParams.append('name', data.name);
-    queryParams.append('price', data.price);
+      if (data.category?.value)
+        queryParams.append('category_id', data.category.value);
+      if (data.employee?.value)
+        queryParams.append('employee_id', data.employee.value);
+      if (data.condition?.value)
+        queryParams.append('condition_id', data.condition.value);
 
-    if (data.category?.value)
-      queryParams.append('category_id', data.category.value);
-    if (data.condition?.value)
-      queryParams.append('condition_id', data.condition.value);
-    if (data.department?.value)
-      queryParams.append('department_id', data.department.value);
-    if (data.branch?.value) queryParams.append('branch_id', data.branch.value);
-    if (data.status) queryParams.append('status', data.status);
+      const urlWithParams = `${endpoints}?${queryParams.toString()}`;
 
-    const urlWithParams = `${endpoints}?${queryParams.toString()}`;
+      try {
+        await Api().request({
+          url: urlWithParams,
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
 
-    try {
-      await Api().request({
-        url: urlWithParams,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      notification.success({
-        message: 'Asset Created',
-        description: 'Asset has been successfully created.',
-        duration: 3,
-      });
-      navigate('/master-data/assets');
-    } catch (error) {
-      notification.error({
-        message: 'Asset Creation Failed',
-        description: error?.response?.data?.message || error.message,
-        duration: 3,
-      });
+        notification.success({
+          message: 'Assignment Created',
+          description: 'Assignment has been successfully created.',
+          duration: 3,
+        });
+        navigate('/assets-management/assignments');
+      } catch (error) {
+        notification.error({
+          message: 'Assignment Creation Failed',
+          description: error?.response?.data?.message || error.message,
+          duration: 3,
+        });
+      }
     }
   };
 
@@ -182,22 +171,22 @@ const CreateAsset = () => {
           }}
           items={[
             {
-              title: 'Master Data',
-              onClick: () => navigate('/master-data'),
+              title: 'Assets Management',
+              onClick: () => navigate('/assets-management'),
             },
             {
-              title: 'assets',
-              onClick: () => navigate('/master-data/assets'),
+              title: 'Assignments',
+              onClick: () => navigate('/assets-management/assignments'),
             },
             {
-              title: 'Add Asset',
+              title: 'Add Assignment',
             },
           ]}
         />
       </Flex>
 
       <Forms
-        title="Create Asset"
+        title="Create Assignment"
         control={control}
         handleSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
@@ -207,4 +196,4 @@ const CreateAsset = () => {
   );
 };
 
-export default CreateAsset;
+export default CreateAssignment;
