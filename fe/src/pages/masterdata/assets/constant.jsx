@@ -4,6 +4,7 @@ import * as z from 'zod';
 
 import ContextMenuOption from '@/blocs/ContextMenuOption';
 import renderTags from '@/utils/renderTags';
+import { fetchSelect } from '@/utils/services/fetchSelect';
 
 export const AssetFormSchema = z
   .object({
@@ -175,6 +176,33 @@ export const getColumns = () => [
     ),
   },
 ];
+
+// Helper function untuk create request function
+export const createRequestFunction = ({
+  url,
+  key = 'select option',
+  labelKey = 'name',
+  valueKey = 'id',
+}) => {
+  return async (params) => {
+    try {
+      const response = await fetchSelect({
+        pageParam: 1,
+        queryKey: [url, key, params.keyWords || ''],
+        url: url,
+        search: params.keyWords || '',
+      });
+
+      return response.data.map((item) => ({
+        label: item[labelKey],
+        value: item[valueKey],
+      }));
+    } catch (error) {
+      console.error('Error fetching options:', error);
+      return [];
+    }
+  };
+};
 
 // Breadcrumb items
 export const getBreadcrumbItems = (navigate) => [

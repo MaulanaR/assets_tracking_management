@@ -6,13 +6,13 @@ import {
   ProFormMoney,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
 import { Button, Card, Flex, Typography } from 'antd';
 import { LucideDownload } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { createRequestFunction } from './constant';
 
 const { Title, Text } = Typography;
 
@@ -139,15 +139,18 @@ const Forms = ({
             name="category"
             control={control}
             render={(form) => (
-              <SelectWithReactQuery
+              <ProFormSelect
                 {...form.field}
-                url="/api/v1/categories"
                 label="Category"
                 placeholder="Select Category"
-                queryKey={['categories']}
-                customFetcher={fetchSelect}
-                labelKey="name"
-                valueKey="id"
+                showSearch
+                request={createRequestFunction({
+                  url: '/api/v1/categories',
+                  key: 'category',
+                  labelKey: 'name',
+                  valueKey: 'id',
+                })}
+                debounceTime={300}
                 colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
                 validateStatus={errors.category && 'error'}
                 extra={
@@ -161,35 +164,9 @@ const Forms = ({
                     paddingBottom: proStyle.ProFormText.labelCol.style.padding,
                   },
                 }}
-              />
-            )}
-          />
-
-          <Controller
-            name="condition"
-            control={control}
-            render={(form) => (
-              <SelectWithReactQuery
-                {...form.field}
-                url="/api/v1/conditions"
-                label="Condition"
-                placeholder="Select Condition"
-                queryKey={['conditions']}
-                customFetcher={fetchSelect}
-                labelKey="name"
-                valueKey="id"
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.condition && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.condition?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
+                fieldProps={{
+                  allowClear: true,
+                  loading: form.field.value === undefined,
                 }}
               />
             )}
@@ -214,66 +191,6 @@ const Forms = ({
                 extra={
                   <Text style={{ fontSize: 12 }} type="danger">
                     {errors?.status?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            name="department"
-            control={control}
-            render={(form) => (
-              <SelectWithReactQuery
-                {...form.field}
-                url="/api/v1/departments"
-                label="Department"
-                placeholder="Select Department"
-                queryKey={['departments']}
-                customFetcher={fetchSelect}
-                labelKey="name"
-                valueKey="id"
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.department && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.department?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            name="branch"
-            control={control}
-            render={(form) => (
-              <SelectWithReactQuery
-                {...form.field}
-                url="/api/v1/branches"
-                label="Branch"
-                placeholder="Select Branch"
-                queryKey={['branches']}
-                customFetcher={fetchSelect}
-                labelKey="name"
-                valueKey="id"
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.branch && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.branch?.message}
                   </Text>
                 }
                 labelCol={{
