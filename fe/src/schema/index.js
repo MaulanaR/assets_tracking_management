@@ -9,7 +9,7 @@ export const ContactFormSchema = z
     contact_type: z.string().min(1, 'Contact type is required'),
     address: z.string().optional(),
   })
-  .passthrough();
+  .loose();
 
 // Login form schema
 export const LoginFormSchema = z.object({
@@ -44,7 +44,7 @@ export const ProductFormSchema = z
     selling_price: z.number().min(0, 'Selling price must be positive'),
     unit_cost: z.number().min(0, 'Unit cost must be positive'),
   })
-  .passthrough();
+  .loose();
 
 // Workspace form schema
 export const WorkspaceFormSchema = z.object({

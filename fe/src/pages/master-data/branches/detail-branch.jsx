@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { BranchFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-branch';
 
 const DetailBranch = () => {
   const { notification } = App.useApp();
@@ -50,8 +50,8 @@ const DetailBranch = () => {
   } = useForm({
     resolver: zodResolver(BranchFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
       address: '',
     },
   });

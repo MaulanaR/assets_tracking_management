@@ -6,10 +6,9 @@ import * as z from 'zod';
 
 export const ConditionFormSchema = z
   .object({
-    code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
   })
-  .passthrough();
+  .loose();
 
 // API Endpoints
 export const ENDPOINTS = '/api/v1/conditions';
@@ -18,8 +17,8 @@ export const ENDPOINTS = '/api/v1/conditions';
 export const DEFAULT_PER_PAGE = 10;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_FILTERS = {
-  limit: DEFAULT_PER_PAGE,
-  page: DEFAULT_PAGE,
+  ['$per_page']: DEFAULT_PER_PAGE,
+  ['$page']: DEFAULT_PAGE,
 };
 
 // Condition type colors mapping

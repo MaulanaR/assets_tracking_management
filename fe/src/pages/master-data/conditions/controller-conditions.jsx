@@ -27,9 +27,10 @@ export const useConditionsController = () => {
 
   // Parse URL parameters
   const allParams = Object.fromEntries(searchParam.entries());
-  const currentPage = Number.parseInt(allParams.page, 10) || DEFAULT_PAGE;
-  const limit = Number.parseInt(allParams.limit, 10) || DEFAULT_PER_PAGE;
-  const searchValue = allParams.search || '';
+  const currentPage = Number.parseInt(allParams['$page'], 10) || DEFAULT_PAGE;
+  const per_page =
+    Number.parseInt(allParams['$per_page'], 10) || DEFAULT_PER_PAGE;
+  const searchValue = allParams['$search']?.split(':')[1];
 
   const currentFilters = {
     ...DEFAULT_FILTERS,
@@ -62,11 +63,11 @@ export const useConditionsController = () => {
 
   // Event handlers
   const handleSearch = (e) => {
-    updateParam({ search: e.target.value, page: 1 });
+    updateParam({ ['$search']: `name,code:${e.target.value}`, ['$page']: 1 });
   };
 
   const onShowSizeChange = (_, newPerPage) => {
-    updateParam({ limit: newPerPage, page: 1 });
+    updateParam({ ['$per_page']: newPerPage, ['$page']: 1 });
   };
 
   const handleSelectRow = (selectedRowKeys, selectedRows) => {
@@ -113,7 +114,7 @@ export const useConditionsController = () => {
     initialData,
     isLoading,
     currentPage,
-    limit,
+    per_page,
     searchValue,
     hasActiveFilters,
     isExporting,
@@ -133,7 +134,7 @@ export const useConditionsController = () => {
       <ListInfinteScroll
         queryKey="mobile-conditions"
         endpoint={ENDPOINTS}
-        pageSize={limit}
+        pageSize={per_page}
         filters={currentFilters}
         onEdit={(item) => navigate(`/master-data/conditions/edit/${item.id}`)}
         onDetail={(item) =>

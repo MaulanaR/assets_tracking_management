@@ -2,7 +2,7 @@ import { Tag } from 'antd';
 
 // Configuration object - add your tags and colors here
 const TAG_CONFIGS = {
-  inactive: { color: 'volcano', label: 'Looser' },
+  inactive: { color: 'volcano', label: 'Inactive' },
   active: { color: 'green', label: 'Active' },
   pending: { color: 'orange', label: 'Pending' },
 };

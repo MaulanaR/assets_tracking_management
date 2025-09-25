@@ -1,3 +1,5 @@
+import SummaryOverview from '@/components/widget/SummaryOverview';
+import TotalAssetWidget from '@/components/widget/TotalAssetWidget';
 import { Card, Col, Row, theme } from 'antd';
 import { TrendingUp } from 'lucide-react';
 import {
@@ -17,6 +19,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import useDashboardController from './dashboard-controller';
 
 const { useToken } = theme;
 
@@ -110,7 +113,8 @@ const data = [
 
 const Dashboard = () => {
   const { token } = useToken();
-
+  const { assetsCategory } = useDashboardController();
+  console.log('Assets Category on Dashboard =>', assetsCategory);
   return (
     <div>
       <Row
@@ -125,6 +129,17 @@ const Dashboard = () => {
           token.size,
         ]}
       >
+        <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+          <Card title="Assets Overview">
+            <TotalAssetWidget />
+          </Card>
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={16} xl={16}>
+          <Card title="Summary Overview" className="h-full">
+            <SummaryOverview />
+          </Card>
+        </Col>
+
         {stats.map((stat) => (
           <Col key={stat.id} xs={24} sm={24} md={12} lg={6} xl={6}>
             <Card>

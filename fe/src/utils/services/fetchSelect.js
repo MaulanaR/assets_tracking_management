@@ -11,8 +11,8 @@ export const fetchSelect = async ({ pageParam = 1, queryKey, url }) => {
 
   const search = queryKey[queryKey.length - 1] || '';
   const params = {
-    page: search ? 1 : pageParam,
-    'search[name,code]': search || '',
+    ['$page']: search ? 1 : pageParam,
+    ['$search']: search ? `name,code:${search}` : '',
   };
 
   const response = await Api().get(url, { params });

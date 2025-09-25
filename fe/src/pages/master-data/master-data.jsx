@@ -49,7 +49,7 @@ const MasterData = () => {
 
   return (
     <div>
-      <Title level={2}>MasterData</Title>
+      <Title level={2}>Master Data</Title>
       <Row gutter={[16, 16]}>
         {menuItems.map((item) => (
           <Col xs={24} sm={12} md={6} key={item.title}>

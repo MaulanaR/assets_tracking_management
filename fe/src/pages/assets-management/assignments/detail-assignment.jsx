@@ -50,7 +50,7 @@ const DetailAssignment = () => {
   } = useForm({
     resolver: zodResolver(AssignmentFormSchema),
     defaultValues: {
-      code: '',
+      code: null,
       asset: null,
       employee: null,
       condition: null,

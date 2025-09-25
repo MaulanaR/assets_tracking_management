@@ -62,7 +62,7 @@ function buildUrl(baseUrl, params) {
  * @param {boolean} [config.enabled=true] - Whether to enable the data fetching
  * @param {number} [config.pageSize=10] - Number of items per page
  * @param {string} [config.pageParam='page'] - Parameter name for page number
- * @param {string} [config.limitParam='limit'] - Parameter name for page size
+ * @param {string} [config.limitParam='per_page'] - Parameter name for page size
  * @param {Function} [config.onSuccess] - Callback when submission succeeds
  * @param {Function} [config.onError] - Callback when submission fails
  * @param {Function} [config.transformResponse] - Function to transform API response
@@ -81,7 +81,7 @@ export function useDataInfiniteScrollQuery({
   enabled = true,
   pageSize = 10,
   pageParam = 'page',
-  limitParam = 'limit',
+  limitParam = 'per_page',
   onSuccess,
   onError,
   transformResponse = (data) => data,

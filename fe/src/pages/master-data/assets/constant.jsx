@@ -8,7 +8,6 @@ import { fetchSelect } from '@/utils/services/fetchSelect';
 
 export const AssetFormSchema = z
   .object({
-    code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
     price: z
       .number({
@@ -21,7 +20,7 @@ export const AssetFormSchema = z
       required_error: 'Status is required',
     }),
   })
-  .passthrough();
+  .loose();
 
 // API Endpoints
 export const ENDPOINTS = '/api/v1/assets';
@@ -30,8 +29,8 @@ export const ENDPOINTS = '/api/v1/assets';
 export const DEFAULT_PER_PAGE = 10;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_FILTERS = {
-  limit: DEFAULT_PER_PAGE,
-  page: DEFAULT_PAGE,
+  ['$per_page']: DEFAULT_PER_PAGE,
+  ['$page']: DEFAULT_PAGE,
 };
 
 // Asset status colors mapping
@@ -88,22 +87,6 @@ export const getColumns = () => [
     width: 120,
     responsive: ['md'],
     render: (category) => category ?? '-',
-  },
-  {
-    title: 'Condition',
-    dataIndex: ['condition', 'name'],
-    key: 'condition',
-    width: 120,
-    responsive: ['lg'],
-    render: (condition) => condition ?? '-',
-  },
-  {
-    title: 'Department',
-    dataIndex: ['department', 'name'],
-    key: 'department',
-    width: 120,
-    responsive: ['lg'],
-    render: (department) => department ?? '-',
   },
   {
     title: 'Status',

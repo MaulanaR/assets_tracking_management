@@ -202,6 +202,7 @@ const Forms = ({
                 placeholder="Select Date Assigned"
                 colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
                 validateStatus={errors.assign_date && 'error'}
+                format="YYYY-MM-DD"
                 extra={
                   <Text style={{ fontSize: 12 }} type="danger">
                     {errors?.assign_date?.message}

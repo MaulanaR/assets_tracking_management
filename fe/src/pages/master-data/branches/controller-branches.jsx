@@ -30,9 +30,11 @@ export const useBranchesController = () => {
 
   // Parse URL parameters
   const allParams = Object.fromEntries(searchParam.entries());
-  const currentPage = Number.parseInt(allParams.page, 10) || DEFAULT_PAGE;
-  const limit = Number.parseInt(allParams.limit, 10) || DEFAULT_PER_PAGE;
-  const searchValue = allParams.search || '';
+  console.log('INI PARAM allParams =>', allParams);
+  const currentPage = Number.parseInt(allParams['$page'], 10) || DEFAULT_PAGE;
+  const per_page =
+    Number.parseInt(allParams['$per_page'], 10) || DEFAULT_PER_PAGE;
+  const searchValue = allParams['$search']?.split(':')[1];
 
   const currentFilters = {
     ...DEFAULT_FILTERS,
@@ -65,11 +67,11 @@ export const useBranchesController = () => {
 
   // Event handlers
   const handleSearch = (e) => {
-    updateParam({ search: e.target.value, page: 1 });
+    updateParam({ ['$search']: `name,code:${e.target.value}`, ['$page']: 1 });
   };
 
   const onShowSizeChange = (_, newPerPage) => {
-    updateParam({ limit: newPerPage, page: 1 });
+    updateParam({ ['$per_page']: newPerPage, ['$page']: 1 });
   };
 
   const handleSelectRow = (selectedRowKeys, selectedRows) => {
@@ -116,7 +118,7 @@ export const useBranchesController = () => {
     initialData,
     isLoading,
     currentPage,
-    limit,
+    per_page,
     searchValue,
     hasActiveFilters,
     isExporting,
@@ -136,7 +138,7 @@ export const useBranchesController = () => {
       <ListInfinteScroll
         queryKey="mobile-branches"
         endpoint={ENDPOINTS}
-        pageSize={limit}
+        pageSize={per_page}
         filters={currentFilters}
         onEdit={(item) => navigate(`/master-data/branches/edit/${item.id}`)}
         onDetail={(item) => navigate(`/master-data/branches/detail/${item.id}`)}

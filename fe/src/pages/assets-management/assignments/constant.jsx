@@ -4,10 +4,10 @@ import * as z from 'zod';
 
 import ContextMenuOption from '@/blocs/ContextMenuOption';
 import renderTags from '@/utils/renderTags';
+import moment from 'moment';
 
 export const AssignmentFormSchema = z
   .object({
-    code: z.string().min(1, 'Code is required'),
     asset: z.union([z.string(), z.number()]),
     employee: z.union([z.string(), z.number()]),
     condition: z.union([z.string(), z.number()]),
@@ -15,7 +15,7 @@ export const AssignmentFormSchema = z
       .date()
       .min(new Date('2000-01-01'), 'Assign date is required'),
   })
-  .passthrough();
+  .loose();
 
 // API Endpoints
 export const ENDPOINTS = '/api/v1/employee_assets';
@@ -24,8 +24,8 @@ export const ENDPOINTS = '/api/v1/employee_assets';
 export const DEFAULT_PER_PAGE = 10;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_FILTERS = {
-  limit: DEFAULT_PER_PAGE,
-  page: DEFAULT_PAGE,
+  ['$per_page']: DEFAULT_PER_PAGE,
+  ['$page']: DEFAULT_PAGE,
 };
 
 // Asset status colors mapping
@@ -59,6 +59,7 @@ export const getColumns = () => [
     dataIndex: 'assign_date',
     key: 'assign_date',
     width: 120,
+    render: (date) => moment(date).format('DD MMM YYYY') || '-',
   },
   {
     title: 'Code',

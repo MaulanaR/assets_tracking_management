@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { ConditionFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-condition';
 
 const CreateCondition = () => {
   const { notification } = App.useApp();
@@ -19,8 +19,8 @@ const CreateCondition = () => {
   } = useForm({
     resolver: zodResolver(ConditionFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
     },
   });
 
@@ -51,7 +51,7 @@ const CreateCondition = () => {
     },
     filters: {
       per_page: 10,
-      page: 1,
+      ['$page']: 1,
       includes: [
         'emails',
         'phones',

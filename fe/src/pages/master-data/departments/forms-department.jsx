@@ -102,30 +102,6 @@ const Forms = ({
             )}
           />
         </ProForm.Group>
-
-        <Controller
-          name="address"
-          control={control}
-          render={(form) => (
-            <ProFormTextArea
-              {...form.field}
-              label="Address"
-              placeholder={''}
-              validateStatus={errors.address && 'error'}
-              extra={
-                <Text style={{ fontSize: 12 }} type="danger">
-                  {errors?.address?.message}
-                </Text>
-              }
-              labelCol={{
-                style: {
-                  //ant-form-item-label padding
-                  paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                },
-              }}
-            />
-          )}
-        />
       </ProForm>
     </Card>
   );

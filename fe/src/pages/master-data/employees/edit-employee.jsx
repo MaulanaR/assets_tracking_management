@@ -7,7 +7,8 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { EmployeeFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-employee';
+import { uploadAttachment } from '@/utils/globalFunction';
 
 const EditEmployee = () => {
   const { notification } = App.useApp();
@@ -49,8 +50,8 @@ const EditEmployee = () => {
   } = useForm({
     resolver: zodResolver(EmployeeFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
       address: '',
       department: null,
       branch: null,
@@ -73,120 +74,42 @@ const EditEmployee = () => {
         attachment,
       } = initialData?.results || {};
       reset({
-        code: code || '',
-        name: name || '',
-        address: address || '',
+        code: code || null,
+        name: name || null,
+        address: address || null,
         department: department || null,
         branch: branch || null,
-        phone: phone || '',
-        email: email || '',
+        phone: phone || null,
+        email: email || null,
         attachment: attachment || null,
       });
     }
   }, [initialData, reset]);
 
   const onSubmit = async (data) => {
-    // Handle file upload if present
-    if (
-      data?.attachment &&
-      Array.isArray(data.attachment) &&
-      data.attachment.length > 0
-    ) {
-      const file = data.attachment[0];
-
-      // Find the actual File object
-      let actualFile = null;
-      if (file.originFileObj && file.originFileObj instanceof File) {
-        actualFile = file.originFileObj;
-      } else if (file instanceof File) {
-        actualFile = file;
-      } else if (file.file && file.file instanceof File) {
-        actualFile = file.file;
-      }
-
-      if (actualFile && actualFile instanceof File) {
-        // Build query parameters for file upload
-        const queryParams = new URLSearchParams();
-        queryParams.append('code', data.code);
-        queryParams.append('name', data.name);
-
-        if (data.address) queryParams.append('address', data.address);
-        if (data.phone) queryParams.append('phone', data.phone);
-        if (data.email) queryParams.append('email', data.email);
-        if (data.department?.value)
-          queryParams.append('department_id', data.department.value);
-        if (data.branch?.value)
-          queryParams.append('branch_id', data.branch.value);
-
-        const urlWithParams = `${endpoints}?${queryParams.toString()}`;
-        const formData = new FormData();
-        formData.append('attachment', actualFile);
-
-        try {
-          await Api().request({
-            url: urlWithParams,
-            method: 'POST',
-            data: formData,
-          });
-
-          notification.success({
-            message: 'Employee Created',
-            description: 'Employee has been successfully created.',
-            duration: 3,
-          });
-          navigate('/master-data/employees');
-        } catch (error) {
-          notification.error({
-            message: 'Employee Creation Failed',
-            description: error?.response?.data?.message || error.message,
-            duration: 3,
-          });
-        }
-        return;
-      } else {
-        notification.error({
-          message: 'File Upload Error',
-          description:
-            'Invalid file object. Please try uploading the file again.',
-          duration: 3,
-        });
-        return;
-      }
-    }
-
-    // Handle form submission without file
-    const queryParams = new URLSearchParams();
-    queryParams.append('code', data.code);
-    queryParams.append('name', data.name);
-
-    if (data.address) queryParams.append('address', data.address);
-    if (data.phone) queryParams.append('phone', data.phone);
-    if (data.email) queryParams.append('email', data.email);
-    if (data.department?.value)
-      queryParams.append('department_id', data.department.value);
-    if (data.branch?.value) queryParams.append('branch_id', data.branch.value);
-
-    const urlWithParams = `${endpoints}?${queryParams.toString()}`;
+    console.log('Form Data:', data);
 
     try {
-      await Api().request({
-        url: urlWithParams,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+      let attachmentId = null;
 
-      notification.success({
-        message: 'Employee Created',
-        description: 'Employee has been successfully created.',
-        duration: 3,
-      });
-      navigate('/master-data/employees');
+      if (data?.attachment?.length > 0) {
+        attachmentId = await uploadAttachment(data.attachment[0]);
+      }
+
+      const submitData = {
+        ...data,
+        department: {
+          id: data?.department || null,
+        },
+        branch: {
+          id: data?.branch || null,
+        },
+        attachment: attachmentId,
+      };
+
+      await submit(submitData);
     } catch (error) {
-      notification.error({
-        message: 'Employee Creation Failed',
-        description: error?.response?.data?.message || error.message,
-        duration: 3,
-      });
+      console.error('Asset creation failed:', error);
     }
   };
 

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { DepartmentFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-department';
 
 const CreateDepartment = () => {
   const { notification } = App.useApp();
@@ -19,8 +19,8 @@ const CreateDepartment = () => {
   } = useForm({
     resolver: zodResolver(DepartmentFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
     },
   });
 
@@ -51,7 +51,7 @@ const CreateDepartment = () => {
     },
     filters: {
       per_page: 10,
-      page: 1,
+      ['$page']: 1,
       includes: [
         'emails',
         'phones',

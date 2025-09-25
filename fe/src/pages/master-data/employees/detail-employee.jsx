@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { EmployeeFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-employee';
 
 const DetailEmployee = () => {
   const { notification } = App.useApp();
@@ -50,21 +50,21 @@ const DetailEmployee = () => {
   } = useForm({
     resolver: zodResolver(EmployeeFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
-      address: '',
+      code: null,
+      name: null,
+      address: null,
     },
   });
 
   useEffect(() => {
     if (initialData) {
       reset({
-        code: initialData?.results?.code || '',
-        name: initialData?.results?.name || '',
-        email: initialData?.results?.email || '',
-        position: initialData?.results?.position || '',
-        contact_type: initialData?.results?.type || '',
-        address: initialData?.results?.address || '',
+        code: initialData?.results?.code || null,
+        name: initialData?.results?.name || null,
+        email: initialData?.results?.email || null,
+        position: initialData?.results?.position || null,
+        contact_type: initialData?.results?.type || null,
+        address: initialData?.results?.address || null,
       });
     }
   }, [initialData, reset]);

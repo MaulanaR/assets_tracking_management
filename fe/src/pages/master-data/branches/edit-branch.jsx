@@ -9,7 +9,7 @@ import { App } from 'antd';
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { BranchFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-branch';
 
 const EditBranch = () => {
   const { notification } = App.useApp();
@@ -50,8 +50,8 @@ const EditBranch = () => {
   } = useForm({
     resolver: zodResolver(BranchFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
       address: '',
     },
   });

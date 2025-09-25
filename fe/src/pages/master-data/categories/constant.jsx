@@ -6,11 +6,9 @@ import * as z from 'zod';
 
 export const CategoryFormSchema = z
   .object({
-    code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
-    address: z.string().optional(),
   })
-  .passthrough();
+  .loose();
 
 // API Endpoints
 export const ENDPOINTS = '/api/v1/categories';
@@ -19,8 +17,8 @@ export const ENDPOINTS = '/api/v1/categories';
 export const DEFAULT_PER_PAGE = 10;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_FILTERS = {
-  limit: DEFAULT_PER_PAGE,
-  page: DEFAULT_PAGE,
+  ['$per_page']: DEFAULT_PER_PAGE,
+  ['$page']: DEFAULT_PAGE,
 };
 
 // Category type colors mapping
@@ -63,12 +61,6 @@ export const getColumns = () => [
     width: 200,
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-    width: 200,
-  },
-  {
     title: 'Status',
     dataIndex: 'is_active',
     key: 'is_active',
@@ -87,9 +79,9 @@ export const getColumns = () => [
     width: 50,
     render: (_, record) => (
       <ContextMenuOption
-        editPath={`/master-data/branches/edit/${record.id}`}
-        detailPath={`/master-data/branches/detail/${record.id}`}
-        deletePath={`/master-data/branches/delete/${record.id}`}
+        editPath={`/master-data/categories/edit/${record.id}`}
+        detailPath={`/master-data/categories/detail/${record.id}`}
+        deletePath={`/master-data/categories/delete/${record.id}`}
       >
         <Button
           variant="text"

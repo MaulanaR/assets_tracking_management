@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 
 import { DepartmentFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-department';
 
 const EditDepartment = () => {
   const { notification } = App.useApp();
@@ -48,8 +48,8 @@ const EditDepartment = () => {
   } = useForm({
     resolver: zodResolver(DepartmentFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
     },
   });
 

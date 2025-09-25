@@ -6,11 +6,10 @@ import * as z from 'zod';
 
 export const BranchFormSchema = z
   .object({
-    code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
     address: z.string().optional(),
   })
-  .passthrough();
+  .loose();
 
 // API Endpoints
 export const ENDPOINTS = '/api/v1/branches';
@@ -19,8 +18,8 @@ export const ENDPOINTS = '/api/v1/branches';
 export const DEFAULT_PER_PAGE = 10;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_FILTERS = {
-  limit: DEFAULT_PER_PAGE,
-  page: DEFAULT_PAGE,
+  ['$per_page']: DEFAULT_PER_PAGE,
+  ['$page']: DEFAULT_PAGE,
 };
 
 // Branch type colors mapping

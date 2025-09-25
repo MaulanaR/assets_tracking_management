@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BranchFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-branch';
 
 const CreateBranch = () => {
   const { notification } = App.useApp();
@@ -20,8 +20,8 @@ const CreateBranch = () => {
   } = useForm({
     resolver: zodResolver(BranchFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
       address: '',
     },
   });
@@ -53,7 +53,7 @@ const CreateBranch = () => {
     },
     filters: {
       per_page: 10,
-      page: 1,
+      ['$page']: 1,
       includes: [
         'emails',
         'phones',

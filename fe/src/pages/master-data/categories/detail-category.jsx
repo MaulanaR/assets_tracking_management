@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 
 import { CategoryFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-category';
 
 const DetailCategory = () => {
   const { notification } = App.useApp();
@@ -51,8 +51,8 @@ const DetailCategory = () => {
   } = useForm({
     resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
       address: '',
     },
   });

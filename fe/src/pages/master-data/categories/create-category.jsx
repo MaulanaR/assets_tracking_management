@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { CategoryFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-category';
 
 const CreateCategory = () => {
   const { notification } = App.useApp();
@@ -19,8 +19,8 @@ const CreateCategory = () => {
   } = useForm({
     resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
       address: '',
     },
   });
@@ -52,7 +52,7 @@ const CreateCategory = () => {
     },
     filters: {
       per_page: 10,
-      page: 1,
+      ['$page']: 1,
       includes: [
         'emails',
         'phones',

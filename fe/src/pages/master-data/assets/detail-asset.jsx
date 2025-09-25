@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssetFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-asset';
 
 const DetailAsset = () => {
   const { notification } = App.useApp();
@@ -50,9 +50,12 @@ const DetailAsset = () => {
   } = useForm({
     resolver: zodResolver(AssetFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
-      address: '',
+      code: null,
+      name: null,
+      price: 0,
+      attachment: null,
+      category: null,
+      status: null,
     },
   });
 
@@ -61,10 +64,10 @@ const DetailAsset = () => {
       reset({
         code: initialData?.results?.code || '',
         name: initialData?.results?.name || '',
-        email: initialData?.results?.email || '',
-        position: initialData?.results?.position || '',
-        contact_type: initialData?.results?.type || '',
-        address: initialData?.results?.address || '',
+        price: initialData?.results?.price || 0,
+        attachment: initialData?.results?.attachment || null,
+        category: initialData?.results?.category || null,
+        status: initialData?.results?.status || null,
       });
     }
   }, [initialData, reset]);

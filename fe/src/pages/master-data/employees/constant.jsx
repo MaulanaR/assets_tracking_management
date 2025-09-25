@@ -7,7 +7,6 @@ import renderTags from '@/utils/renderTags';
 
 export const EmployeeFormSchema = z
   .object({
-    code: z.string().min(1, 'Code is required'),
     name: z.string().min(1, 'Name is required'),
     department: z.union([z.string(), z.number()]),
     branch: z.union([z.string(), z.number()]),
@@ -15,7 +14,7 @@ export const EmployeeFormSchema = z
     phone: z.string().optional(),
     email: z.string().email('Invalid email format').optional(),
   })
-  .passthrough();
+  .loose();
 
 // API Endpoints
 export const ENDPOINTS = '/api/v1/employees';
@@ -24,8 +23,8 @@ export const ENDPOINTS = '/api/v1/employees';
 export const DEFAULT_PER_PAGE = 10;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_FILTERS = {
-  limit: DEFAULT_PER_PAGE,
-  page: DEFAULT_PAGE,
+  ['$per_page']: DEFAULT_PER_PAGE,
+  ['$page']: DEFAULT_PAGE,
 };
 
 // Employee type colors mapping

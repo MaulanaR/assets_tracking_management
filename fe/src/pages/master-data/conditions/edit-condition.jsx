@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 
 import { ConditionFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-condition';
 
 const EditCondition = () => {
   const { notification } = App.useApp();
@@ -48,8 +48,8 @@ const EditCondition = () => {
   } = useForm({
     resolver: zodResolver(ConditionFormSchema),
     defaultValues: {
-      code: '',
-      name: '',
+      code: null,
+      name: null,
     },
   });
 
