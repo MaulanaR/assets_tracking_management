@@ -12,6 +12,19 @@ const routes = [
           async () => await import('@/pages/reports/reports'),
         ),
       },
+      {
+        path: 'filter-distribution-asset',
+        element: ReactLazyWithSuspense(
+          async () => await import('@/pages/reports/filter-distribution-asset'),
+        ),
+      },
+      {
+        path: 'distribution-asset-per-department',
+        element: ReactLazyWithSuspense(
+          async () =>
+            await import('@/pages/reports/distribution-asset-per-department'),
+        ),
+      },
       ...financialStatement,
       {
         path: '*',
