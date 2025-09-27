@@ -13,6 +13,11 @@ const Reports = () => {
       description: 'Distribution asset per department reports',
     },
     {
+      title: 'Asset Condition Report',
+      path: '/reports/filter-asset-condition',
+      description: 'Asset condition tracking and monitoring reports',
+    },
+    {
       title: 'Payable Reports',
       path: '/reports/payable',
       description: 'Supplier payments and outstanding payables',

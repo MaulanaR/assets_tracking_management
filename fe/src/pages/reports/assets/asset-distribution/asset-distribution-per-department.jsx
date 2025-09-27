@@ -2,53 +2,8 @@ import { Card, Table, Typography, Tag, Space, Button } from 'antd';
 import { useSearchParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import Api from '@/utils/axios/api';
-
+import { SafeInnerHTMLDisplay } from '@/utils/sanitizeInnerHTML';
 const { Title } = Typography;
-
-// Function untuk sanitasi HTML sederhana (tanpa library eksternal)
-const sanitizeHTML = (html) => {
-  if (!html) return '';
-
-  // Remove potentially dangerous scripts and events
-  let sanitized = html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '') // Remove iframe tags
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '') // Remove object tags
-    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '') // Remove embed tags
-    .replace(/<link\b[^<]*(?:(?!<\/link>)<[^<]*)*<\/link>/gi, '') // Remove link tags
-    .replace(/<meta\b[^<]*(?:(?!<\/meta>)<[^<]*)*<\/meta>/gi, '') // Remove meta tags
-    .replace(/on\w+="[^"]*"/gi, '') // Remove event handlers like onclick, onload, etc.
-    .replace(/javascript:/gi, '') // Remove javascript: protocols
-    .replace(/vbscript:/gi, '') // Remove vbscript: protocols
-    .replace(/data:/gi, '') // Remove data: protocols
-    .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '') // Remove form tags
-    .replace(/<input\b[^<]*(?:(?!<\/input>)<[^<]*)*<\/input>/gi, '') // Remove input tags
-    .replace(/<button\b[^<]*(?:(?!<\/button>)<[^<]*)*<\/button>/gi, '') // Remove button tags
-    .replace(/<select\b[^<]*(?:(?!<\/select>)<[^<]*)*<\/select>/gi, '') // Remove select tags
-    .replace(/<textarea\b[^<]*(?:(?!<\/textarea>)<[^<]*)*<\/textarea>/gi, ''); // Remove textarea tags
-
-  return sanitized;
-};
-
-// Function untuk menampilkan HTML dengan aman
-const SafeHTMLDisplay = ({ htmlContent, className = '' }) => {
-  if (!htmlContent) return null;
-
-  // Sanitasi HTML untuk mencegah XSS attacks
-  const sanitizedHTML = sanitizeHTML(htmlContent);
-
-  return (
-    <div
-      className={className}
-      dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
-      style={{
-        maxWidth: '100%',
-        overflow: 'auto',
-        wordWrap: 'break-word',
-      }}
-    />
-  );
-};
 
 // Function untuk fetch data report
 const fetchReport = async ({ branchIds, departmentIds }) => {
@@ -193,9 +148,9 @@ const DistributionAssetPerDepartment = () => {
       <Card>
         {isHTMLResponse ? (
           // Tampilkan HTML response dengan aman
-          <SafeHTMLDisplay
+          <SafeInnerHTMLDisplay
             htmlContent={initialData}
-            className="report-html-content"
+            classNameWrapper="report-html-content"
           />
         ) : (
           // Tampilkan tabel jika response adalah data JSON
