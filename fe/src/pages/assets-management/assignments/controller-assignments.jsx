@@ -105,6 +105,10 @@ export const useAssignmentController = () => {
     navigate('/assets-management');
   };
 
+  const handleTransferAsset = () => {
+    navigate('/assets-management/assignments/transfer');
+  };
+
   return {
     // State
     selectedRow,
@@ -129,6 +133,7 @@ export const useAssignmentController = () => {
     handleFilter,
     handleCreate,
     handleExportCSV,
+    handleTransferAsset,
     navigateToParent,
     renderListMobileView: () => (
       <ListInfinteScroll

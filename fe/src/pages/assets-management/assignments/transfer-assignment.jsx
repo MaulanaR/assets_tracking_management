@@ -9,7 +9,7 @@ import { AssignmentFormSchema } from './constant';
 import Forms from './forms';
 import Api from '@/utils/axios/api';
 
-const EditAssignment = () => {
+const TransferAssignment = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -38,6 +38,8 @@ const EditAssignment = () => {
       });
     },
   });
+
+  console.log("INII DATAA =>",initialData);
 
   const {
     // register,
@@ -126,14 +128,14 @@ const EditAssignment = () => {
               onClick: () => navigate('/assets-management/assignments'),
             },
             {
-              title: 'Edit Assignment',
+              title: 'Transfer Assignment',
             },
           ]}
         />
       </Flex>
 
       <Forms
-        title="Edit Assignment"
+        title="Transfer Assignment"
         control={control}
         isLoading={isLoading}
         handleSubmit={handleSubmit(onSubmit)}
@@ -144,4 +146,4 @@ const EditAssignment = () => {
   );
 };
 
-export default EditAssignment;
+export default TransferAssignment;

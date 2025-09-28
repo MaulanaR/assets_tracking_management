@@ -229,7 +229,7 @@ const Forms = ({
                   name: 'attachment',
                   listType: 'text',
                   accept: '.pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls',
-                  fileList: value || [],
+                  fileList: Array.isArray(value) ? value : [],
                   onChange: ({ fileList }) => {
                     onChange(fileList);
                   },

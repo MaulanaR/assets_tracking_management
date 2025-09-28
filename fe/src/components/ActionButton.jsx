@@ -13,6 +13,11 @@ const ActionButtons = ({
   onExportCSV,
   onCreate,
   isExporting,
+  createProps = {
+    icon: <Plus size={16} />,
+    title: 'Create',
+  },
+  ...props
 }) => {
   const screens = useBreakpoint();
   const isMobile = !screens.md;
@@ -44,14 +49,15 @@ const ActionButtons = ({
       >
         {!isMobile && 'Export to CSV'}
       </Button>
+      {props.children && props.children}
       <Button
         variant="solid"
         color="primary"
         onClick={onCreate}
-        icon={isMobile ? <Plus size={16} /> : undefined}
-        title={isMobile ? 'Create' : undefined}
+        icon={isMobile ? createProps.icon : undefined}
+        title={isMobile ? createProps.title : undefined}
       >
-        {!isMobile && 'Create'}
+        {!isMobile && createProps.title}
       </Button>
     </Space>
   );

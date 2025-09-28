@@ -1,4 +1,4 @@
-import { Breadcrumb, Card, Flex, Input, Space, Table, Typography } from 'antd';
+import { Breadcrumb, Button, Card, Flex, Input, Space, Table, Typography } from 'antd';
 import { createStyles } from 'antd-style';
 import { Outlet } from 'react-router';
 
@@ -11,6 +11,8 @@ import {
   getColumns,
 } from './constant';
 import { useAssignmentController } from './controller-assignments';
+import { Transfer } from 'antd';
+import { ArrowRightLeft } from 'lucide-react';
 
 // Styles
 const useStyle = createStyles(({ css, token }) => {
@@ -56,6 +58,7 @@ const ContentAssignment = () => {
     handleFilter,
     handleCreate,
     handleExportCSV,
+    handleTransferAsset,
     navigate,
   } = useAssignmentController();
 
@@ -130,6 +133,9 @@ const ContentAssignment = () => {
                 onExportCSV={handleExportCSV}
                 onCreate={handleCreate}
                 isExporting={isExporting}
+                createProps={{
+                  title: 'Assign Asset',
+                }}
               />
             </Flex>
 

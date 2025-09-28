@@ -50,6 +50,15 @@ const routes = [
         ),
       },
       {
+        path: 'transfer/:id',
+        element: ReactLazyWithSuspense(
+          async () =>
+            await import(
+              '@/pages/assets-management/assignments/transfer-assignment'
+            ),
+        ),
+      },
+      {
         path: 'detail/:id',
         element: ReactLazyWithSuspense(
           async () =>

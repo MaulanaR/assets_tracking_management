@@ -45,4 +45,4 @@ const SafeInnerHTMLDisplay = ({ htmlContent, classNameWrapper = '' }) => {
   );
 };
 
-export { sanitizeInnerHTML, SafeInnerHTMLDisplay };
+export default SafeInnerHTMLDisplay;

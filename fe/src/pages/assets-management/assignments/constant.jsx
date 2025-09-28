@@ -2,9 +2,9 @@ import { Button } from 'antd';
 import { MoreVertical } from 'lucide-react';
 import * as z from 'zod';
 
-import ContextMenuOption from '@/blocs/ContextMenuOption';
 import renderTags from '@/utils/renderTags';
 import moment from 'moment';
+import AssignmentContextMenuOption from '@/blocs/AssignmentContextMenuOption';
 
 export const AssignmentFormSchema = z
   .object({
@@ -18,7 +18,7 @@ export const AssignmentFormSchema = z
   .loose();
 
 // API Endpoints
-export const ENDPOINTS = '/api/v1/employee_assets';
+export const ENDPOINTS = '/api/v1/assets';
 
 // Pagination defaults
 export const DEFAULT_PER_PAGE = 10;
@@ -116,10 +116,11 @@ export const getColumns = () => [
     align: 'right',
     width: 50,
     render: (_, record) => (
-      <ContextMenuOption
+      <AssignmentContextMenuOption
         editPath={`/assets-management/assignments/edit/${record.id}`}
         detailPath={`/assets-management/assignments/detail/${record.id}`}
         deletePath={`/assets-management/assignments/delete/${record.id}`}
+        transferPath={`/assets-management/assignments/transfer/${record.id}`}
       >
         <Button
           variant="text"
@@ -128,7 +129,7 @@ export const getColumns = () => [
           icon={<MoreVertical size={12} />}
           size={'middle'}
         />
-      </ContextMenuOption>
+      </AssignmentContextMenuOption>
     ),
   },
 ];
