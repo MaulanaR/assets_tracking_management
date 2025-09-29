@@ -1,12 +1,7 @@
 import { Card, Col, Row, Typography } from 'antd';
-import {
-  Building2,
-  Package,
-  ShoppingCart,
-  Tags,
-  User,
-  Users,
-} from 'lucide-react';
+import { LibraryBig } from 'lucide-react';
+import { Box, Building, Building2, PackageX, Users } from 'lucide-react';
+
 import { useNavigate } from 'react-router';
 
 const { Title } = Typography;
@@ -16,34 +11,34 @@ const MasterData = () => {
 
   const menuItems = [
     {
-      title: 'Assets',
-      icon: <User size={24} />,
-      path: '/master-data/assets/list',
-    },
-    {
       title: 'Branches',
-      icon: <ShoppingCart size={24} />,
+      icon: <Building2 size={24} />,
       path: '/master-data/branches/list',
     },
     {
-      title: 'Categories',
-      icon: <Building2 size={24} />,
-      path: '/master-data/categories/list',
-    },
-    {
-      title: 'Conditions',
-      icon: <Users size={24} />,
-      path: '/master-data/conditions/list',
-    },
-    {
       title: 'Departments',
-      icon: <Tags size={24} />,
+      icon: <Building size={24} />,
       path: '/master-data/departments/list',
     },
     {
       title: 'Employees',
-      icon: <Package size={24} />,
+      icon: <Users size={24} />,
       path: '/master-data/employees/list',
+    },
+    {
+      title: 'Categories',
+      icon: <LibraryBig size={24} />,
+      path: '/master-data/categories/list',
+    },
+    {
+      title: 'Conditions',
+      icon: <PackageX size={24} />,
+      path: '/master-data/conditions/list',
+    },
+    {
+      title: 'Assets',
+      icon: <Box size={24} />,
+      path: '/master-data/assets/list',
     },
   ];
 
