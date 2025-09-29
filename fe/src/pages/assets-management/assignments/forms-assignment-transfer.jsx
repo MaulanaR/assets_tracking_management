@@ -230,9 +230,9 @@ const Forms = ({
               />
             )}
           />
-</ProForm.Group>
-<ProForm.Group>
-<Controller
+        </ProForm.Group>
+        <ProForm.Group>
+          <Controller
             name="history_assign_date"
             control={control}
             disabled={true}

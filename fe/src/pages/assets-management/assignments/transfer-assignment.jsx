@@ -1,14 +1,14 @@
+import { uploadAttachment } from '@/utils/globalFunction';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssignmentFormSchema } from './constant';
 import FormsAssignmentTransfer from './forms-assignment-transfer';
-import moment from 'moment';
-import { uploadAttachment } from '@/utils/globalFunction';
 
 const TransferAssignment = () => {
   const { notification } = App.useApp();
@@ -64,18 +64,13 @@ const TransferAssignment = () => {
 
   useEffect(() => {
     if (initialData) {
-      const {
-        code,
-        employee,
-        condition,
-        assign_date,
-        attachment,
-        ...props
-      } = initialData?.results || {};
+      const { code, employee, condition, assign_date, attachment, ...props } =
+        initialData?.results || {};
 
       reset({
         asset: { label: props?.name, value: props?.id } || null,
-        current_employee:{ label: employee?.name, value: employee?.id } || null,
+        current_employee:
+          { label: employee?.name, value: employee?.id } || null,
         employee: null,
         condition: { label: condition?.name, value: condition?.id } || null,
         history_assign_date: moment(assign_date).format('YYYY-MM-DD') || null,

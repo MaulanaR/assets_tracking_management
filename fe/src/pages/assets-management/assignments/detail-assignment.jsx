@@ -1,31 +1,32 @@
-import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import Api from '@/utils/axios/api';
+import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
 import { App, Breadcrumb, Flex } from 'antd';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssignmentFormSchema } from './constant';
 import Forms from './forms-assignment';
-import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 
 const fetchHistory = async ({ url }) => {
   const response = await Api().get(url);
   const results = response.data?.results || [];
   // Hapus data pertama dari response
   const rebuildChildren = results.list.map((result) => {
-
     return {
       ...result,
       color: 'blue',
-      children: (<>
-        <p>Date: {moment(result.date).format('DD MMM YYYY')}</p>
-        <p>Employee: {result.employee.name}</p>
-        <p>Condition: {result.condition.name}</p>
-      </>)
-    }
+      children: (
+        <>
+          <p>Date: {moment(result.date).format('DD MMM YYYY')}</p>
+          <p>Employee: {result.employee.name}</p>
+          <p>Condition: {result.condition.name}</p>
+        </>
+      ),
+    };
   });
   return rebuildChildren;
 };
@@ -39,9 +40,9 @@ const DetailAssignment = () => {
     id && typeof id === 'string' && id.trim() !== ''
       ? `/api/v1/assets/${id}`
       : '/api/v1/assets';
-  
+
   const endpointHistory = `/api/v1/employee_assets?asset.id=${id}&$sort=-date`;
-  
+
   const { data: historyData, isLoading: isLoadingHistory } = useQuery({
     enabled: !!id,
     queryKey: ['employee_assets_history', endpointHistory],
@@ -144,7 +145,7 @@ const DetailAssignment = () => {
           ]}
         />
       </Flex>
-          
+
       <Forms
         title={'Detail Asset'}
         control={control}

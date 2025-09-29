@@ -8,23 +8,29 @@ import moment from 'moment';
 
 export const AssignmentFormSchema = z
   .object({
-    asset: z.union([z.string(), z.number(),
+    asset: z.union([
+      z.string(),
+      z.number(),
       z.object({
         label: z.string(),
-        value: z.union([z.string(), z.number()])
-      })
+        value: z.union([z.string(), z.number()]),
+      }),
     ]),
-    employee: z.union([z.string(), z.number(),
+    employee: z.union([
+      z.string(),
+      z.number(),
       z.object({
         label: z.string(),
-        value: z.union([z.string(), z.number()])
-      })
+        value: z.union([z.string(), z.number()]),
+      }),
     ]),
-    condition: z.union([z.string(), z.number(),
+    condition: z.union([
+      z.string(),
+      z.number(),
       z.object({
         label: z.string(),
-        value: z.union([z.string(), z.number()])
-      })
+        value: z.union([z.string(), z.number()]),
+      }),
     ]),
     assign_date: z.coerce
       .date()

@@ -1,4 +1,5 @@
 import Api from '@/utils/axios/api';
+import { uploadAttachment } from '@/utils/globalFunction';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +9,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssetFormSchema } from './constant';
 import Forms from './forms-asset';
-import { uploadAttachment } from '@/utils/globalFunction';
 
 const EditAsset = () => {
   const { notification } = App.useApp();
@@ -21,7 +21,7 @@ const EditAsset = () => {
     queryKey: ['assets', endpoints],
     getUrl: endpoints,
     method: 'PUT', // Use PUT for updating existing assets
-    submitType:'json',
+    submitType: 'json',
     submitUrl: endpoints,
     onSuccess: () => {
       notification.success({
@@ -69,8 +69,12 @@ const EditAsset = () => {
         name: name || '',
         price: price || 0,
         attachment: attachment || null,
-        category: category?.id ? {label: category.name, value: category.id} : null,
-        condition: condition?.id ? {label: condition.name, value: condition.id} : null,
+        category: category?.id
+          ? { label: category.name, value: category.id }
+          : null,
+        condition: condition?.id
+          ? { label: condition.name, value: condition.id }
+          : null,
         status: status || null,
       });
     }

@@ -75,8 +75,12 @@ const EditAssignment = () => {
       reset({
         code: code || null,
         asset: asset?.id ? { label: asset.name, value: asset.id } : null,
-        employee: employee?.id ? { label: employee.name, value: employee.id } : null,
-        condition: condition?.id ? { label: condition.name, value: condition.id } : null,
+        employee: employee?.id
+          ? { label: employee.name, value: employee.id }
+          : null,
+        condition: condition?.id
+          ? { label: condition.name, value: condition.id }
+          : null,
         assign_date: assign_date || null,
         attachment: attachment || null,
       });
