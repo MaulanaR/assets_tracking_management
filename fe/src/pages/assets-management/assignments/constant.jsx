@@ -83,18 +83,20 @@ export const getColumns = () => [
     render: (date) => moment(date).format('DD MMM YYYY') || '-',
   },
   {
-    title: 'Code',
-    dataIndex: 'code',
-    key: 'code',
-    width: 120,
-  },
-  {
     title: 'Department',
     dataIndex: ['department', 'name'],
     key: 'department',
     width: 120,
     responsive: ['lg'],
     render: (department) => department ?? '-',
+  },
+  {
+    title: 'Branch',
+    dataIndex: ['branch', 'name'],
+    key: 'branch',
+    width: 120,
+    responsive: ['lg'],
+    render: (branch) => branch ?? '-',
   },
   {
     title: 'Employee Name',
@@ -104,11 +106,13 @@ export const getColumns = () => [
   },
   {
     title: 'Asset Name',
-    dataIndex: ['asset', 'name'],
-    key: 'asset_name',
+    dataIndex: 'name', // key from res data
+    key: 'name',
     width: 120,
     responsive: ['md'],
-    render: (asset) => asset ?? '-',
+    render: (name) => {
+      return name ?? '-';
+    },
   },
   {
     title: 'Condition',
@@ -116,7 +120,9 @@ export const getColumns = () => [
     key: 'condition',
     width: 120,
     responsive: ['lg'],
-    render: (condition) => condition ?? '-',
+    render: (condition) => {
+      return condition ?? '-';
+    },
   },
   {
     title: 'Status',

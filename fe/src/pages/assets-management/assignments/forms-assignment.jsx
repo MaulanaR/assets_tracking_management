@@ -261,14 +261,14 @@ const Forms = ({
             )}
           />
         </ProForm.Group>
-      </ProForm>
-
       {formType === 'detail' && (
-        <Flex vertical gap="large">
+        <Flex vertical gap="medium">
           <Title level={3}>History</Title>
           <Timeline items={historyData} loading={isLoadingHistory} />
         </Flex>
       )}
+      </ProForm>
+
     </Card>
   );
 };

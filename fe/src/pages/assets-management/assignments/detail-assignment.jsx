@@ -47,7 +47,8 @@ const DetailAssignment = () => {
     enabled: !!id,
     queryKey: ['employee_assets_history', endpointHistory],
     queryFn: () => fetchHistory({ url: endpointHistory }),
-    select: (data) => data.slice(1),
+    // select: (data) => data.slice(1),
+    select: (data) => data,
   });
 
   const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
@@ -137,17 +138,17 @@ const DetailAssignment = () => {
             },
             {
               title: 'Assignments',
-              onClick: () => navigate('/assets-management/assets'),
+              onClick: () => navigate('/assets-management/assignments'),
             },
             {
-              title: 'Detail Asset',
+              title: 'Detail Assignment',
             },
           ]}
         />
       </Flex>
 
       <Forms
-        title={'Detail Asset'}
+        title={'Detail Assignment'}
         control={control}
         isLoading={isLoading}
         handleSubmit={handleSubmit(onSubmit)}
