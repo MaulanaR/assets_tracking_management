@@ -1,12 +1,12 @@
-import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import Api from '@/utils/axios/api';
+import { uploadAttachment } from '@/utils/globalFunction';
+import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { EmployeeFormSchema } from './constant';
 import Forms from './forms-employee';
-import { uploadAttachment } from '@/utils/globalFunction';
 
 const CreateEmployee = () => {
   const { notification } = App.useApp();

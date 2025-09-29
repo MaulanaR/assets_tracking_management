@@ -50,21 +50,21 @@ const EditCategory = () => {
     defaultValues: {
       code: null,
       name: null,
-      address: '',
+      description: null,
+      economic_age: 60,
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      const { code, name, email, position, contact_type, address } =
+      const { code, name, description, is_active, economic_age } =
         initialData?.results || {};
       reset({
-        code: code || '',
-        name: name || '',
-        email: email || '',
-        position: position || '',
-        contact_type: contact_type || '',
-        address: address || '',
+        code: code || null,
+        name: name || null,
+        description: description || null,
+        is_active: is_active || false,
+        economic_age: economic_age || 0,
       });
     }
   }, [initialData, reset]);
@@ -91,8 +91,8 @@ const EditCategory = () => {
               onClick: () => navigate('/master-data'),
             },
             {
-              title: 'Categories',
-              onClick: () => navigate('/master-data/categories'),
+              title: 'Categores',
+              onClick: () => navigate('/masterdata/categories'),
             },
             {
               title: 'Edit Category',

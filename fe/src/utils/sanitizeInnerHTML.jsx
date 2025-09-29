@@ -5,7 +5,7 @@ const sanitizeInnerHTML = (html) => {
   if (!html) return '';
 
   // Remove potentially dangerous scripts and events
-  let sanitized = html
+  const sanitized = html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
     .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '') // Remove iframe tags
     .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '') // Remove object tags

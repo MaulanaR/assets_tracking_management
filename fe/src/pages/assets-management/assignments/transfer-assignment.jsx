@@ -1,3 +1,4 @@
+import Api from '@/utils/axios/api';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssignmentFormSchema } from './constant';
 import Forms from './forms';
-import Api from '@/utils/axios/api';
 
 const TransferAssignment = () => {
   const { notification } = App.useApp();
@@ -39,7 +39,7 @@ const TransferAssignment = () => {
     },
   });
 
-  console.log("INII DATAA =>",initialData);
+  console.log('INII DATAA =>', initialData);
 
   const {
     // register,
@@ -62,14 +62,21 @@ const TransferAssignment = () => {
 
   useEffect(() => {
     if (initialData) {
-      const { code, asset, employee, condition, assign_date, attachment, ...props } =
-        initialData?.results || {};
+      const {
+        code,
+        asset,
+        employee,
+        condition,
+        assign_date,
+        attachment,
+        ...props
+      } = initialData?.results || {};
 
       reset({
         code: code || null,
-        asset: {label:props.name, value:props.id} || null,
-        employee: {label:employee.name, value:employee.id} || null,
-        condition: {label:condition.name, value:condition.id} || null,
+        asset: { label: props.name, value: props.id } || null,
+        employee: { label: employee.name, value: employee.id } || null,
+        condition: { label: condition.name, value: condition.id } || null,
         assign_date: assign_date || null,
         attachment: attachment || null,
       });

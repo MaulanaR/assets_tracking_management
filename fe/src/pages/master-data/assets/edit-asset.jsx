@@ -1,3 +1,4 @@
+import Api from '@/utils/axios/api';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssetFormSchema } from './constant';
 import Forms from './forms-asset';
-import Api from '@/utils/axios/api';
 
 const EditAsset = () => {
   const { notification } = App.useApp();

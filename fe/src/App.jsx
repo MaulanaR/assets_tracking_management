@@ -1,8 +1,8 @@
 import { setGlobalNotificationApi } from '@/utils/globalNotification';
 import { App as AntdApp, ConfigProvider } from 'antd';
+import enUS from 'antd/locale/en_US';
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router';
-import enUS from 'antd/locale/en_US';
 
 import router from './routes/index.jsx';
 

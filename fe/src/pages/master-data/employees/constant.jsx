@@ -37,7 +37,7 @@ export const TYPE_COLORS = {
 
 // Export CSV configuration
 export const EXPORT_CSV_CONFIG = {
-  selectedKeys: ['id', 'name', 'code', 'emails.0.value', 'phones.0.value'],
+  selectedKeys: ['id', 'name', 'code', 'description'],
   defaultParams: {
     is_skip_pagination: true,
   },
@@ -48,7 +48,8 @@ export const expandedRowRender = (record) => (
   <div style={{ padding: '8px', borderTop: '1px solid #f0f0f0' }}>
     <p>code: {record.code}</p>
     <p>name: {record.name}</p>
-    <p>email: {record.email}</p>
+    <p>economic_age: {record.economic_age}</p>
+    <p>description: {record.description}</p>
   </div>
 );
 
@@ -67,28 +68,16 @@ export const getColumns = () => [
     width: 200,
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-    responsive: ['md'],
-    render: (email) => email ?? '-',
+    title: 'Umur Ekonomis',
+    dataIndex: 'economic_age',
+    key: 'economic_age',
+    render: (_, { economic_age }) => economic_age + ' Bulan',
   },
   {
-    title: 'Position',
-    dataIndex: 'position',
-    key: 'position',
-    responsive: ['md'],
-    render: (position) => position ?? '-',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'contact_type',
-    key: 'contact_type',
-    width: 120,
-    responsive: ['md'],
-    render: (type) => {
-      return renderTags(type, { tags: [type], color: TYPE_COLORS[type] });
-    },
+    title: 'Deskripsi',
+    dataIndex: 'description',
+    key: 'description',
+    render: (_, { description }) => description ?? '-',
   },
   {
     title: 'Status',

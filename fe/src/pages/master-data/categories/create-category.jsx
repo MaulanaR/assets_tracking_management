@@ -21,7 +21,9 @@ const CreateCategory = () => {
     defaultValues: {
       code: null,
       name: null,
-      address: '',
+      description: null,
+      economic_age: 60,
+      is_active: true,
     },
   });
 

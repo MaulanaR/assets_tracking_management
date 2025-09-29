@@ -15,26 +15,37 @@ const routes = [
       {
         path: 'filter-distribution-asset',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/reports/assets/asset-distribution/filter-asset-distribution'),
+          async () =>
+            await import(
+              '@/pages/reports/assets/asset-distribution/filter-asset-distribution'
+            ),
         ),
       },
       {
         path: 'distribution-asset-per-department',
         element: ReactLazyWithSuspense(
           async () =>
-            await import('@/pages/reports/assets/asset-distribution/asset-distribution-per-department'),
+            await import(
+              '@/pages/reports/assets/asset-distribution/asset-distribution-per-department'
+            ),
         ),
       },
       {
         path: 'filter-asset-condition',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/reports/assets/asset-condition/filter-asset-condition'),
+          async () =>
+            await import(
+              '@/pages/reports/assets/asset-condition/filter-asset-condition'
+            ),
         ),
       },
       {
         path: 'asset-condition',
         element: ReactLazyWithSuspense(
-          async () => await import('@/pages/reports/assets/asset-condition/asset-condition-report'),
+          async () =>
+            await import(
+              '@/pages/reports/assets/asset-condition/asset-condition-report'
+            ),
         ),
       },
       ...financialStatement,

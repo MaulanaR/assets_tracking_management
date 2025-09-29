@@ -2,17 +2,17 @@ import { App } from 'antd';
 import { Flex } from 'antd';
 import { Dropdown, Typography } from 'antd';
 import { Trash } from 'lucide-react';
-import { File, Pen, ArrowRightLeft } from 'lucide-react';
+import { ArrowRightLeft, File, Pen } from 'lucide-react';
 import { useFetcher, useNavigate } from 'react-router';
 
 const { Text } = Typography;
 
-const AssignmentContextMenuOption = ({ 
-  children, 
-  editPath, 
-  deletePath, 
-  detailPath, 
-  transferPath 
+const AssignmentContextMenuOption = ({
+  children,
+  editPath,
+  deletePath,
+  detailPath,
+  transferPath,
 }) => {
   const navigate = useNavigate();
   const fetcher = useFetcher({ key: 'action-delete' });
@@ -44,16 +44,16 @@ const AssignmentContextMenuOption = ({
       ),
     },
     {
-        key: '2',
-        label: (
-          <Text onClick={() => navigate(transferPath)}>
-            <Flex gap={8} align="center">
-              <ArrowRightLeft size={16} />
-              Transfer
-            </Flex>
-          </Text>
-        ),
-      },
+      key: '2',
+      label: (
+        <Text onClick={() => navigate(transferPath)}>
+          <Flex gap={8} align="center">
+            <ArrowRightLeft size={16} />
+            Transfer
+          </Flex>
+        </Text>
+      ),
+    },
     {
       key: '3',
       label: (

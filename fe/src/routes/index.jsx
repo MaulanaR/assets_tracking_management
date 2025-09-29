@@ -2,8 +2,8 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/pages';
 import ReactLazyWithSuspense from '@/utils/reactLazyWithSuspense';
 import { createBrowserRouter } from 'react-router';
-import masterData from './master-data/_master_data';
 import assetsManagement from './assets-management/_assets_management';
+import masterData from './master-data/_master_data';
 import reports from './reports/_reports';
 
 const router = createBrowserRouter([

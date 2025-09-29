@@ -1,9 +1,20 @@
-import { Breadcrumb, Button, Card, Flex, Input, Space, Table, Typography } from 'antd';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Flex,
+  Input,
+  Space,
+  Table,
+  Typography,
+} from 'antd';
 import { createStyles } from 'antd-style';
 import { Outlet } from 'react-router';
 
 import ActionButtons from '@/components/ActionButton';
 import TitleTableRender from '@/components/TitleTableRender';
+import { Transfer } from 'antd';
+import { ArrowRightLeft } from 'lucide-react';
 import {
   DEFAULT_PER_PAGE,
   expandedRowRender,
@@ -11,8 +22,6 @@ import {
   getColumns,
 } from './constant';
 import { useAssignmentController } from './controller-assignments';
-import { Transfer } from 'antd';
-import { ArrowRightLeft } from 'lucide-react';
 
 // Styles
 const useStyle = createStyles(({ css, token }) => {

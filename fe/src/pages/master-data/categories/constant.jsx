@@ -22,12 +22,12 @@ export const DEFAULT_FILTERS = {
 };
 
 // Category type colors mapping
-export const TYPE_COLORS = {
-  customer: 'blue',
-  supplier: 'green',
-  employee: 'orange',
-  salesman: 'purple',
-};
+// export const TYPE_COLORS = {
+//   customer: 'blue',
+//   supplier: 'green',
+//   employee: 'orange',
+//   salesman: 'purple',
+// };
 
 // Export CSV configuration
 export const EXPORT_CSV_CONFIG = {
@@ -58,6 +58,18 @@ export const getColumns = () => [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
+    width: 200,
+  },
+  {
+    title: 'Economic Age (Month)',
+    dataIndex: 'economic_age',
+    key: 'economic_age',
+    width: 200,
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
     width: 200,
   },
   {

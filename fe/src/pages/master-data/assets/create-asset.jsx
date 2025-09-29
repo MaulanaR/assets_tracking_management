@@ -1,14 +1,14 @@
-import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import Api from '@/utils/axios/api';
+import { uploadAttachment } from '@/utils/globalFunction';
+import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
+import { attempt } from 'lodash';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { id } from 'zod/v4/locales';
 import { AssetFormSchema } from './constant';
 import Forms from './forms-asset';
-import { attempt } from 'lodash';
-import { uploadAttachment } from '@/utils/globalFunction';
-import { id } from 'zod/v4/locales';
 
 const CreateAsset = () => {
   const { notification } = App.useApp();

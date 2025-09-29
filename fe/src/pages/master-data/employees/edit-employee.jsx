@@ -1,5 +1,6 @@
-import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import Api from '@/utils/axios/api';
+import { uploadAttachment } from '@/utils/globalFunction';
+import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
@@ -8,7 +9,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { EmployeeFormSchema } from './constant';
 import Forms from './forms-employee';
-import { uploadAttachment } from '@/utils/globalFunction';
 
 const EditEmployee = () => {
   const { notification } = App.useApp();

@@ -1,4 +1,6 @@
 import proStyle from '@/styles/proComponentStyle';
+import { ProFormSwitch } from '@ant-design/pro-components';
+import { ProFormMoney } from '@ant-design/pro-components';
 import {
   ProForm,
   ProFormText,
@@ -92,6 +94,79 @@ const Forms = ({
                     {errors?.code?.message}
                   </Text>
                 }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="economic_age"
+            control={control}
+            render={(form) => (
+              <ProFormMoney
+                {...form.field}
+                label="Economic Age (Month)"
+                placeholder={'Dalam Bulan'}
+                fieldProps={{
+                  moneySymbol: false,
+                }}
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.economic_age && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.economic_age?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+          <Controller
+            name="description"
+            control={control}
+            render={(form) => (
+              <ProFormTextArea
+                {...form.field}
+                label="Description"
+                placeholder={''}
+                validateStatus={errors.description && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.description?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="is_active"
+            control={control}
+            render={(form) => (
+              <ProFormSwitch
+                {...form.field}
+                label="Status"
+                TextRight="Active"
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.is_active && 'error'}
+                checkedChildren="Active"
+                unCheckedChildren="Inactive"
                 labelCol={{
                   style: {
                     //ant-form-item-label padding

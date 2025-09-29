@@ -1,13 +1,13 @@
+import { Grid, theme } from 'antd';
+import { useEffect, useState } from 'react';
 import {
-  PieChart,
-  Pie,
   Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from 'recharts';
-import { theme, Grid } from 'antd';
-import { useState, useEffect } from 'react';
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;

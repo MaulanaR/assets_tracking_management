@@ -1,8 +1,8 @@
-import { Card, Table, Typography, Tag, Space, Button } from 'antd';
-import { useSearchParams } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
 import Api from '@/utils/axios/api';
 import SafeInnerHTMLDisplay from '@/utils/sanitizeInnerHTML';
+import { useQuery } from '@tanstack/react-query';
+import { Button, Card, Space, Table, Tag, Typography } from 'antd';
+import { useSearchParams } from 'react-router';
 
 const { Title } = Typography;
 
@@ -74,7 +74,15 @@ const AssetConditionReport = () => {
       jobPositionId,
       employeeId,
     ],
-    queryFn: () => fetchReport({ categoryId, departmentId, branchId, conditionId, jobPositionId, employeeId }),
+    queryFn: () =>
+      fetchReport({
+        categoryId,
+        departmentId,
+        branchId,
+        conditionId,
+        jobPositionId,
+        employeeId,
+      }),
     staleTime: 5 * 60 * 1000, // Data dianggap fresh selama 5 menit
     cacheTime: 10 * 60 * 1000, // Data di-cache selama 10 menit
   });
@@ -121,18 +129,14 @@ const AssetConditionReport = () => {
       key: 'condition',
       render: (condition) => {
         const colorMap = {
-          'Good': 'green',
-          'Fair': 'orange',
-          'Poor': 'red',
-          'Damaged': 'red',
-          'Lost': 'red',
+          Good: 'green',
+          Fair: 'orange',
+          Poor: 'red',
+          Damaged: 'red',
+          Lost: 'red',
         };
-        
-        return (
-          <Tag color={colorMap[condition] || 'default'}>
-            {condition}
-          </Tag>
-        );
+
+        return <Tag color={colorMap[condition] || 'default'}>{condition}</Tag>;
       },
     },
     {
@@ -171,15 +175,26 @@ const AssetConditionReport = () => {
       </div>
 
       {/* Tampilkan filter yang aktif */}
-      {(categoryId || departmentId || branchId || conditionId || jobPositionId || employeeId) && (
+      {(categoryId ||
+        departmentId ||
+        branchId ||
+        conditionId ||
+        jobPositionId ||
+        employeeId) && (
         <Card style={{ marginBottom: 16 }}>
           <Title level={4}>Filter Aktif:</Title>
           <Space wrap>
             {categoryId && <Tag color="blue">Category ID: {categoryId}</Tag>}
-            {departmentId && <Tag color="green">Department ID: {departmentId}</Tag>}
+            {departmentId && (
+              <Tag color="green">Department ID: {departmentId}</Tag>
+            )}
             {branchId && <Tag color="orange">Branch ID: {branchId}</Tag>}
-            {conditionId && <Tag color="purple">Condition ID: {conditionId}</Tag>}
-            {jobPositionId && <Tag color="cyan">Job Position ID: {jobPositionId}</Tag>}
+            {conditionId && (
+              <Tag color="purple">Condition ID: {conditionId}</Tag>
+            )}
+            {jobPositionId && (
+              <Tag color="cyan">Job Position ID: {jobPositionId}</Tag>
+            )}
             {employeeId && <Tag color="magenta">Employee ID: {employeeId}</Tag>}
           </Space>
         </Card>

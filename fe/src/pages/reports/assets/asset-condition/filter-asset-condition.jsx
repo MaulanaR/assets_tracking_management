@@ -1,9 +1,9 @@
+import proStyle from '@/styles/proComponentStyle';
+import proFormSelectRequestFunction from '@/utils/services/proFormSelectRequestFunction';
 import { ProForm, ProFormSelect } from '@ant-design/pro-components';
 import { Modal, Typography } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import proStyle from '@/styles/proComponentStyle';
-import proFormSelectRequestFunction from '@/utils/services/proFormSelectRequestFunction';
 
 const { Title, Text } = Typography;
 
