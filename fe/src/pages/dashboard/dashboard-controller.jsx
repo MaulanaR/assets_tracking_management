@@ -1,57 +1,222 @@
 import Api from '@/utils/axios/api';
 import { useQuery } from '@tanstack/react-query';
 
-// Separate function for fetching assets category data
+// Separate function for fetching summary data
 const fetchSummary = async ({ url }) => {
   try {
     const response = await Api().get(url);
-    console.log('Asset Categories =>', response.data);
+    console.log('Summary Data =>', response.data);
     return response.data?.results || [];
   } catch (error) {
-    console.error('Error fetching asset categories:', error);
+    console.error('Error fetching summary data:', error);
     throw error;
   }
 };
 
-const useDashboardController = () => {
-  // Fetch assets category data using React Query
-  const {
-    data: assetsCategory = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ['assets_category'],
-    queryFn: fetchSummary({
-      url: '/api/v1/assets?$select=$count:id&$group=category.id',
-    }),
-    staleTime: 5 * 60 * 1000, // Data dianggap fresh selama 5 menit
-    cacheTime: 10 * 60 * 1000, // Data di-cache selama 10 menit
-  });
+// Function to extract count from API response
+const extractCount = (data) => {
+  if (data && data.list && data.list.length > 0) {
+    return data.list[0].count_id || 0;
+  }
+  return 0;
+};
 
+const useDashboardController = () => {
+  // Fetch departments count
   const {
-    data: departments = [],
+    data: departmentsData = [],
     isLoading: isLoadingDepartments,
     isError: isErrorDepartments,
     error: errorDepartments,
     refetch: refetchDepartments,
   } = useQuery({
-    queryKey: ['departments'],
-    queryFn: fetchSummary({
-      url: '/api/v1/departments?$select=$count:id&$group=category.id',
-    }),
+    queryKey: ['departments_count'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/departments?$select=$count:id',
+      }),
     staleTime: 5 * 60 * 1000, // Data dianggap fresh selama 5 menit
     cacheTime: 10 * 60 * 1000, // Data di-cache selama 10 menit
   });
 
+  // Fetch branches count
+  const {
+    data: branchesData = [],
+    isLoading: isLoadingBranches,
+    isError: isErrorBranches,
+    error: errorBranches,
+    refetch: refetchBranches,
+  } = useQuery({
+    queryKey: ['branches_count'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/branches?$select=$count:id',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Fetch employees count
+  const {
+    data: employeesData = [],
+    isLoading: isLoadingEmployees,
+    isError: isErrorEmployees,
+    error: errorEmployees,
+    refetch: refetchEmployees,
+  } = useQuery({
+    queryKey: ['employees_count'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/employees?$select=$count:id',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Fetch available assets count (assets without assignments)
+  const {
+    data: availableAssetsData = [],
+    isLoading: isLoadingAvailableAssets,
+    isError: isErrorAvailableAssets,
+    error: errorAvailableAssets,
+    refetch: refetchAvailableAssets,
+  } = useQuery({
+    queryKey: ['available_assets_count'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/assets?$select=$count:id&$filter=assignment_id eq null',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Fetch unavailable assets count (assets with assignments)
+  const {
+    data: unavailableAssetsData = [],
+    isLoading: isLoadingUnavailableAssets,
+    isError: isErrorUnavailableAssets,
+    error: errorUnavailableAssets,
+    refetch: refetchUnavailableAssets,
+  } = useQuery({
+    queryKey: ['unavailable_assets_count'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/assets?$select=$count:id&$filter=assignment_id ne null',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Fetch assets by category for pie chart
+  const {
+    data: assetsByCategoryData = [],
+    isLoading: isLoadingAssetsByCategory,
+    isError: isErrorAssetsByCategory,
+    error: errorAssetsByCategory,
+    refetch: refetchAssetsByCategory,
+  } = useQuery({
+    queryKey: ['assets_by_category'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/assets?$select=$count:id,category.name&$group=category.id',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Calculate counts
+  const departmentsCount = extractCount(departmentsData);
+  const branchesCount = extractCount(branchesData);
+  const employeesCount = extractCount(employeesData);
+  const availableAssetsCount = extractCount(availableAssetsData);
+  const unavailableAssetsCount = extractCount(unavailableAssetsData);
+
+  // Check if any data is still loading
+  const isLoading =
+    isLoadingDepartments ||
+    isLoadingBranches ||
+    isLoadingEmployees ||
+    isLoadingAvailableAssets ||
+    isLoadingUnavailableAssets ||
+    isLoadingAssetsByCategory;
+
+  // Check if any data has errors
+  const isError =
+    isErrorDepartments ||
+    isErrorBranches ||
+    isErrorEmployees ||
+    isErrorAvailableAssets ||
+    isErrorUnavailableAssets ||
+    isErrorAssetsByCategory;
+
   return {
+    // Individual data objects
+    departments: {
+      data: departmentsData,
+      count: departmentsCount,
+      isLoading: isLoadingDepartments,
+      isError: isErrorDepartments,
+      error: errorDepartments,
+      refetch: refetchDepartments,
+    },
+    branches: {
+      data: branchesData,
+      count: branchesCount,
+      isLoading: isLoadingBranches,
+      isError: isErrorBranches,
+      error: errorBranches,
+      refetch: refetchBranches,
+    },
+    employees: {
+      data: employeesData,
+      count: employeesCount,
+      isLoading: isLoadingEmployees,
+      isError: isErrorEmployees,
+      error: errorEmployees,
+      refetch: refetchEmployees,
+    },
+    availableAssets: {
+      data: availableAssetsData,
+      count: availableAssetsCount,
+      isLoading: isLoadingAvailableAssets,
+      isError: isErrorAvailableAssets,
+      error: errorAvailableAssets,
+      refetch: refetchAvailableAssets,
+    },
+    unavailableAssets: {
+      data: unavailableAssetsData,
+      count: unavailableAssetsCount,
+      isLoading: isLoadingUnavailableAssets,
+      isError: isErrorUnavailableAssets,
+      error: errorUnavailableAssets,
+      refetch: refetchUnavailableAssets,
+    },
+    assetsByCategory: {
+      data: assetsByCategoryData,
+      isLoading: isLoadingAssetsByCategory,
+      isError: isErrorAssetsByCategory,
+      error: errorAssetsByCategory,
+      refetch: refetchAssetsByCategory,
+    },
+    // Summary counts for easy access
+    summary: {
+      departments: departmentsCount,
+      branches: branchesCount,
+      employees: employeesCount,
+      availableAssets: availableAssetsCount,
+      unavailableAssets: unavailableAssetsCount,
+      totalAssets: availableAssetsCount + unavailableAssetsCount,
+    },
+    // Global loading and error states
+    isLoading,
+    isError,
+    // Legacy support for existing code
     assetsCategory: {
-      data: assetsCategory,
-      isLoading,
-      isError,
-      error,
-      refetch,
+      data: [],
+      isLoading: false,
+      isError: false,
+      error: null,
+      refetch: () => {},
     },
   };
 };

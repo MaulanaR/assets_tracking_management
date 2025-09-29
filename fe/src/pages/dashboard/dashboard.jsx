@@ -1,3 +1,4 @@
+import DashboardSummaryWidget from '@/components/widget/DashboardSummaryWidget';
 import SummaryOverview from '@/components/widget/SummaryOverview';
 import TotalAssetWidget from '@/components/widget/TotalAssetWidget';
 import { Card, Col, Row, theme } from 'antd';
@@ -113,8 +114,11 @@ const data = [
 
 const Dashboard = () => {
   const { token } = useToken();
-  const { assetsCategory } = useDashboardController();
-  console.log('Assets Category on Dashboard =>', assetsCategory);
+  const { summary, isLoading, isError } = useDashboardController();
+
+  console.log('Dashboard Summary =>', summary);
+  console.log('Loading State =>', isLoading);
+  console.log('Error State =>', isError);
   return (
     <div>
       <Row
@@ -129,6 +133,15 @@ const Dashboard = () => {
           token.size,
         ]}
       >
+        {/* Dashboard Summary Widget */}
+        {/* <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <DashboardSummaryWidget 
+            summary={summary}
+            isLoading={isLoading}
+            isError={isError}
+          />
+        </Col> */}
+
         <Col xs={24} sm={24} md={12} lg={8} xl={8}>
           <Card title="Assets Overview">
             <TotalAssetWidget />
@@ -136,7 +149,11 @@ const Dashboard = () => {
         </Col>
         <Col xs={24} sm={24} md={12} lg={16} xl={16}>
           <Card title="Summary Overview" className="h-full">
-            <SummaryOverview />
+            <SummaryOverview
+              summary={summary}
+              isLoading={isLoading}
+              isError={isError}
+            />
           </Card>
         </Col>
 
