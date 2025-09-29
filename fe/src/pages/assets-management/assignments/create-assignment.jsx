@@ -6,7 +6,7 @@ import { App, Breadcrumb, Flex } from 'antd';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { AssignmentFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-assignment';
 
 const CreateAssignment = () => {
   const { notification } = App.useApp();
@@ -70,13 +70,13 @@ const CreateAssignment = () => {
       const submitData = {
         ...data,
         asset: {
-          id: data?.asset || null,
+          id: data?.asset?.value || data?.asset || null,
         },
         employee: {
-          id: data?.employee || null,
+          id: data?.employee?.value || data?.employee || null,
         },
         condition: {
-          id: data?.condition || null,
+          id: data?.condition?.value || data?.condition || null,
         },
         attachment: attachmentId,
       };
@@ -117,6 +117,7 @@ const CreateAssignment = () => {
         handleSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
         errors={errors}
+        formType="create"
       />
     </Flex>
   );

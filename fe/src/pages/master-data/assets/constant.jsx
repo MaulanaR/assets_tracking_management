@@ -15,7 +15,22 @@ export const AssetFormSchema = z
         invalid_type_error: 'Price must be a number',
       })
       .positive('Price must be greater than 0'),
-    category: z.union([z.string(), z.number()]),
+    category: z.union([
+      z.string(), 
+      z.number(), 
+      z.object({
+        label: z.string(),
+        value: z.union([z.string(), z.number()])
+      })
+    ]),
+    condition: z.union([
+      z.string(), 
+      z.number(), 
+      z.object({
+        label: z.string(),
+        value: z.union([z.string(), z.number()])
+      })
+    ]).optional(),
     status: z.enum(['available', 'unavailable'], {
       required_error: 'Status is required',
     }),

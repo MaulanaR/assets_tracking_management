@@ -56,7 +56,7 @@ const Forms = ({
         }}
       >
         <ProForm.Group>
-          <Controller
+          {/* <Controller
             name="code"
             control={control}
             render={(form) => (
@@ -79,11 +79,12 @@ const Forms = ({
                 }}
               />
             )}
-          />
+          /> */}
 
           <Controller
             name="asset"
             control={control}
+            disabled={true}
             render={(form) => (
               <ProFormSelect
                 {...form.field}
@@ -102,6 +103,44 @@ const Forms = ({
                 extra={
                   <Text style={{ fontSize: 12 }} type="danger">
                     {errors?.asset?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+                fieldProps={{
+                  allowClear: true,
+                  loading: form.field.value === undefined,
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name="current_employee"
+            control={control}
+            disabled={true}
+            render={(form) => (
+              <ProFormSelect
+                {...form.field}
+                label="Current Employee"
+                placeholder="Select Employee"
+                showSearch
+                request={proFormSelectRequestFunction({
+                  url: '/api/v1/employees',
+                  key: 'employees',
+                  labelKey: 'name',
+                  valueKey: 'id',
+                })}
+                debounceTime={300}
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.current_employee && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.current_employee?.message}
                   </Text>
                 }
                 labelCol={{
@@ -191,15 +230,45 @@ const Forms = ({
               />
             )}
           />
-
+</ProForm.Group>
+<ProForm.Group>
+<Controller
+            name="history_assign_date"
+            control={control}
+            disabled={true}
+            render={(form) => (
+              <ProFormDatePicker
+                {...form.field}
+                label="History Date Assigned"
+                placeholder="Select Date Assigned"
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.history_assign_date && 'error'}
+                format="YYYY-MM-DD"
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.history_assign_date?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+                fieldProps={{
+                  style: { width: '100%' },
+                }}
+              />
+            )}
+          />
           <Controller
             name="assign_date"
             control={control}
             render={(form) => (
               <ProFormDatePicker
                 {...form.field}
-                label="Date Assigned"
-                placeholder="Select Date Assigned"
+                label="Transfer Date"
+                placeholder="Select Date Transfer"
                 colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
                 validateStatus={errors.assign_date && 'error'}
                 format="YYYY-MM-DD"

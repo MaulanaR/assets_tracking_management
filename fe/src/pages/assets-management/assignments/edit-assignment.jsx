@@ -1,4 +1,5 @@
 import Api from '@/utils/axios/api';
+import { uploadAttachment } from '@/utils/globalFunction';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,7 +8,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssignmentFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-assignment';
 
 const EditAssignment = () => {
   const { notification } = App.useApp();
@@ -15,13 +16,14 @@ const EditAssignment = () => {
   const { id } = useParams();
 
   const endpoints = `/api/v1/assets/${id}`;
+  const endpointPut = `/api/v1/employee_assets`;
 
   const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
     queryKey: ['assignments', endpoints],
     getUrl: endpoints,
     method: 'PUT', // Use PUT for updating existing assignments
-    submitType: 'form-data',
-    submitUrl: endpoints,
+    submitType: 'json',
+    submitUrl: endpointPut,
     onSuccess: () => {
       notification.success({
         message: 'Assignment Updated',
@@ -72,9 +74,9 @@ const EditAssignment = () => {
 
       reset({
         code: code || null,
-        asset: { label: props.name, value: props.id } || null,
-        employee: { label: employee.name, value: employee.id } || null,
-        condition: { label: condition.name, value: condition.id } || null,
+        asset: asset?.id ? { label: asset.name, value: asset.id } : null,
+        employee: employee?.id ? { label: employee.name, value: employee.id } : null,
+        condition: condition?.id ? { label: condition.name, value: condition.id } : null,
         assign_date: assign_date || null,
         attachment: attachment || null,
       });
@@ -94,13 +96,13 @@ const EditAssignment = () => {
       const submitData = {
         ...data,
         asset: {
-          id: data?.asset || null,
+          id: data?.asset?.value || data?.asset || null,
         },
         employee: {
-          id: data?.employee || null,
+          id: data?.employee?.value || data?.employee || null,
         },
         condition: {
-          id: data?.condition || null,
+          id: data?.condition?.value || data?.condition || null,
         },
         attachment: attachmentId,
       };
@@ -146,6 +148,7 @@ const EditAssignment = () => {
         handleSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
         errors={errors}
+        formType="edit"
       />
     </Flex>
   );

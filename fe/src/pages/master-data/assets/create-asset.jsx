@@ -27,6 +27,7 @@ const CreateAsset = () => {
       price: 0,
       attachment: null,
       category: null,
+      condition: null,
       status: null,
     },
   });
@@ -72,7 +73,10 @@ const CreateAsset = () => {
       const submitData = {
         ...data,
         category: {
-          id: data?.category || null,
+          id: data?.category?.value || data?.category || null,
+        },
+        condition: {
+          id: data?.condition?.value || data?.condition || null,
         },
         attachment: attachmentId,
       };

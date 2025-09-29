@@ -1,4 +1,3 @@
-import Api from '@/utils/axios/api';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,33 +6,36 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssignmentFormSchema } from './constant';
-import Forms from './forms';
+import FormsAssignmentTransfer from './forms-assignment-transfer';
+import moment from 'moment';
+import { uploadAttachment } from '@/utils/globalFunction';
 
 const TransferAssignment = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const endpoints = `/api/v1/assets/${id}`;
+  const getEndpoints = `/api/v1/assets/${id}`;
+  const putEndpoints = `/api/v1/employee_assets`;
 
   const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
-    queryKey: ['assignments', endpoints],
-    getUrl: endpoints,
-    method: 'PUT', // Use PUT for updating existing assignments
-    submitType: 'form-data',
-    submitUrl: endpoints,
+    queryKey: ['assignments', getEndpoints],
+    getUrl: getEndpoints,
+    method: 'POST', // Use POST for creating new assignments
+    submitType: 'json',
+    submitUrl: putEndpoints,
     onSuccess: () => {
       notification.success({
-        message: 'Assignment Updated',
-        description: 'Assignment has been successfully updated.',
+        message: 'Assignment Transferred',
+        description: 'Assignment has been successfully transferred.',
         duration: 3,
       });
       navigate('/assets-management/assignments');
     },
     onError: (err) => {
       notification.error({
-        message: 'Assignment Update Failed',
-        description: err.message || 'Failed to update assignment.',
+        message: 'Assignment Transfer Failed',
+        description: err.message || 'Failed to transfer assignment.',
         duration: 3,
       });
     },
@@ -51,7 +53,7 @@ const TransferAssignment = () => {
   } = useForm({
     resolver: zodResolver(AssignmentFormSchema),
     defaultValues: {
-      code: null,
+      // code: null,
       asset: null,
       employee: null,
       condition: null,
@@ -64,7 +66,6 @@ const TransferAssignment = () => {
     if (initialData) {
       const {
         code,
-        asset,
         employee,
         condition,
         assign_date,
@@ -73,11 +74,12 @@ const TransferAssignment = () => {
       } = initialData?.results || {};
 
       reset({
-        code: code || null,
-        asset: { label: props.name, value: props.id } || null,
-        employee: { label: employee.name, value: employee.id } || null,
-        condition: { label: condition.name, value: condition.id } || null,
-        assign_date: assign_date || null,
+        asset: { label: props?.name, value: props?.id } || null,
+        current_employee:{ label: employee?.name, value: employee?.id } || null,
+        employee: null,
+        condition: { label: condition?.name, value: condition?.id } || null,
+        history_assign_date: moment(assign_date).format('YYYY-MM-DD') || null,
+        assign_date: moment().format('YYYY-MM-DD') || null,
         attachment: attachment || null,
       });
     }
@@ -96,13 +98,13 @@ const TransferAssignment = () => {
       const submitData = {
         ...data,
         asset: {
-          id: data?.asset || null,
+          id: id || null,
         },
         employee: {
-          id: data?.employee || null,
+          id: data?.employee?.value || data?.employee || null,
         },
         condition: {
-          id: data?.condition || null,
+          id: data?.condition?.value || data?.condition || null,
         },
         attachment: attachmentId,
       };
@@ -141,7 +143,7 @@ const TransferAssignment = () => {
         />
       </Flex>
 
-      <Forms
+      <FormsAssignmentTransfer
         title="Transfer Assignment"
         control={control}
         isLoading={isLoading}

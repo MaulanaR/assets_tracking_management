@@ -1,4 +1,5 @@
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
+import Api from '@/utils/axios/api';
 import ProSkeleton from '@ant-design/pro-skeleton';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
@@ -6,7 +7,28 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssignmentFormSchema } from './constant';
-import Forms from './forms';
+import Forms from './forms-assignment';
+import { useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+
+const fetchHistory = async ({ url }) => {
+  const response = await Api().get(url);
+  const results = response.data?.results || [];
+  // Hapus data pertama dari response
+  const rebuildChildren = results.list.map((result) => {
+
+    return {
+      ...result,
+      color: 'blue',
+      children: (<>
+        <p>Date: {moment(result.date).format('DD MMM YYYY')}</p>
+        <p>Employee: {result.employee.name}</p>
+        <p>Condition: {result.condition.name}</p>
+      </>)
+    }
+  });
+  return rebuildChildren;
+};
 
 const DetailAssignment = () => {
   const { notification } = App.useApp();
@@ -15,11 +37,20 @@ const DetailAssignment = () => {
 
   const endpoints =
     id && typeof id === 'string' && id.trim() !== ''
-      ? `/api/v1/employee_assets/${id}`
-      : '/api/v1/employee_assets';
+      ? `/api/v1/assets/${id}`
+      : '/api/v1/assets';
+  
+  const endpointHistory = `/api/v1/employee_assets?asset.id=${id}&$sort=-date`;
+  
+  const { data: historyData, isLoading: isLoadingHistory } = useQuery({
+    enabled: !!id,
+    queryKey: ['employee_assets_history', endpointHistory],
+    queryFn: () => fetchHistory({ url: endpointHistory }),
+    select: (data) => data.slice(1),
+  });
 
   const { initialData, isLoading, isSubmitting, submit } = useDataQuery({
-    queryKey: ['employee_assets'],
+    queryKey: ['assets'],
     getUrl: endpoints,
     method: 'PUT', // Use PUT for updating existing assignment
     submitUrl: endpoints,
@@ -61,13 +92,23 @@ const DetailAssignment = () => {
 
   useEffect(() => {
     if (initialData) {
+      const {
+        code,
+        asset,
+        employee,
+        condition,
+        assign_date,
+        attachment,
+        ...props
+      } = initialData?.results || {};
+
       reset({
-        code: initialData?.results?.code || '',
-        asset: initialData?.results?.asset || null,
-        employee: initialData?.results?.employee || null,
-        condition: initialData?.results?.condition || null,
-        assign_date: initialData?.results?.assign_date || null,
-        attachment: initialData?.results?.attachment || null,
+        code: code || null,
+        asset: { label: props.name, value: props.id } || null,
+        employee: { label: employee.name, value: employee.id } || null,
+        condition: { label: condition.name, value: condition.id } || null,
+        assign_date: assign_date || null,
+        attachment: attachment || null,
       });
     }
   }, [initialData, reset]);
@@ -103,7 +144,7 @@ const DetailAssignment = () => {
           ]}
         />
       </Flex>
-
+          
       <Forms
         title={'Detail Asset'}
         control={control}
@@ -111,7 +152,9 @@ const DetailAssignment = () => {
         handleSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
         errors={errors}
-        isDetail={true}
+        formType="detail"
+        historyData={historyData}
+        isLoadingHistory={isLoadingHistory}
       />
     </Flex>
   );

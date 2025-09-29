@@ -2,12 +2,13 @@ import proStyle from '@/styles/proComponentStyle';
 import proFormSelectRequestFunction from '@/utils/services/proFormSelectRequestFunction';
 import {
   ProForm,
-  ProFormMoney,
+  ProFormDatePicker,
   ProFormSelect,
   ProFormText,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
-import { Button, Card, Flex, Typography } from 'antd';
+
+import { Button, Card, Flex, Timeline, Typography } from 'antd';
 import { LucideDownload } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -20,8 +21,10 @@ const Forms = ({
   isLoading,
   isSubmitting,
   handleSubmit,
-  isDetail = false,
+  formType = 'create' || 'edit' || 'detail',
   errors,
+  historyData,
+  isLoadingHistory,
 }) => {
   const navigate = useNavigate();
 
@@ -37,7 +40,7 @@ const Forms = ({
       <ProForm
         grid={true}
         disabled={isLoading || isSubmitting}
-        readonly={isDetail}
+        readonly={formType === 'detail'}
         onFinish={handleSubmit}
         onReset={() => navigate(-1)}
         submitter={{
@@ -45,7 +48,7 @@ const Forms = ({
             disabled: isLoading || isSubmitting,
             loading: isLoading || isSubmitting,
             style: {
-              display: isDetail ? 'none' : 'inline-block',
+              display: formType === 'detail' ? 'none' : 'inline-block',
             },
           },
           searchConfig: {
@@ -55,32 +58,7 @@ const Forms = ({
         }}
       >
         <ProForm.Group>
-          <Controller
-            name="name"
-            control={control}
-            render={(form) => (
-              <ProFormText
-                {...form.field}
-                label="Name"
-                placeholder={''}
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.name && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.name?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-              />
-            )}
-          />
-
-          <Controller
+          {/* <Controller
             name="code"
             control={control}
             render={(form) => (
@@ -103,57 +81,29 @@ const Forms = ({
                 }}
               />
             )}
-          />
+          /> */}
 
           <Controller
-            name="price"
-            control={control}
-            render={(form) => (
-              <ProFormMoney
-                {...form.field}
-                label="Price"
-                placeholder="Enter price"
-                min={0}
-                locale="id-ID"
-                precision={2}
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.price && 'error'}
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.price?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            name="category"
+            name="asset"
             control={control}
             render={(form) => (
               <ProFormSelect
                 {...form.field}
-                label="Category"
-                placeholder="Select Category"
+                label="Asset"
+                placeholder="Select Asset"
                 showSearch
                 request={proFormSelectRequestFunction({
-                  url: '/api/v1/categories',
-                  key: 'category',
+                  url: '/api/v1/assets',
+                  key: 'assets',
                   labelKey: 'name',
                   valueKey: 'id',
                 })}
                 debounceTime={300}
                 colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.category && 'error'}
+                validateStatus={errors.asset && 'error'}
                 extra={
                   <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.category?.message}
+                    {errors?.asset?.message}
                   </Text>
                 }
                 labelCol={{
@@ -169,9 +119,44 @@ const Forms = ({
               />
             )}
           />
-        </ProForm.Group>
 
-        <ProForm.Group>
+          <Controller
+            name="employee"
+            control={control}
+            render={(form) => (
+              <ProFormSelect
+                {...form.field}
+                label="Employee"
+                placeholder="Select Employee"
+                showSearch
+                request={proFormSelectRequestFunction({
+                  url: '/api/v1/employees',
+                  key: 'employees',
+                  labelKey: 'name',
+                  valueKey: 'id',
+                })}
+                debounceTime={300}
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.employee && 'error'}
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.employee?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+                fieldProps={{
+                  allowClear: true,
+                  loading: form.field.value === undefined,
+                }}
+              />
+            )}
+          />
+
           <Controller
             name="condition"
             control={control}
@@ -183,7 +168,7 @@ const Forms = ({
                 showSearch
                 request={proFormSelectRequestFunction({
                   url: '/api/v1/conditions',
-                  key: 'condition',
+                  key: 'conditions',
                   labelKey: 'name',
                   valueKey: 'id',
                 })}
@@ -210,22 +195,19 @@ const Forms = ({
           />
 
           <Controller
-            name="status"
+            name="assign_date"
             control={control}
             render={(form) => (
-              <ProFormSelect
+              <ProFormDatePicker
                 {...form.field}
-                label="Status"
-                placeholder="Select Status"
-                options={[
-                  { label: 'Available', value: 'available' },
-                  { label: 'Unavailable', value: 'unavailable' },
-                ]}
+                label="Date Assigned"
+                placeholder="Select Date Assigned"
                 colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.status && 'error'}
+                validateStatus={errors.assign_date && 'error'}
+                format="YYYY-MM-DD"
                 extra={
                   <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.status?.message}
+                    {errors?.assign_date?.message}
                   </Text>
                 }
                 labelCol={{
@@ -233,6 +215,9 @@ const Forms = ({
                     //ant-form-item-label padding
                     paddingBottom: proStyle.ProFormText.labelCol.style.padding,
                   },
+                }}
+                fieldProps={{
+                  style: { width: '100%' },
                 }}
               />
             )}
@@ -277,6 +262,15 @@ const Forms = ({
           />
         </ProForm.Group>
       </ProForm>
+
+      {
+        formType === 'detail' && (
+          <Flex vertical gap="large">
+            <Title level={3}>History</Title>
+            <Timeline items={historyData} loading={isLoadingHistory} />
+          </Flex>
+        )
+      }
     </Card>
   );
 };

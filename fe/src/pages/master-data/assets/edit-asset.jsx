@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { AssetFormSchema } from './constant';
 import Forms from './forms-asset';
+import { uploadAttachment } from '@/utils/globalFunction';
 
 const EditAsset = () => {
   const { notification } = App.useApp();
@@ -20,7 +21,7 @@ const EditAsset = () => {
     queryKey: ['assets', endpoints],
     getUrl: endpoints,
     method: 'PUT', // Use PUT for updating existing assets
-    submitType: 'form-data',
+    submitType:'json',
     submitUrl: endpoints,
     onSuccess: () => {
       notification.success({
@@ -68,8 +69,8 @@ const EditAsset = () => {
         name: name || '',
         price: price || 0,
         attachment: attachment || null,
-        category: category || null,
-        condition: condition || null,
+        category: category?.id ? {label: category.name, value: category.id} : null,
+        condition: condition?.id ? {label: condition.name, value: condition.id} : null,
         status: status || null,
       });
     }
@@ -88,7 +89,10 @@ const EditAsset = () => {
       const submitData = {
         ...data,
         category: {
-          id: data?.category || null,
+          id: data?.category?.value || data?.category || null,
+        },
+        condition: {
+          id: data?.condition?.value || data?.condition || null,
         },
         attachment: attachmentId,
       };
