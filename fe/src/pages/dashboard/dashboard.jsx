@@ -21,6 +21,7 @@ import {
   YAxis,
 } from 'recharts';
 import useDashboardController from './dashboard-controller';
+import { ENV } from '@/config/env';
 
 const { useToken } = theme;
 
@@ -121,6 +122,7 @@ const Dashboard = () => {
   console.log('Error State =>', isError);
   return (
     <div>
+      <p>ENV.IS_TAURI - {`${ENV.IS_TAURI}`}</p>
       <Row
         gutter={[
           {

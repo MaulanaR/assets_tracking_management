@@ -9,6 +9,7 @@
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../dist"
   },
+  
   "app": {
     "windows": [
       {
@@ -19,7 +20,8 @@
     ],
     "security": {
       "csp": null
-    }
+    },
+    "withGlobalTauri": true
   },
   "bundle": {
     "active": true,
@@ -56,15 +58,16 @@
       }
     },
     "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
       "wix": {
-        "language": "en-US",
-        "template": null
+        "language": "en-US"
       },
       "nsis": {
-        "languages": ["en-US"],
+        "languages": ["English"],
         "displayLanguageSelector": false,
-        "installMode": "currentUser",
-        "installerIcon": "icons/icon.ico"
+        "installMode": "currentUser"
       }
     },
     "linux": {
