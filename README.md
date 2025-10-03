@@ -44,6 +44,23 @@ Dilengkapi dengan fitur master data, assignment, dashboard, dan laporan.
 - ./fe -> React + tauri
 - ./be -> Phyton -> FastAPI
 
+### 🛠️ Build Instructions
+
+#### Build untuk Windows
+```bash
+pnpm tauri build --target x86_64-pc-windows-msvc
+```
+
+#### Build untuk macOS
+```bash
+pnpm tauri build --target x86_64-apple-darwin
+```
+
+#### Build untuk Linux
+```bash
+pnpm tauri build --target x86_64-unknown-linux-gnu
+```
+
 ### 💡 Authors 
 - A***
 - M***
