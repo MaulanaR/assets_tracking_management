@@ -65,10 +65,23 @@ const showError = (message, description) => {
 const Api = () => {
   const instance = axios.create({});
 
-  instance.defaults.adapter = axiosTauriApiAdapter;
-  instance.defaults.baseURL = ENV.VITE_API_BASE_URL;
-  // instance.defaults.timeout = 10000;
-  // instance.defaults.headers['Origin'] = "";
+  // Only import Tauri adapter if running in Tauri
+  let adapter;
+  let baseURL;
+  if (ENV.IS_TAURI) {
+    const tauriAdapter = axiosTauriApiAdapter;
+    adapter = tauriAdapter.default;
+    baseURL = ENV.VITE_API_BASE_URL;
+  } else {
+    // Use default axios adapter for web
+    adapter = undefined; // axios will use default
+    baseURL = undefined;
+  }
+
+  instance.defaults.adapter = adapter;
+  instance.defaults.baseURL = baseURL;
+  instance.defaults.timeout = 10000;
+  instance.defaults.headers['Origin'] = "";
 
   // Request interceptor - get fresh auth state on every request
   instance.interceptors.request.use(

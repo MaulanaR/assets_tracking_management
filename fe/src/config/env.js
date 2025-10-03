@@ -1,3 +1,8 @@
+// Deteksi apakah running di Tauri atau web
+const isTauri = () => {
+  return typeof window !== 'undefined' && window.__TAURI__ !== undefined;
+};
+
 export const ENV = {
   NODE_ENV: import.meta.env.MODE,
   VITE_APP_ENV: import.meta.env.VITE_APP_ENV,
@@ -7,6 +12,8 @@ export const ENV = {
   IS_LOCAL: import.meta.env.VITE_APP_ENV === 'local',
   IS_PROD: import.meta.env.VITE_APP_ENV === 'production',
   IS_DEV: import.meta.env.VITE_APP_ENV === 'development',
+  IS_TAURI: isTauri(),
+  IS_WEB: !isTauri(),
 };
 
 export const logger = {
@@ -20,5 +27,10 @@ export const logger = {
   },
   warn: (...args) => {
     console.warn(...args);
+  },
+  platform: () => {
+    const platform = ENV.IS_TAURI ? 'Tauri Desktop' : 'Web Browser';
+    logger.log(`🖥️ Running on: ${platform}`);
+    return platform;
   },
 };

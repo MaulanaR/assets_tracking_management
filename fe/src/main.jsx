@@ -16,6 +16,7 @@ const queryClient = new QueryClient();
 // Log app startup info
 logger.log(`🚀 App starting in ${ENV.VITE_APP_ENV} mode`);
 logger.log(`📡 API Base URL: ${ENV.VITE_API_BASE_URL}`);
+logger.platform();
 
 // Auth initializer component
 const AuthInitializer = ({ children }) => {
