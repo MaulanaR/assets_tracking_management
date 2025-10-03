@@ -1,6 +1,8 @@
 import { useAuthStore } from '@/stores/authStore';
 import axios from 'axios';
 import { showErrorNotification } from '../globalNotification';
+import axiosTauriApiAdapter from 'axios-tauri-api-adapter';
+import { ENV } from '@/config/env';
 
 let isHandlingLogout = false;
 
@@ -62,6 +64,11 @@ const showError = (message, description) => {
 
 const Api = () => {
   const instance = axios.create({});
+
+  instance.defaults.adapter = axiosTauriApiAdapter;
+  instance.defaults.baseURL = ENV.VITE_API_BASE_URL;
+  // instance.defaults.timeout = 10000;
+  // instance.defaults.headers['Origin'] = "";
 
   // Request interceptor - get fresh auth state on every request
   instance.interceptors.request.use(
