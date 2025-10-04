@@ -22,6 +22,8 @@ const EditAsset = () => {
     getUrl: endpoints,
     method: 'PUT', // Use PUT for updating existing assets
     submitType: 'json',
+    handleFileUpload: true, // Enable automatic file upload handling
+    fileUploadFields: ['attachment'], // Specify which fields need file upload
     submitUrl: endpoints,
     onSuccess: () => {
       notification.success({
@@ -84,11 +86,6 @@ const EditAsset = () => {
     console.log('Form Data:', data);
 
     try {
-      let attachmentId = null;
-
-      if (data?.attachment?.length > 0) {
-        attachmentId = await uploadAttachment(data.attachment[0]);
-      }
 
       const submitData = {
         ...data,
@@ -98,7 +95,7 @@ const EditAsset = () => {
         condition: {
           id: data?.condition?.value || data?.condition || null,
         },
-        attachment: attachmentId,
+        // attachment will be handled automatically by useDataQuery
       };
 
       await submit(submitData);

@@ -27,20 +27,25 @@ const ContextMenuOption = ({ children, editPath, deletePath, detailPath }) => {
     });
   };
 
-  const items = [
-    {
+  const items = [];
+
+  if (editPath) {
+    items.push({
       key: '1',
       label: (
         <Text onClick={() => navigate(editPath)}>
           <Flex gap={8} align="center">
             <Pen size={16} />
-            Edit
+            Update
           </Flex>
         </Text>
       ),
-    },
-    {
-      key: '2',
+    });
+  }
+
+  if (detailPath) {
+    items.push({
+      key: '3',
       label: (
         <Text type="warning" onClick={() => navigate(detailPath)}>
           <Flex gap={8} align="center">
@@ -49,9 +54,12 @@ const ContextMenuOption = ({ children, editPath, deletePath, detailPath }) => {
           </Flex>
         </Text>
       ),
-    },
-    {
-      key: '3',
+    });
+  }
+
+  if (deletePath) {
+    items.push({
+      key: '4',
       label: (
         <Text type="danger" onClick={() => handleDelete(deletePath)}>
           <Flex gap={8} align="center">
@@ -60,8 +68,8 @@ const ContextMenuOption = ({ children, editPath, deletePath, detailPath }) => {
           </Flex>
         </Text>
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <Dropdown

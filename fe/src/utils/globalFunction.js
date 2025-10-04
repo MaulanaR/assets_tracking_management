@@ -50,4 +50,24 @@ const uploadAttachment = async (fileObj) => {
   }
 };
 
-export { extractFile, uploadAttachment };
+// format currency
+const formatCurrency = (value, options = {
+  locale: 'id-ID',
+  currency: 'IDR',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+  style: 'currency',
+}) => {
+  const { locale, currency, minimumFractionDigits, maximumFractionDigits, style } = options;
+
+  if (value == null || value === '' || isNaN(Number(value))) return '';
+
+  return new Intl.NumberFormat(locale, {
+    style,
+    currency,
+    minimumFractionDigits,
+    maximumFractionDigits,
+  }).format(Number(value));
+};
+
+export { extractFile, uploadAttachment, formatCurrency };

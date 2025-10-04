@@ -62,6 +62,8 @@ function buildUrl(baseUrl, params) {
  * @param {Object} [config.queryOptions={}] - Additional options for useQuery
  * @param {Object} [config.mutationOptions={}] - Additional options for useMutation
  * @param {Object} [config.axiosConfig={}] - Additional Api configuration
+ * @param {boolean} [config.handleFileUpload=false] - Enable automatic file upload handling
+ * @param {string[]} [config.fileUploadFields=['attachment']] - Array of field names that need file upload processing
  * @returns {Object} Form query result object
  */
 export function useDataQuery({
@@ -77,6 +79,8 @@ export function useDataQuery({
   mutationOptions = {},
   axiosConfig = {},
   submitType = 'json', // 'json' or 'form-data'
+  handleFileUpload = false, // Enable file upload handling
+  fileUploadFields = ['attachment'], // Fields that need file upload processing
 }) {
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -133,6 +137,20 @@ export function useDataQuery({
       setSubmitError(null);
 
       try {
+        let processedData = { ...formData };
+
+        // Handle file upload if enabled
+        if (handleFileUpload && fileUploadFields.length > 0) {
+          for (const field of fileUploadFields) {
+            if (processedData[field]?.length > 0) {
+              // Lazy import uploadAttachment to avoid circular dependencies
+              const { uploadAttachment } = await import('../globalFunction');
+              const attachmentId = await uploadAttachment(processedData[field][0]);
+              processedData[field] = attachmentId;
+            }
+          }
+        }
+
         const res = await Api().request({
           url: submitUrl,
           method,
@@ -140,7 +158,7 @@ export function useDataQuery({
             submitType === 'form-data'
               ? { 'Content-Type': 'multipart/form-data' }
               : { 'Content-Type': 'application/json' },
-          data: formData,
+          data: processedData,
           ...axiosConfig,
         });
         return transformResponse(res.data);

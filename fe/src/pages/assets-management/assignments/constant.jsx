@@ -1,10 +1,13 @@
-import { Button } from 'antd';
+import { Button, Row, Col, Typography } from 'antd';
 import { MoreVertical } from 'lucide-react';
 import * as z from 'zod';
 
 import AssignmentContextMenuOption from '@/blocs/AssignmentContextMenuOption';
 import renderTags from '@/utils/renderTags';
 import moment from 'moment';
+import { formatCurrency } from '@/utils/globalFunction';
+
+const { Text, Title } = Typography;
 
 export const AssignmentFormSchema = z
   .object({
@@ -64,14 +67,96 @@ export const EXPORT_CSV_CONFIG = {
 };
 
 // Mobile view expanded row render
-export const expandedRowRender = (record) => (
-  <div style={{ padding: '8px', borderTop: '1px solid #f0f0f0' }}>
-    <p>Assignment Date: {record?.assign_date}</p>
-    <p>Name: {record?.name}</p>
-    <p>Asset: {record?.asset?.name}</p>
-    <p>Status: {record?.status}</p>
-  </div>
-);
+export const expandedRowRender = (record) => {
+  const options = {
+    locale: 'id-ID',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+    style: 'currency',
+  }
+
+  const InfoItem = ({ label, value }) => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '8px 0',
+      borderBottom: '1px solid #f0f0f0'
+    }}>
+      <Text type="secondary" style={{ fontSize: '13px' }}>
+        {label}:
+      </Text>
+      <Text strong style={{ fontSize: '13px', color: '#262626' }}>
+        {value || '-'}
+      </Text>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: '16px', backgroundColor: '#fafafa' }}>
+      <Row gutter={[16, 0]}>
+        <Col xs={24} sm={12}>
+          <div style={{ 
+            backgroundColor: 'white', 
+            padding: '16px', 
+            borderRadius: '8px',
+            border: '1px solid #e8e8e8'
+          }}>
+            <Text strong style={{ fontSize: '14px', color: '#1890ff', marginBottom: '12px', display: 'block' }}>
+              Informasi Assignment
+            </Text>
+            <InfoItem 
+              label="Tanggal Assignment" 
+              value={record?.assign_date ? moment(record.assign_date).format('DD MMM YYYY') : '-'}
+            />
+            <InfoItem 
+              label="Departemen" 
+              value={record?.department?.name}
+            />
+            <InfoItem 
+              label="Cabang" 
+              value={record?.branch?.name}
+            />
+            <InfoItem 
+              label="Kondisi" 
+              value={record?.condition?.name}
+            />
+            <InfoItem 
+              label="Nilai Saat Ini" 
+              value={formatCurrency(record?.current_amount, options)}
+            />
+          </div>
+        </Col>
+        
+        <Col xs={24} sm={12}>
+          <div style={{ 
+            backgroundColor: 'white', 
+            padding: '16px', 
+            borderRadius: '8px',
+            border: '1px solid #e8e8e8'
+          }}>
+            <Text strong style={{ fontSize: '14px', color: '#f5222d', marginBottom: '12px', display: 'block' }}>
+              Informasi Depresiasi
+            </Text>
+            <InfoItem 
+              label="Depresiasi per Bulan" 
+              value={formatCurrency(record?.depreciation?.per_month, options)}
+            />
+            <InfoItem 
+              label="Total Depresiasi" 
+              value={formatCurrency(record?.depreciation?.amount, options)}
+            />
+            <InfoItem 
+              label="Nilai Sisa" 
+              value={formatCurrency(record?.salvage?.amount, options)}
+            />
+          </div>
+        </Col>
+      </Row>
+    </div>
+  )
+};
 
 // Table columns configuration
 export const getColumns = () => [
@@ -81,22 +166,6 @@ export const getColumns = () => [
     key: 'assign_date',
     width: 120,
     render: (date) => moment(date).format('DD MMM YYYY') || '-',
-  },
-  {
-    title: 'Department',
-    dataIndex: ['department', 'name'],
-    key: 'department',
-    width: 120,
-    responsive: ['lg'],
-    render: (department) => department ?? '-',
-  },
-  {
-    title: 'Branch',
-    dataIndex: ['branch', 'name'],
-    key: 'branch',
-    width: 120,
-    responsive: ['lg'],
-    render: (branch) => branch ?? '-',
   },
   {
     title: 'Employee Name',
@@ -114,28 +183,45 @@ export const getColumns = () => [
       return name ?? '-';
     },
   },
+  // {
+  //   title: 'Condition',
+  //   dataIndex: ['condition', 'name'],
+  //   key: 'condition',
+  //   width: 120,
+  //   responsive: ['lg'],
+  //   render: (condition) => {
+  //     return condition ?? '-';
+  //   },
+  // },
   {
-    title: 'Condition',
-    dataIndex: ['condition', 'name'],
-    key: 'condition',
+    title: 'Currnt Amount',
+    dataIndex: ['current', 'amount'],
+    key: 'current_amount',
     width: 120,
     responsive: ['lg'],
-    render: (condition) => {
-      return condition ?? '-';
+    render: (current_amount) => {
+      const options = {
+        locale: 'id-ID',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+        style: 'currency',
+      }
+      return formatCurrency(current_amount, options) ?? '-';
     },
   },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    width: 100,
-    render: (status) => {
-      return renderTags(status, {
-        tags: [status],
-        color: STATUS_COLORS[status] || 'default',
-      });
-    },
-  },
+  // {
+  //   title: 'Status',
+  //   dataIndex: 'status',
+  //   key: 'status',
+  //   width: 100,
+  //   render: (status) => {
+  //     return renderTags(status, {
+  //       tags: [status],
+  //       color: STATUS_COLORS[status] || 'default',
+  //     });
+  //   },
+  // },
   {
     title: '',
     dataIndex: '',
@@ -146,7 +232,7 @@ export const getColumns = () => [
       <AssignmentContextMenuOption
         editPath={`/assets-management/assignments/edit/${record.id}`}
         detailPath={`/assets-management/assignments/detail/${record.id}`}
-        deletePath={`/assets-management/assignments/delete/${record.id}`}
+        // deletePath={`/assets-management/assignments/delete/${record.id}`}
         transferPath={`/assets-management/assignments/transfer/${record.id}`}
       >
         <Button

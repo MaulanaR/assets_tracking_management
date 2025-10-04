@@ -58,6 +58,35 @@ const Forms = ({
         }}
       >
         <ProForm.Group>
+          <Controller
+            name="assign_date"
+            control={control}
+            render={(form) => (
+              <ProFormDatePicker
+                {...form.field}
+                label="Date Assigned"
+                placeholder="Select Date Assigned"
+                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
+                validateStatus={errors.assign_date && 'error'}
+                format="YYYY-MM-DD"
+                extra={
+                  <Text style={{ fontSize: 12 }} type="danger">
+                    {errors?.assign_date?.message}
+                  </Text>
+                }
+                labelCol={{
+                  style: {
+                    //ant-form-item-label padding
+                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
+                  },
+                }}
+                fieldProps={{
+                  style: { width: '100%' },
+                }}
+              />
+            )}
+          />
+
           {/* <Controller
             name="code"
             control={control}
@@ -189,35 +218,6 @@ const Forms = ({
                 fieldProps={{
                   allowClear: true,
                   loading: form.field.value === undefined,
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            name="assign_date"
-            control={control}
-            render={(form) => (
-              <ProFormDatePicker
-                {...form.field}
-                label="Date Assigned"
-                placeholder="Select Date Assigned"
-                colProps={{ xs: 24, sm: 24, md: 12, lg: 8, xl: 6 }}
-                validateStatus={errors.assign_date && 'error'}
-                format="YYYY-MM-DD"
-                extra={
-                  <Text style={{ fontSize: 12 }} type="danger">
-                    {errors?.assign_date?.message}
-                  </Text>
-                }
-                labelCol={{
-                  style: {
-                    //ant-form-item-label padding
-                    paddingBottom: proStyle.ProFormText.labelCol.style.padding,
-                  },
-                }}
-                fieldProps={{
-                  style: { width: '100%' },
                 }}
               />
             )}

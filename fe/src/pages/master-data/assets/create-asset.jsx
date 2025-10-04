@@ -39,6 +39,8 @@ const CreateAsset = () => {
     getUrl: endpoints,
     method: 'POST',
     submitType: 'json', // Changed to json since we'll handle the file separately
+    handleFileUpload: true, // Enable automatic file upload handling
+    fileUploadFields: ['attachment'], // Specify which fields need file upload
     queryOptions: {
       enabled: false, // Disable initial fetch
     },
@@ -64,12 +66,6 @@ const CreateAsset = () => {
     console.log('Form Data:', data);
 
     try {
-      let attachmentId = null;
-
-      if (data?.attachment?.length > 0) {
-        attachmentId = await uploadAttachment(data.attachment[0]);
-      }
-
       const submitData = {
         ...data,
         category: {
@@ -78,7 +74,7 @@ const CreateAsset = () => {
         condition: {
           id: data?.condition?.value || data?.condition || null,
         },
-        attachment: attachmentId,
+        // attachment will be handled automatically by useDataQuery
       };
 
       await submit(submitData);

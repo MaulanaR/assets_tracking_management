@@ -1,5 +1,4 @@
 import Api from '@/utils/axios/api';
-import { uploadAttachment } from '@/utils/globalFunction';
 import { useDataQuery } from '@/utils/hooks/useDataQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { App, Breadcrumb, Flex } from 'antd';
@@ -35,7 +34,9 @@ const CreateAssignment = () => {
     queryKey: ['assignments', endpoints],
     getUrl: endpoints,
     method: 'POST',
-    submitType: 'json', // Changed to json since we'll handle the file separately
+    submitType: 'json',
+    handleFileUpload: true, // Enable automatic file upload handling
+    fileUploadFields: ['attachment'], // Specify which fields need file upload
     queryOptions: {
       enabled: false, // Disable initial fetch
     },
@@ -61,12 +62,6 @@ const CreateAssignment = () => {
     console.log('Form Data:', data);
 
     try {
-      let attachmentId = null;
-
-      if (data?.attachment?.length > 0) {
-        attachmentId = await uploadAttachment(data.attachment[0]);
-      }
-
       const submitData = {
         ...data,
         asset: {
@@ -78,7 +73,7 @@ const CreateAssignment = () => {
         condition: {
           id: data?.condition?.value || data?.condition || null,
         },
-        attachment: attachmentId,
+        // attachment will be handled automatically by useDataQuery
       };
 
       await submit(submitData);

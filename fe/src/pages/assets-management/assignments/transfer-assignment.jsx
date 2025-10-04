@@ -23,6 +23,8 @@ const TransferAssignment = () => {
     getUrl: getEndpoints,
     method: 'POST', // Use POST for creating new assignments
     submitType: 'json',
+    handleFileUpload: true, // Enable automatic file upload handling
+    fileUploadFields: ['attachment'], // Specify which fields need file upload
     submitUrl: putEndpoints,
     onSuccess: () => {
       notification.success({
@@ -84,12 +86,6 @@ const TransferAssignment = () => {
     console.log('Form Data:', data);
 
     try {
-      let attachmentId = null;
-
-      if (data?.attachment?.length > 0) {
-        attachmentId = await uploadAttachment(data.attachment[0]);
-      }
-
       const submitData = {
         ...data,
         asset: {
@@ -101,7 +97,7 @@ const TransferAssignment = () => {
         condition: {
           id: data?.condition?.value || data?.condition || null,
         },
-        attachment: attachmentId,
+       // attachment will be handled automatically by useDataQuery
       };
 
       await submit(submitData);

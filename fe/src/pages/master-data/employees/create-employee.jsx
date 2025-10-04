@@ -38,6 +38,8 @@ const CreateEmployee = () => {
     getUrl: endpoints,
     method: 'POST',
     submitType: 'json', // Changed to json since we'll handle the file separately
+    handleFileUpload: true, // Enable automatic file upload handling
+    fileUploadFields: ['attachment'], // Specify which fields need file upload
     queryOptions: {
       enabled: false, // Disable initial fetch
     },
@@ -63,21 +65,15 @@ const CreateEmployee = () => {
     console.log('Form Data:', data);
 
     try {
-      let attachmentId = null;
-
-      if (data?.attachment?.length > 0) {
-        attachmentId = await uploadAttachment(data.attachment[0]);
-      }
-
       const submitData = {
         ...data,
         department: {
-          id: data?.department || null,
+          id: data?.department?.value || data?.department || null,
         },
         branch: {
-          id: data?.branch || null,
+          id: data?.branch?.value || data?.branch || null,
         },
-        attachment: attachmentId,
+        // attachment will be handled automatically by useDataQuery
       };
 
       await submit(submitData);

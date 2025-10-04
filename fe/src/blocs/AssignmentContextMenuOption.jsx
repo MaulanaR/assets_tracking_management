@@ -31,8 +31,10 @@ const AssignmentContextMenuOption = ({
     });
   };
 
-  const items = [
-    {
+  const items = [];
+  
+  if (editPath) {
+    items.push({
       key: '1',
       label: (
         <Text onClick={() => navigate(editPath)}>
@@ -42,8 +44,11 @@ const AssignmentContextMenuOption = ({
           </Flex>
         </Text>
       ),
-    },
-    {
+    });
+  }
+
+  if (transferPath) {
+    items.push({
       key: '2',
       label: (
         <Text onClick={() => navigate(transferPath)}>
@@ -53,8 +58,11 @@ const AssignmentContextMenuOption = ({
           </Flex>
         </Text>
       ),
-    },
-    {
+    });
+  }
+
+  if (detailPath) {
+    items.push({
       key: '3',
       label: (
         <Text type="warning" onClick={() => navigate(detailPath)}>
@@ -64,9 +72,12 @@ const AssignmentContextMenuOption = ({
           </Flex>
         </Text>
       ),
-    },
-    {
-      key: '5',
+    });
+  }
+
+  if (deletePath) {
+    items.push({
+      key: '4',
       label: (
         <Text type="danger" onClick={() => handleDelete(deletePath)}>
           <Flex gap={8} align="center">
@@ -75,8 +86,8 @@ const AssignmentContextMenuOption = ({
           </Flex>
         </Text>
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <Dropdown
