@@ -51,14 +51,23 @@ const uploadAttachment = async (fileObj) => {
 };
 
 // format currency
-const formatCurrency = (value, options = {
-  locale: 'id-ID',
-  currency: 'IDR',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-  style: 'currency',
-}) => {
-  const { locale, currency, minimumFractionDigits, maximumFractionDigits, style } = options;
+const formatCurrency = (
+  value,
+  options = {
+    locale: 'id-ID',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+    style: 'currency',
+  },
+) => {
+  const {
+    locale,
+    currency,
+    minimumFractionDigits,
+    maximumFractionDigits,
+    style,
+  } = options;
 
   if (value == null || value === '' || isNaN(Number(value))) return '';
 

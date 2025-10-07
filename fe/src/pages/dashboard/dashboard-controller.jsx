@@ -21,6 +21,22 @@ const extractCount = (data) => {
   return 0;
 };
 
+// Function to extract sum from API response
+const extractSum = (data) => {
+  if (data && data.list && data.list.length > 0) {
+    return data.list[0].sum_price || 0;
+  }
+  return 0;
+};
+
+// Function to extract depreciation sum from API response
+const extractDepreciationSum = (data) => {
+  if (data && data.list && data.list.length > 0) {
+    return data.list[0].sum_depreciation?.amount || 0;
+  }
+  return 0;
+};
+
 const useDashboardController = () => {
   // Fetch departments count
   const {
@@ -124,12 +140,51 @@ const useDashboardController = () => {
     cacheTime: 10 * 60 * 1000,
   });
 
+  // Fetch total asset value
+  const {
+    data: totalAssetValueData = [],
+    isLoading: isLoadingTotalAssetValue,
+    isError: isErrorTotalAssetValue,
+    error: errorTotalAssetValue,
+    refetch: refetchTotalAssetValue,
+  } = useQuery({
+    queryKey: ['total_asset_value'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/assets?$select=$sum:price&$is_disable_pagination=true',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Fetch total asset depreciation
+  const {
+    data: totalAssetDepreciationData = [],
+    isLoading: isLoadingTotalAssetDepreciation,
+    isError: isErrorTotalAssetDepreciation,
+    error: errorTotalAssetDepreciation,
+    refetch: refetchTotalAssetDepreciation,
+  } = useQuery({
+    queryKey: ['total_asset_depreciation'],
+    queryFn: () =>
+      fetchSummary({
+        url: '/api/v1/assets?$select=$sum:depreciation.amount&$is_disable_pagination=true',
+      }),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
   // Calculate counts
   const departmentsCount = extractCount(departmentsData);
   const branchesCount = extractCount(branchesData);
   const employeesCount = extractCount(employeesData);
   const availableAssetsCount = extractCount(availableAssetsData);
   const unavailableAssetsCount = extractCount(unavailableAssetsData);
+  const totalAssetValue = extractSum(totalAssetValueData);
+  const totalAssetDepreciation = extractDepreciationSum(
+    totalAssetDepreciationData,
+  );
+  const totalAssetEconomicValue = totalAssetValue - totalAssetDepreciation;
 
   // Check if any data is still loading
   const isLoading =
@@ -138,7 +193,9 @@ const useDashboardController = () => {
     isLoadingEmployees ||
     isLoadingAvailableAssets ||
     isLoadingUnavailableAssets ||
-    isLoadingAssetsByCategory;
+    isLoadingAssetsByCategory ||
+    isLoadingTotalAssetValue ||
+    isLoadingTotalAssetDepreciation;
 
   // Check if any data has errors
   const isError =
@@ -147,7 +204,9 @@ const useDashboardController = () => {
     isErrorEmployees ||
     isErrorAvailableAssets ||
     isErrorUnavailableAssets ||
-    isErrorAssetsByCategory;
+    isErrorAssetsByCategory ||
+    isErrorTotalAssetValue ||
+    isErrorTotalAssetDepreciation;
 
   return {
     // Individual data objects
@@ -197,6 +256,27 @@ const useDashboardController = () => {
       isError: isErrorAssetsByCategory,
       error: errorAssetsByCategory,
       refetch: refetchAssetsByCategory,
+    },
+    totalAssetValue: {
+      data: totalAssetValueData,
+      value: totalAssetValue,
+      isLoading: isLoadingTotalAssetValue,
+      isError: isErrorTotalAssetValue,
+      error: errorTotalAssetValue,
+      refetch: refetchTotalAssetValue,
+    },
+    totalAssetDepreciation: {
+      data: totalAssetDepreciationData,
+      value: totalAssetDepreciation,
+      isLoading: isLoadingTotalAssetDepreciation,
+      isError: isErrorTotalAssetDepreciation,
+      error: errorTotalAssetDepreciation,
+      refetch: refetchTotalAssetDepreciation,
+    },
+    totalAssetEconomicValue: {
+      value: totalAssetEconomicValue,
+      isLoading: isLoadingTotalAssetValue || isLoadingTotalAssetDepreciation,
+      isError: isErrorTotalAssetValue || isErrorTotalAssetDepreciation,
     },
     // Summary counts for easy access
     summary: {

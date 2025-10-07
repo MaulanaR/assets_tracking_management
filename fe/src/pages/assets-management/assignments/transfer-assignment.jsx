@@ -97,7 +97,7 @@ const TransferAssignment = () => {
         condition: {
           id: data?.condition?.value || data?.condition || null,
         },
-       // attachment will be handled automatically by useDataQuery
+        // attachment will be handled automatically by useDataQuery
       };
 
       await submit(submitData);

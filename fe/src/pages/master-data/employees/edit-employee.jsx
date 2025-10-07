@@ -22,7 +22,7 @@ const EditEmployee = () => {
     getUrl: endpoints,
     method: 'PUT', // Use PUT for updating existing employee
     submitType: 'json', // Changed to json
-        handleFileUpload: true, // Enable automatic file upload handling
+    handleFileUpload: true, // Enable automatic file upload handling
     fileUploadFields: ['attachment'], // Specify which fields need file upload
     submitUrl: endpoints,
     onSuccess: () => {
@@ -92,7 +92,6 @@ const EditEmployee = () => {
     console.log('Form Data:', data);
 
     try {
-
       const submitData = {
         ...data,
         department: {

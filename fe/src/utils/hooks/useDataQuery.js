@@ -137,7 +137,7 @@ export function useDataQuery({
       setSubmitError(null);
 
       try {
-        let processedData = { ...formData };
+        const processedData = { ...formData };
 
         // Handle file upload if enabled
         if (handleFileUpload && fileUploadFields.length > 0) {
@@ -145,7 +145,9 @@ export function useDataQuery({
             if (processedData[field]?.length > 0) {
               // Lazy import uploadAttachment to avoid circular dependencies
               const { uploadAttachment } = await import('../globalFunction');
-              const attachmentId = await uploadAttachment(processedData[field][0]);
+              const attachmentId = await uploadAttachment(
+                processedData[field][0],
+              );
               processedData[field] = attachmentId;
             }
           }

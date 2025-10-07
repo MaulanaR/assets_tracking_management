@@ -93,7 +93,6 @@ const EditAssignment = () => {
     console.log('Form Data:', data);
 
     try {
-
       const submitData = {
         ...data,
         asset: {
@@ -104,7 +103,7 @@ const EditAssignment = () => {
         },
         condition: {
           id: data?.condition?.value || data?.condition || null,
-        }
+        },
         // attachment will be handled automatically by useDataQuery
       };
 

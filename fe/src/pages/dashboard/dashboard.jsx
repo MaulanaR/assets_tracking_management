@@ -1,6 +1,10 @@
 import DashboardSummaryWidget from '@/components/widget/DashboardSummaryWidget';
 import SummaryOverview from '@/components/widget/SummaryOverview';
+import TotalAssetDepreciationWidget from '@/components/widget/TotalAssetDepreciationWidget';
+import TotalAssetEconomicValueWidget from '@/components/widget/TotalAssetEconomicValueWidget';
+import TotalAssetValueWidget from '@/components/widget/TotalAssetValueWidget';
 import TotalAssetWidget from '@/components/widget/TotalAssetWidget';
+import { ENV } from '@/config/env';
 import { Card, Col, Row, theme } from 'antd';
 import { TrendingUp } from 'lucide-react';
 import {
@@ -21,7 +25,6 @@ import {
   YAxis,
 } from 'recharts';
 import useDashboardController from './dashboard-controller';
-import { ENV } from '@/config/env';
 
 const { useToken } = theme;
 
@@ -115,7 +118,14 @@ const data = [
 
 const Dashboard = () => {
   const { token } = useToken();
-  const { summary, isLoading, isError } = useDashboardController();
+  const {
+    summary,
+    totalAssetValue,
+    totalAssetDepreciation,
+    totalAssetEconomicValue,
+    isLoading,
+    isError,
+  } = useDashboardController();
 
   console.log('Dashboard Summary =>', summary);
   console.log('Loading State =>', isLoading);
@@ -145,6 +155,29 @@ const Dashboard = () => {
         </Col> */}
 
         <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+          <TotalAssetValueWidget
+            value={totalAssetValue?.value}
+            isLoading={totalAssetValue?.isLoading}
+            isError={totalAssetValue?.isError}
+          />
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+          <TotalAssetDepreciationWidget
+            value={totalAssetDepreciation?.value}
+            isLoading={totalAssetDepreciation?.isLoading}
+            isError={totalAssetDepreciation?.isError}
+          />
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={8} xl={8}>
+          <TotalAssetEconomicValueWidget
+            totalAssetValue={totalAssetValue?.value}
+            totalAssetDepreciation={totalAssetDepreciation?.value}
+            isLoading={totalAssetEconomicValue?.isLoading}
+            isError={totalAssetEconomicValue?.isError}
+          />
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={8} xl={8}>
           <Card title="Assets Overview">
             <TotalAssetWidget />
           </Card>
@@ -158,35 +191,6 @@ const Dashboard = () => {
             />
           </Card>
         </Col>
-
-        {stats.map((stat) => (
-          <Col key={stat.id} xs={24} sm={24} md={12} lg={6} xl={6}>
-            <Card>
-              <div className="flex justify-between items-center mb-3">
-                <div className="flex items-center space-x-2">
-                  <TrendingUp size={20} className="text-emerald-500" />
-                  <h3 className="font-medium text-gray-500">{stat.name}</h3>
-                </div>
-                <span className="text-xs px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full">
-                  +2.5%
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-gray-800 mb-4">
-                Rp{' '}
-                {Number(stat.value).toLocaleString('id-ID', {
-                  minimumFractionDigits: 2,
-                })}
-              </p>
-              <Link
-                to={stat.detailsLink}
-                className="flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
-              >
-                View details
-                <ChevronRight size={16} />
-              </Link>
-            </Card>
-          </Col>
-        ))}
 
         <Col xs={24} sm={24} md={12} lg={18} xl={18}>
           <Card title="Sales Overview" className="h-full">

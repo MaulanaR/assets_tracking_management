@@ -32,7 +32,7 @@ const AssignmentContextMenuOption = ({
   };
 
   const items = [];
-  
+
   if (editPath) {
     items.push({
       key: '1',

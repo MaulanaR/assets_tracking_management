@@ -86,7 +86,6 @@ const EditAsset = () => {
     console.log('Form Data:', data);
 
     try {
-
       const submitData = {
         ...data,
         category: {
