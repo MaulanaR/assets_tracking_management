@@ -36,6 +36,11 @@ const MasterData = () => {
       path: '/master-data/maintenance-types/list',
     },
     {
+      title: 'Asset Maintenance',
+      icon: <Wrench size={24} />,
+      path: '/master-data/maintenance-assets/list',
+    },
+    {
       title: 'Conditions',
       icon: <PackageX size={24} />,
       path: '/master-data/conditions/list',

@@ -6,6 +6,7 @@ import conditions from './_conditions';
 import departments from './_departments';
 import employees from './_employees';
 import maintenance_types from './_maintenance_types';
+import maintenance_assets from './_maintenance_assets';
 
 /** @type {import('react-router').RouteObject[]} */
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
       ...departments,
       ...conditions,
       ...maintenance_types,
+      ...maintenance_assets,
       {
         path: '*',
         element: ReactLazyWithSuspense(() => import('@/pages/notfound')),
