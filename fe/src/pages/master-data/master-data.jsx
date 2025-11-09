@@ -1,6 +1,6 @@
 import { Card, Col, Row, Typography } from 'antd';
 import { LibraryBig } from 'lucide-react';
-import { Box, Building, Building2, PackageX, Users } from 'lucide-react';
+import { Box, Building, Building2, PackageX, Users, Wrench } from 'lucide-react';
 
 import { useNavigate } from 'react-router';
 
@@ -29,6 +29,11 @@ const MasterData = () => {
       title: 'Categories',
       icon: <LibraryBig size={24} />,
       path: '/master-data/categories/list',
+    },
+    {
+      title: 'Maintenance Types',
+      icon: <Wrench size={24} />,
+      path: '/master-data/maintenance-types/list',
     },
     {
       title: 'Conditions',
